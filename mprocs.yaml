@@ -1,0 +1,7 @@
+procs:
+  client:
+    cmd: ["npm.cmd", "run", "dev"]
+    depends_on:
+      - cms
+  cms:
+    cmd: ["npm.cmd", "run", "cms"]
