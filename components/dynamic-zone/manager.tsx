@@ -61,10 +61,8 @@ const ProductFeaturesShowcase = dynamic(
   }
 );
 
-const componentMapping: Record<
-  string,
-  React.ComponentType<any>
-> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const componentMapping: Record<string, React.ComponentType<any>> = {
   'hero': Hero,
   'feature': Feature,
   'how-it-work': HowItWork,
@@ -82,7 +80,7 @@ interface DynamicZoneManagerProps {
 
 export function DynamicZoneManager({
   blocks,
-}: DynamicZoneManagerProps) {
+}: Readonly<DynamicZoneManagerProps>) {
   if (!blocks || blocks.length === 0) {
     return null;
   }

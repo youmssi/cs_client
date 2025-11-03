@@ -1,5 +1,5 @@
 /**
- * Centralized constants for routes, cache tags, and endpoints
+ * Centralized constants for routes, cache tags, endpoints, and metadata
  */
 
 export const ROUTES = {
@@ -10,6 +10,22 @@ export const ROUTES = {
   ABOUT: '/about',
   CONTACT: '/contact',
 } as const;
+
+/**
+ * Default metadata values
+ */
+export const DEFAULT_METADATA = {
+  TITLE: 'MRVIN100 - Software for Everyone, Everywhere',
+  DESCRIPTION: 'Build globally usable software solutions accessible to communities worldwide.',
+  KEYWORDS: [
+    'saas solutions',
+    'education technology',
+    'healthcare software',
+    'business management',
+    'operational efficiency',
+  ] as string[],
+  SITE_NAME: 'MRVIN100',
+};
 
 /**
  * Centralized cache tags for ISR revalidation

@@ -1,3 +1,5 @@
+import { TRPCError } from './init';
+
 class ApiClient {
   private readonly baseURL: string;
   private readonly token?: string;
@@ -16,16 +18,52 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      headers,
-      next: { revalidate: 3600 },
-    });
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        headers,
+        next: { revalidate: 3600 },
+      });
 
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
+      if (!response.ok) {
+        const code = this.getErrorCode(response.status);
+        throw new TRPCError({
+          code,
+          message: `Failed to fetch from Strapi: ${response.statusText}`,
+          cause: {
+            status: response.status,
+            statusText: response.statusText,
+            endpoint,
+          },
+        });
+      }
+
+      return response.json();
+    } catch (error) {
+      if (error instanceof TRPCError) {
+        throw error;
+      }
+
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error instanceof Error ? error.message : 'Unknown error occurred',
+        cause: error,
+      });
     }
+  }
 
-    return response.json();
+  private getErrorCode(status: number): 'BAD_REQUEST' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'NOT_FOUND' | 'INTERNAL_SERVER_ERROR' {
+    switch (status) {
+      case 400:
+        return 'BAD_REQUEST';
+      case 401:
+        return 'UNAUTHORIZED';
+      case 403:
+        return 'FORBIDDEN';
+      case 404:
+        return 'NOT_FOUND';
+      default:
+        return 'INTERNAL_SERVER_ERROR';
+    }
   }
 }
 

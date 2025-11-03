@@ -38,7 +38,7 @@ export function ProductHero({
       : null;
 
   return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-background to-muted/30">
+    <section className="relative py-20 md:py-32 overflow-hidden bg-linear-to-b from-background to-muted/30">
       <div className="container mx-auto px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}

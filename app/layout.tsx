@@ -8,6 +8,7 @@ import { TRPCProvider } from '@/lib/trpc/client';
 import { api } from '@/lib/trpc/server';
 import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
+import { DEFAULT_METADATA } from '@/lib/constants';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,17 +17,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MRVIN100 - Software for Everyone, Everywhere',
-    template: '%s | MRVIN100',
+    default: DEFAULT_METADATA.TITLE,
+    template: `%s | ${DEFAULT_METADATA.SITE_NAME}`,
   },
-  description: 'Build globally usable software solutions accessible to communities worldwide.',
-  keywords: [
-    'open source software',
-    'community-driven development',
-    'global software solutions',
-    'free software',
-    'managed hosting',
-  ],
+  description: DEFAULT_METADATA.DESCRIPTION,
+  keywords: DEFAULT_METADATA.KEYWORDS,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
 };
 
@@ -35,12 +30,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let globalData = null;
-  try {
-    globalData = await api.global.get();
-  } catch (error) {
-    console.error('Error loading global data:', error);
-  }
+  // Load global data (navbar, footer) - let errors bubble up to error boundary
+  const globalData = await api.global.get();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -52,9 +43,9 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {globalData && <Navbar navbar={globalData.navbar} />}
+            <Navbar navbar={globalData.navbar} />
             <main className="flex-1">{children}</main>
-            {globalData && <Footer footer={globalData.footer} />}
+            <Footer footer={globalData.footer} />
             <Toaster />
           </ThemeProvider>
         </TRPCProvider>

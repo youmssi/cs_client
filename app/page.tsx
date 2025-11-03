@@ -5,37 +5,28 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { api, HydrateClient } from '@/lib/trpc/server';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
 import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
+import { DEFAULT_METADATA } from '@/lib/constants';
 
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const page = await api.blog.getHomePage();
-    const seo = page.seo;
+  const page = await api.blog.getHomePage();
+  const seo = page.seo;
 
-    return {
-      title: seo.metaTitle || 'MRVIN100 - Software for Everyone, Everywhere',
-      description: seo.metaDescription || 'Build globally usable software solutions',
-      keywords: seo.keywords?.split(',').map((k) => k.trim()),
-      robots: seo.metaRobots || 'index, follow',
-      openGraph: {
-        title: seo.metaTitle || 'MRVIN100',
-        description: seo.metaDescription || 'Build globally usable software solutions',
-        images: seo.metaImage?.url
-          ? [{ url: seo.metaImage.url }]
-          : [],
-      },
-      alternates: {
-        canonical: seo.canonicalURL || undefined,
-      },
-    };
-  } catch (error) {
-    console.error('Error generating metadata:', error);
-    return {
-      title: 'MRVIN100 - Software for Everyone, Everywhere',
-      description: 'Build globally usable software solutions',
-    };
-  }
+  return {
+    title: seo.metaTitle || DEFAULT_METADATA.TITLE,
+    description: seo.metaDescription || DEFAULT_METADATA.DESCRIPTION,
+    keywords: seo.keywords?.split(',').map((k) => k.trim()) || DEFAULT_METADATA.KEYWORDS,
+    robots: seo.metaRobots || 'index, follow',
+    openGraph: {
+      title: seo.metaTitle || DEFAULT_METADATA.SITE_NAME,
+      description: seo.metaDescription || DEFAULT_METADATA.DESCRIPTION,
+      images: seo.metaImage?.url ? [{ url: seo.metaImage.url }] : [],
+    },
+    alternates: {
+      canonical: seo.canonicalURL || undefined,
+    },
+  };
 }
 
 export default async function HomePage() {
