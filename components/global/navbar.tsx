@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { getStrapiMediaUrl } from '@/lib/utils/media';
 import type { Navbar as NavbarType } from '@/types';
 import Image from 'next/image';
+import { ModeToggle } from '@/components/mode-toggle';
 
 interface NavbarProps {
   navbar: NavbarType;
@@ -53,34 +54,37 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           )}
 
           {/* Right Nav Items */}
-          {navbar.right_navbar_items && navbar.right_navbar_items.length > 0 && (
-            <div className="flex items-center space-x-2">
-              {navbar.right_navbar_items.map((item, index) => {
-                const buttonVariantMap = {
-                  simple: 'ghost' as const,
-                  outline: 'outline' as const,
-                  primary: 'default' as const,
-                  muted: 'secondary' as const,
-                };
+          <div className="flex items-center space-x-2">
+            {navbar.right_navbar_items && navbar.right_navbar_items.length > 0 && (
+              <>
+                {navbar.right_navbar_items.map((item, index) => {
+                  const buttonVariantMap = {
+                    simple: 'ghost' as const,
+                    outline: 'outline' as const,
+                    primary: 'default' as const,
+                    muted: 'secondary' as const,
+                  };
 
-                return (
-                  <Button
-                    key={index}
-                    asChild
-                    variant={item.variant ? buttonVariantMap[item.variant] : 'default'}
-                  >
-                    <Link
-                      href={item.URL}
-                      target={item.target ?? '_self'}
-                      rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
+                  return (
+                    <Button
+                      key={index}
+                      asChild
+                      variant={item.variant ? buttonVariantMap[item.variant] : 'default'}
                     >
-                      {item.text}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </div>
-          )}
+                      <Link
+                        href={item.URL}
+                        target={item.target ?? '_self'}
+                        rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
+                      >
+                        {item.text}
+                      </Link>
+                    </Button>
+                  );
+                })}
+              </>
+            )}
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </nav>

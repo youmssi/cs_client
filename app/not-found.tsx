@@ -9,10 +9,11 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
+import { ContainerView } from '@/components/ui/state-views';
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <ContainerView className="min-h-screen flex items-center justify-center">
       <Empty className="border border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">
@@ -29,7 +30,7 @@ export default function NotFound() {
           </Button>
         </EmptyContent>
       </Empty>
-    </main>
+    </ContainerView>
   );
 }
 
