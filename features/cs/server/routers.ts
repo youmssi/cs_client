@@ -123,8 +123,8 @@ export const comingSoonRouter = createTRPCRouter({
   getProducts: publicProcedure
     .input(
       z.object({
-        page: z.number().default(PAGINATION.DEFAULT_PAGE),
-        pageSize: z.number().default(PAGINATION.DEFAULT_PAGE_SIZE),
+        page: z.number().int().min(1).default(PAGINATION.DEFAULT_PAGE),
+        pageSize: z.number().int().min(PAGINATION.MIN_PAGE_SIZE).max(PAGINATION.MAX_PAGE_SIZE).default(PAGINATION.DEFAULT_PAGE_SIZE),
         search: z.string().optional(),
         locale: z.string().optional(),
       })
