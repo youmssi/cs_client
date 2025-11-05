@@ -84,12 +84,22 @@ export const getCacheTags = {
  * API Endpoints
  * Using /clean endpoints for optimized, type-safe responses
  */
+/**
+ * Pagination constants
+ */
+export const PAGINATION = {
+  DEFAULT_PAGE: 1,
+  DEFAULT_PAGE_SIZE: 10,
+  MIN_PAGE_SIZE: 1,
+  MAX_PAGE_SIZE: 50,
+} as const;
+
 export const API_ENDPOINTS = {
   GLOBAL: '/api/global/clean',
-  PAGE: '/api/page/clean', // Note: singular 'page', requires ?slug=xxx parameter
-  PRODUCTS: '/api/saas-products/clean',
-  PRODUCT: '/api/saas-products/clean',
-  PRODUCT_PAGE: '/api/product-pages/clean',
+  PAGE: '/api/page/clean',
+  PRODUCTS: '/api/saas-product/clean',
+  PRODUCT: '/api/saas-product/clean',
+  PRODUCT_PAGE: '/api/product-page/clean',
   ARTICLES: '/api/articles/clean',
   FAQS: '/api/faqs/clean',
   TESTIMONIALS: '/api/testimonials/clean',

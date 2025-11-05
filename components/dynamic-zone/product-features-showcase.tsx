@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getStrapiMediaUrl } from '@/lib/utils/media';
-import type { StrapiFeatureCategory } from '@/types/products';
+import type { FeatureCategory } from '@/types/products';
 import Image from 'next/image';
 
 interface ProductFeaturesShowcaseProps {
@@ -10,7 +10,7 @@ interface ProductFeaturesShowcaseProps {
   subheadline?: string | null;
   feature_categories?: Array<{ id: number }> | null;
   layout?: 'grid' | 'tabs' | 'accordion' | null;
-  featureCategoriesData?: StrapiFeatureCategory[];
+  featureCategoriesData?: FeatureCategory[];
 }
 
 export function ProductFeaturesShowcase({

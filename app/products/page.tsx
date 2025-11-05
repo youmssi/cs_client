@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { api, HydrateClient } from '@/lib/trpc/server';
+import { HydrateClient, prefetch, trpc } from '@/trpc/server';
 import { ProductsList } from './products-list';
 
 export const revalidate = 3600;
@@ -12,7 +12,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProductsPage() {
-  void api.products.getAll.prefetch();
+  prefetch(trpc.comingSoon.getProducts.queryOptions({ 
+    page: 1,
+    pageSize: 12
+  }));
 
   return (
     <HydrateClient>

@@ -1,5 +1,5 @@
-import { AlertTriangle, Loader2, PackageOpen } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { AlertTriangle, Loader2, PackageOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -7,7 +7,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '@/components/ui/empty';
+} from "@/components/ui/empty";
+import { cn } from "@/lib/utils";
 
 interface StateViewProps {
   message?: string;
@@ -38,7 +39,7 @@ interface EmptyViewProps extends StateViewProps {
 }
 
 export function EmptyView({
-  title = 'No items',
+  title = "No items",
   message,
   actionLabel,
   onAction,
@@ -62,3 +63,21 @@ export function EmptyView({
     </div>
   );
 }
+
+interface ContainerViewProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const ContainerView = ({ children, className }: ContainerViewProps) => {
+  return (
+    <div
+      className={cn(
+        "mx-auto container h-full",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};

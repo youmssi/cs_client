@@ -2,17 +2,20 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { trpc } from '@/lib/trpc/client';
+import { trpc } from '@/trpc/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LoadingView, EmptyView } from '@/components/ui/state-views';
 import { getStrapiMediaUrl } from '@/lib/utils/media';
 import { ROUTES } from '@/lib/constants';
-import type { StrapiSaaSProduct } from '@/types/products';
+import type { SaaSProduct } from '@/types/products';
 
 export function ProductsList() {
-  const { data: products, isLoading } = trpc.products.getAll.useQuery();
+  const { data: response, isLoading } = trpc.comingSoon.getProducts.useQuery({
+    page: 1,
+    pageSize: 12
+  });
 
   if (isLoading) {
     return (
@@ -22,7 +25,9 @@ export function ProductsList() {
     );
   }
 
-  if (!products || !Array.isArray(products) || products.length === 0) {
+  const productList = response?.results || [];
+  
+  if (!productList || !Array.isArray(productList) || productList.length === 0) {
     return (
       <main className="min-h-screen">
         <EmptyView
@@ -49,7 +54,7 @@ export function ProductsList() {
 
       <section className="py-20 container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(products as StrapiSaaSProduct[]).map((product: StrapiSaaSProduct) => {
+          {(productList as SaaSProduct[]).map((product: SaaSProduct) => {
             const iconUrl = product.product_icon?.url
               ? getStrapiMediaUrl(product.product_icon.url)
               : null;
