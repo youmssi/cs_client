@@ -4,13 +4,13 @@
 
 import type { Media } from './components';
 
-export interface StrapiSaaSProduct {
+export interface SaaSProduct {
   id: number;
   name: string;
   slug: string;
   product_type?: 'saas' | 'open_source' | 'enterprise' | null;
   short_description?: string | null;
-  full_description?: unknown[] | null; // blocks
+  full_description?: unknown[] | null;
   product_icon?: Media | null;
   product_logo?: Media | null;
   primary_color?: string | null;
@@ -33,7 +33,7 @@ export interface StrapiSaaSProduct {
   updatedAt: string;
 }
 
-export interface StrapiProductPage {
+export interface ProductPage {
   id: number;
   seo: {
     metaTitle: string;
@@ -48,14 +48,14 @@ export interface StrapiProductPage {
   slug: string;
   heading?: string | null;
   sub_heading?: string | null;
-  product?: StrapiSaaSProduct | null;
+  product?: SaaSProduct | null;
   dynamic_zone?: unknown[] | null;
   publishedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface StrapiPricingPlan {
+export interface PricingPlan {
   id: number;
   name: string;
   description?: string | null;
@@ -72,7 +72,7 @@ export interface StrapiPricingPlan {
   saas_product?: { id: number } | null;
 }
 
-export interface StrapiFeatureCategory {
+export interface FeatureCategory {
   id: number;
   name: string;
   description?: string | null;
@@ -85,14 +85,14 @@ export interface StrapiFeatureCategory {
   saas_product?: { id: number } | null;
 }
 
-export interface StrapiCaseStudy {
+export interface ProductCaseStudy {
   id: number;
   title: string;
   client_name?: string | null;
   client_logo?: Media | null;
   industry?: string | null;
-  challenge?: unknown[] | null; // blocks
-  solution?: unknown[] | null; // blocks
+  challenge?: unknown[] | null;
+  solution?: unknown[] | null;
   results?: Array<{
     headline: string;
     description: string;
@@ -100,7 +100,7 @@ export interface StrapiCaseStudy {
   testimonial?: { id: number } | null;
 }
 
-export interface StrapiIntegration {
+export interface Integration {
   id: number;
   name: string;
   logo?: Media | null;

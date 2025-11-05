@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getStrapiMediaUrl } from '@/lib/utils/media';
 import type { Button as ButtonType, Image as ImageType } from '@/types';
-import type { StrapiSaaSProduct } from '@/types/products';
+import type { SaaSProduct } from '@/types/products';
 import Image from 'next/image';
 
 interface ProductHeroProps {
@@ -19,7 +19,7 @@ interface ProductHeroProps {
     text: string;
     icon?: ImageType | null;
   }> | null;
-  product?: StrapiSaaSProduct | null;
+  product?: SaaSProduct | null;
 }
 
 export function ProductHero({

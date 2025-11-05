@@ -4,8 +4,8 @@ import './globals.css';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
-import { TRPCProvider } from '@/lib/trpc/client';
-import { api } from '@/lib/trpc/server';
+import { TRPCReactProvider } from '@/trpc/client';
+import { getCaller } from '@/trpc/server';
 import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
 import { DEFAULT_METADATA } from '@/lib/constants';
@@ -30,13 +30,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Load global data (navbar, footer) - let errors bubble up to error boundary
-  const globalData = await api.global.get();
+  const caller = await getCaller();
+  const globalData = await caller.comingSoon.getGlobal({});
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.variable} suppressHydrationWarning>
-        <TRPCProvider>
+        <TRPCReactProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -48,7 +48,7 @@ export default async function RootLayout({
             <Footer footer={globalData.footer} />
             <Toaster />
           </ThemeProvider>
-        </TRPCProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

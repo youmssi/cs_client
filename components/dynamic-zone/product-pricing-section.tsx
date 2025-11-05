@@ -3,12 +3,12 @@ import { Check } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import type { StrapiPricingPlan } from '@/types/products';
+import type { PricingPlan } from '@/types/products';
 
 type ProductPricingSectionProps = Readonly<{
   headline: string;
   subheadline?: string | null;
-  pricingPlansData?: StrapiPricingPlan[];
+  pricingPlansData?: PricingPlan[];
 }>;
 
 export function ProductPricingSection({

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { api, HydrateClient } from '@/lib/trpc/server';
+import { HydrateClient, prefetch, trpc, getCaller } from '@/trpc/server';
 import { ErrorView, LoadingView } from '@/components/ui/state-views';
 import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
 import { DEFAULT_METADATA } from '@/lib/constants';
@@ -10,27 +10,15 @@ import { DEFAULT_METADATA } from '@/lib/constants';
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await api.blog.getHomePage();
-  const seo = page.seo;
-
   return {
-    title: seo.metaTitle || DEFAULT_METADATA.TITLE,
-    description: seo.metaDescription || DEFAULT_METADATA.DESCRIPTION,
-    keywords: seo.keywords?.split(',').map((k) => k.trim()) || DEFAULT_METADATA.KEYWORDS,
-    robots: seo.metaRobots || 'index, follow',
-    openGraph: {
-      title: seo.metaTitle || DEFAULT_METADATA.SITE_NAME,
-      description: seo.metaDescription || DEFAULT_METADATA.DESCRIPTION,
-      images: seo.metaImage?.url ? [{ url: seo.metaImage.url }] : [],
-    },
-    alternates: {
-      canonical: seo.canonicalURL || undefined,
-    },
+    title: DEFAULT_METADATA.TITLE,
+    description: DEFAULT_METADATA.DESCRIPTION,
+    keywords: DEFAULT_METADATA.KEYWORDS,
   };
 }
 
 export default async function HomePage() {
-  void api.blog.getHomePage.prefetch();
+  prefetch(trpc.comingSoon.getPage.queryOptions({}));
 
   return (
     <HydrateClient>
@@ -56,7 +44,8 @@ export default async function HomePage() {
 }
 
 async function PageContent() {
-  const page = await api.blog.getHomePage();
+  const caller = await getCaller();
+  const page = await caller.comingSoon.getPage({});
   
   return (
     <main className="min-h-screen">
