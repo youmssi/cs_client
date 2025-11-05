@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { getStrapiMediaUrl } from '@/lib/utils/media';
+import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import type { Navbar as NavbarType } from '@/types';
 import Image from 'next/image';
 import { ModeToggle } from '@/components/mode-toggle';
@@ -11,7 +11,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ navbar }: Readonly<NavbarProps>) {
-  const logoUrl = navbar.logo?.image
+    const logoUrl = navbar.logo?.image?.url
     ? getStrapiMediaUrl(navbar.logo.image.url)
     : null;
 

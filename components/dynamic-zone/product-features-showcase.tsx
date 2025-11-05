@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { getStrapiMediaUrl } from '@/lib/utils/media';
+import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import type { FeatureCategory } from '@/types/products';
 import Image from 'next/image';
 

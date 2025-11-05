@@ -3,6 +3,7 @@
  */
 
 import type { Media } from './components';
+import type { DynamicBlock } from './blocks';
 
 export interface SaaSProduct {
   id: number;
@@ -49,7 +50,7 @@ export interface ProductPage {
   heading?: string | null;
   sub_heading?: string | null;
   product?: SaaSProduct | null;
-  dynamic_zone?: unknown[] | null;
+  dynamic_zone?: DynamicBlock[] | null;
   publishedAt?: string | null;
   createdAt: string;
   updatedAt: string;

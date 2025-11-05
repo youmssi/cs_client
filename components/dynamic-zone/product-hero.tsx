@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getStrapiMediaUrl } from '@/lib/utils/media';
+import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import type { Button as ButtonType, Image as ImageType } from '@/types';
 import type { SaaSProduct } from '@/types/products';
 import Image from 'next/image';
@@ -31,11 +31,11 @@ export function ProductHero({
   trust_indicators,
   product,
 }: Readonly<ProductHeroProps>) {
-  const heroImageUrl = hero_image
+      const heroImageUrl = hero_image?.url
     ? getStrapiMediaUrl(hero_image.url)
-    : product?.product_logo
-      ? getStrapiMediaUrl(product.product_logo.url)
-      : null;
+    : product?.product_logo?.url
+    ? getStrapiMediaUrl(product.product_logo.url)
+    : null;
 
   return (
     <section className="relative py-20 md:py-32 overflow-hidden bg-linear-to-b from-background to-muted/30">
@@ -78,9 +78,9 @@ export function ProductHero({
             {/* Trust Indicators */}
             {trust_indicators && trust_indicators.length > 0 && (
               <div className="flex flex-wrap gap-4 pt-4">
-                {trust_indicators.map((indicator, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm">
-                    {indicator.icon && (
+                                {trust_indicators.map((indicator) => (
+                  <div key={indicator.text} className="flex items-center gap-2 text-sm">
+                    {indicator.icon?.url && (
                       <Image
                         src={getStrapiMediaUrl(indicator.icon.url)}
                         alt=""

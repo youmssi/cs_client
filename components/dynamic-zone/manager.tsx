@@ -1,61 +1,72 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
-import type { DynamicBlock } from '@/types';
-import { Skeleton } from '@/components/ui/skeleton';
+import type { DynamicBlock } from "@/types";
+import type {
+  SaaSProduct,
+  PricingPlan,
+  FeatureCategory,
+  ProductCaseStudy,
+  Integration,
+} from "@/types/products";
+import type { Testimonial } from "@/types/testimonial";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load components
-const Hero = dynamic(() => import('./hero').then((mod) => mod.Hero), {
+const Hero = dynamic(() => import("./hero").then((mod) => mod.Hero), {
   loading: () => <Skeleton className="h-screen w-full" />,
 });
 
 const HowItWork = dynamic(
-  () => import('./how-it-work').then((mod) => mod.HowItWork),
+  () => import("./how-it-work").then((mod) => mod.HowItWork),
   {
     loading: () => <Skeleton className="h-96 w-full" />,
   }
 );
 
 const Testimonials = dynamic(
-  () => import('./testimonials').then((mod) => mod.Testimonials),
+  () => import("./testimonials").then((mod) => mod.Testimonials),
   {
     loading: () => <Skeleton className="h-96 w-full" />,
   }
 );
 
-const FAQ = dynamic(() => import('./faq').then((mod) => mod.FAQ), {
+const FAQ = dynamic(() => import("./faq").then((mod) => mod.FAQ), {
   loading: () => <Skeleton className="h-96 w-full" />,
 });
 
-const CTA = dynamic(() => import('./cta').then((mod) => mod.CTA), {
+const CTA = dynamic(() => import("./cta").then((mod) => mod.CTA), {
   loading: () => <Skeleton className="h-96 w-full" />,
 });
 
-const Feature = dynamic(
-  () => import('./feature').then((mod) => mod.Feature),
-  {
-    loading: () => <Skeleton className="h-96 w-full" />,
-  }
-);
+const Feature = dynamic(() => import("./feature").then((mod) => mod.Feature), {
+  loading: () => <Skeleton className="h-96 w-full" />,
+});
 
 const ProductHero = dynamic(
-  () => import('./product-hero').then((mod) => mod.ProductHero),
+  () => import("./product-hero").then((mod) => mod.ProductHero),
   {
     loading: () => <Skeleton className="h-96 w-full" />,
   }
 );
 
 const ProductPricingSection = dynamic(
-  () => import('./product-pricing-section').then((mod) => mod.ProductPricingSection),
+  () =>
+    import("./product-pricing-section").then(
+      (mod) => mod.ProductPricingSection
+    ),
   {
     loading: () => <Skeleton className="h-96 w-full" />,
   }
 );
 
 const ProductFeaturesShowcase = dynamic(
-  () => import('./product-features-showcase').then((mod) => mod.ProductFeaturesShowcase),
+  () =>
+    import("./product-features-showcase").then(
+      (mod) => mod.ProductFeaturesShowcase
+    ),
   {
     loading: () => <Skeleton className="h-96 w-full" />,
   }
@@ -63,23 +74,30 @@ const ProductFeaturesShowcase = dynamic(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const componentMapping: Record<string, React.ComponentType<any>> = {
-  'hero': Hero,
-  'feature': Feature,
-  'how-it-work': HowItWork,
-  'testimonial': Testimonials,
-  'faq': FAQ,
-  'cta': CTA,
-  'product-hero': ProductHero,
-  'product-pricing-section': ProductPricingSection,
-  'product-features-showcase': ProductFeaturesShowcase,
+  hero: Hero,
+  feature: Feature,
+  "how-it-work": HowItWork,
+  testimonial: Testimonials,
+  faq: FAQ,
+  cta: CTA,
+  "product-hero": ProductHero,
+  "product-pricing-section": ProductPricingSection,
+  "product-features-showcase": ProductFeaturesShowcase,
 };
 
 interface DynamicZoneManagerProps {
   blocks?: DynamicBlock[] | null;
+  product?: SaaSProduct | null;
+  pricingPlansData?: PricingPlan[] | null;
+  featureCategoriesData?: FeatureCategory[] | null;
+  testimonialsData?: Testimonial[] | null;
+  integrationsData?: Integration[] | null;
+  caseStudiesData?: ProductCaseStudy[] | null;
 }
 
 export function DynamicZoneManager({
   blocks,
+  ...rest
 }: Readonly<DynamicZoneManagerProps>) {
   if (!blocks || blocks.length === 0) {
     return null;
@@ -100,11 +118,10 @@ export function DynamicZoneManager({
             key={`${block.type}-${index}`}
             fallback={<Skeleton className="h-96 w-full" />}
           >
-            <Component {...block} />
+            <Component {...block} {...rest} />
           </Suspense>
         );
       })}
     </>
   );
 }
-

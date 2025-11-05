@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LoadingView, EmptyView } from '@/components/ui/state-views';
-import { getStrapiMediaUrl } from '@/lib/utils/media';
+import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import { ROUTES } from '@/lib/constants';
 import type { SaaSProduct } from '@/types/products';
 

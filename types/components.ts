@@ -13,6 +13,7 @@ export interface Media {
 }
 
 export interface Link {
+  id: number;
   text: string;
   URL: string;
   target: '_blank' | '_self' | '_parent' | '_top';

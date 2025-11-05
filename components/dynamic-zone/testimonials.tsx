@@ -6,7 +6,7 @@ import { CardStack } from '@/components/aceternity/card-stack';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { TestimonialBlock } from '@/types';
-import { getUserFullName, getUserInitials } from '@/lib/utils/type-helpers';
+import { getUserFullName, getUserInitials } from '@/lib/utils';
 
 export function Testimonials({
   heading,

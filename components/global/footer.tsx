@@ -1,7 +1,7 @@
-import Link from 'next/link';
+  import Link from 'next/link';
 
-import { getStrapiMediaUrl } from '@/lib/utils/media';
-import type { Footer as FooterType } from '@/types';
+import { getStrapiMediaUrl } from '@/lib/media.strapi';
+import type { Footer as FooterType, Link as LinkType } from '@/types';
 import Image from 'next/image';
 
 interface FooterProps {
@@ -9,7 +9,7 @@ interface FooterProps {
 }
 
 export function Footer({ footer }: Readonly<FooterProps>) {
-  const logoUrl = footer.logo?.image
+    const logoUrl = footer.logo?.image?.url
     ? getStrapiMediaUrl(footer.logo.image.url)
     : null;
 
@@ -38,8 +38,8 @@ export function Footer({ footer }: Readonly<FooterProps>) {
             <div>
               <h3 className="font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                {footer.internal_links.map((link, index) => (
-                  <li key={index}>
+                {footer.internal_links.map((link: LinkType) => (
+                  <li key={link.id}>
                     <Link
                       href={link.URL}
                       target={link.target || '_self'}
@@ -58,8 +58,8 @@ export function Footer({ footer }: Readonly<FooterProps>) {
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
-                {footer.policy_links.map((link, index) => (
-                  <li key={index}>
+                {footer.policy_links.map((link: LinkType) => (
+                  <li key={link.id}>
                     <Link
                       href={link.URL}
                       target={link.target || '_self'}
@@ -78,8 +78,8 @@ export function Footer({ footer }: Readonly<FooterProps>) {
             <div>
               <h3 className="font-semibold mb-4">Connect</h3>
               <ul className="space-y-2">
-                {footer.social_media_links.map((link, index) => (
-                  <li key={index}>
+                {footer.social_media_links.map((link: LinkType) => (
+                  <li key={link.id}>
                     <Link
                       href={link.URL}
                       target={link.target || '_blank'}

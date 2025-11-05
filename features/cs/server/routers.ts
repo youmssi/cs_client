@@ -2,10 +2,18 @@ import { createTRPCRouter, publicProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { PAGINATION, API_ENDPOINTS } from "@/lib/constants";
-import { env } from "@/lib/env.server";
+import { envServer } from "@/lib/env.server";
 import type { Global } from "@/types/global";
 import type { Page } from "@/types/page";
-import type { SaaSProduct, ProductPage } from "@/types/products";
+import type {
+  SaaSProduct,
+  ProductPage,
+  PricingPlan,
+  FeatureCategory,
+  ProductCaseStudy,
+  Integration,
+} from '@/types/products';
+import type { Testimonial } from '@/types/testimonial';
 
 /**
  * Strapi clean endpoint response types
@@ -24,14 +32,14 @@ interface StrapiCollectionResponse<T> {
  * Helper function to call Strapi clean endpoints
  */
 async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
-  const url = `${env.STRAPI_API_URL}${endpoint}`;
+  const url = `${envServer.STRAPI_API_URL}${endpoint}`;
   
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
   
-  if (env.STRAPI_API_TOKEN) {
-    headers['Authorization'] = `Bearer ${env.STRAPI_API_TOKEN}`;
+  if (envServer.STRAPI_API_TOKEN) {
+    headers['Authorization'] = `Bearer ${envServer.STRAPI_API_TOKEN}`;
   }
   
   const response = await fetch(url, { 
@@ -201,5 +209,61 @@ export const comingSoonRouter = createTRPCRouter({
       }
       
       return productPage;
+    }),
+
+  getPricingPlans: publicProcedure
+    .input(z.object({ productId: z.number() }))
+    .query(async ({ input }): Promise<PricingPlan[]> => {
+      const params = new URLSearchParams({
+        'filters[saas_product][id][$eq]': input.productId.toString(),
+      });
+      const response = await fetchFromStrapi<StrapiCollectionResponse<PricingPlan>>(`${API_ENDPOINTS.PRICING_PLANS}?${params.toString()}`);
+      return response.results || [];
+    }),
+
+  getFeatureCategories: publicProcedure
+    .input(z.object({ productId: z.number() }))
+    .query(async ({ input }): Promise<FeatureCategory[]> => {
+      const params = new URLSearchParams({
+        'filters[saas_product][id][$eq]': input.productId.toString(),
+      });
+      const response = await fetchFromStrapi<StrapiCollectionResponse<FeatureCategory>>(`${API_ENDPOINTS.FEATURE_CATEGORIES}?${params.toString()}`);
+      return response.results || [];
+    }),
+
+  getTestimonials: publicProcedure
+    .input(z.object({ ids: z.array(z.number()) }))
+    .query(async ({ input }): Promise<Testimonial[]> => {
+      if (input.ids.length === 0) return [];
+      const params = new URLSearchParams();
+      for (const id of input.ids) {
+        params.append('filters[id][$in]', id.toString());
+      }
+      const response = await fetchFromStrapi<StrapiCollectionResponse<Testimonial>>(`${API_ENDPOINTS.TESTIMONIALS}?${params.toString()}`);
+      return response.results || [];
+    }),
+
+  getIntegrations: publicProcedure
+    .input(z.object({ ids: z.array(z.number()) }))
+    .query(async ({ input }): Promise<Integration[]> => {
+      if (input.ids.length === 0) return [];
+      const params = new URLSearchParams();
+      for (const id of input.ids) {
+        params.append('filters[id][$in]', id.toString());
+      }
+      const response = await fetchFromStrapi<StrapiCollectionResponse<Integration>>(`${API_ENDPOINTS.INTEGRATIONS}?${params.toString()}`);
+      return response.results || [];
+    }),
+
+  getCaseStudies: publicProcedure
+    .input(z.object({ ids: z.array(z.number()) }))
+    .query(async ({ input }): Promise<ProductCaseStudy[]> => {
+      if (input.ids.length === 0) return [];
+      const params = new URLSearchParams();
+      for (const id of input.ids) {
+        params.append('filters[id][$in]', id.toString());
+      }
+      const response = await fetchFromStrapi<StrapiCollectionResponse<ProductCaseStudy>>(`${API_ENDPOINTS.CASE_STUDIES}?${params.toString()}`);
+      return response.results || [];
     }),
 });

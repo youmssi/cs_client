@@ -4,39 +4,53 @@
  * Only import this file in server-side code (actions, API routes, server components)
  */
 
-interface ServerEnvConfig {
-  STRAPI_API_URL: string;
-  NODE_ENV: string;
-  STRAPI_API_TOKEN?: string;
-  WEBHOOK_SECRET?: string;
+export enum EnvVarType {
+    REQUIRED_CLIENT = 'Required client env',
+    OPTIONAL_CLIENT = 'Optional client env',
+    REQUIRED_SERVER = 'Required server env',
+    OPTIONAL_SERVER = 'Optional server env',
+}
+export interface EnvVarConfig {
+    name: string;
+    value?: string;
+    type: EnvVarType;
 }
 
-function validateEnvVar(name: string, value: string | undefined): string {
-  if (!value) {
-    console.error(`[SERVER ENV] Missing required environment variable: ${name}`);
-    throw new Error(`Missing required environment variable: ${name}`);
+const serversEnvs: EnvVarConfig[] = [
+    {
+        name: 'STRAPI_API_URL',
+        value: process.env.STRAPI_API_URL,
+        type: EnvVarType.REQUIRED_SERVER,
+    },
+    {
+        name: 'NODE_ENV',
+        value: process.env.NODE_ENV,
+        type: EnvVarType.REQUIRED_SERVER,
+    },
+    {
+        name: 'STRAPI_API_TOKEN',
+        value: process.env.STRAPI_API_TOKEN,
+        type: EnvVarType.OPTIONAL_SERVER,
+    },
+    {
+        name: 'WEBHOOK_SECRET',
+        value: process.env.WEBHOOK_SECRET,
+        type: EnvVarType.OPTIONAL_SERVER,
+    },
+]
+
+export function validateEnvVar(env: EnvVarConfig): string {
+  if (!env.value && env.type === EnvVarType.REQUIRED_SERVER || env.type === EnvVarType.REQUIRED_CLIENT) {
+    console.error(`[${env.type}] is missing: ${env.name}`);
+    throw new Error(`Missing required environment variable: ${env.name}`);
   }
-  return value;
+  return env.value!;
 }
 
-function getOptionalEnvVar(name: string, value: string | undefined): string | undefined {
-  if (!value) {
-    console.warn(`[SERVER ENV] Optional environment variable not set: ${name}`);
-    return undefined;
-  }
-  return value;
-}
 
-/**
- * Server-side environment variables (NOT available in browser)
- * Use for: ISR data fetching, API routes, webhooks, server components
- */
-export const env: ServerEnvConfig = {
-  STRAPI_API_URL: validateEnvVar(
-    'STRAPI_API_URL',
-    process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.STRAPI_API_URL
-  ),
-  NODE_ENV: process.env.NODE_ENV ?? 'development',
-  STRAPI_API_TOKEN: getOptionalEnvVar('STRAPI_API_TOKEN', process.env.STRAPI_API_TOKEN),
-  WEBHOOK_SECRET: getOptionalEnvVar('WEBHOOK_SECRET', process.env.WEBHOOK_SECRET),
+export const envServer = {
+  STRAPI_API_URL: validateEnvVar(serversEnvs[0]),
+  NODE_ENV: validateEnvVar(serversEnvs[1]),
+  STRAPI_API_TOKEN: validateEnvVar(serversEnvs[2]),
+  WEBHOOK_SECRET: validateEnvVar(serversEnvs[3]),
 };
