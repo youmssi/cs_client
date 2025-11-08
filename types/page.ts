@@ -1,8 +1,13 @@
-import type { DynamicBlock } from './blocks';
 import type { SEO } from './components';
+import type { DynamicBlock } from './blocks';
 
 export interface Page {
-  seo: SEO;
+  id: number;
+  seo: SEO | null;
   slug: string;
-  blocks: DynamicBlock[];
+  dynamic_zone: DynamicBlock[];
+  localizations: Array<{
+    id: number;
+    locale: string;
+  }>;
 }

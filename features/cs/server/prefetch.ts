@@ -1,27 +1,33 @@
 import { prefetch, trpc } from "@/trpc/server";
 import { inferInput } from "@trpc/tanstack-react-query";
 
-type GetPageInput = inferInput<typeof trpc.comingSoon.getPage>;
+type GetGlobalInput = inferInput<typeof trpc.comingSoon.getGlobal>;
 type GetPageBySlugInput = inferInput<typeof trpc.comingSoon.getPageBySlug>;
-type GetProductsInput = inferInput<typeof trpc.comingSoon.getProducts>;
+type GetPagesInput = inferInput<typeof trpc.comingSoon.getPages>;
 
 /**
- * Prefetch page data
+ * Prefetches global data
+ * @param params - Input parameters
+ * @returns Prefetch function for global data
  */
-export const prefetchPage = (params: GetPageInput) => {
-  return prefetch(trpc.comingSoon.getPage.queryOptions(params));
+export const prefetchGlobal = (params: GetGlobalInput) => {
+  return prefetch(trpc.comingSoon.getGlobal.queryOptions(params));
 };
 
 /**
- * Prefetch a single page by slug
+ * Prefetches page data by slug
+ * @param params - Input parameters
+ * @returns Prefetch function for page data
  */
 export const prefetchPageBySlug = (params: GetPageBySlugInput) => {
   return prefetch(trpc.comingSoon.getPageBySlug.queryOptions(params));
 };
 
 /**
- * Prefetch products data
+ * Prefetches all pages data
+ * @param params - Input parameters
+ * @returns Prefetch function for all pages data
  */
-export const prefetchProducts = (params: GetProductsInput) => {
-  return prefetch(trpc.comingSoon.getProducts.queryOptions(params));
+export const prefetchPages = (params: GetPagesInput) => {
+  return prefetch(trpc.comingSoon.getPages.queryOptions(params));
 };
