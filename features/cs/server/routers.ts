@@ -6,19 +6,6 @@ import { envServer } from "@/lib/env.server";
 import type { Global, Page } from "@/types";
 
 /**
- * Strapi clean endpoint response types
- */
-interface StrapiCollectionResponse<T> {
-  results: T[];
-  pagination: {
-    page: number;
-    pageSize: number;
-    pageCount: number;
-    total: number;
-  };
-}
-
-/**
  * Helper function to call Strapi clean endpoints
  */
 async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
@@ -62,21 +49,29 @@ export const comingSoonRouter = createTRPCRouter({
   getPageBySlug: publicProcedure
     .input(z.object({ slug: z.string(), locale: z.string().optional() }))
     .query(async ({ input }): Promise<Page> => {
-      const params = new URLSearchParams({
-        'filters[slug][$eq]': input.slug,
-      });
+      const params = new URLSearchParams();
       if (input.locale) params.set('locale', input.locale);
       
-      const response = await fetchFromStrapi<StrapiCollectionResponse<Page>>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
       
-      if (!response.results || response.results.length === 0) {
+      if (!pages || pages.length === 0) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No pages found`,
+        });
+      }
+      
+      // Filter by slug on the client side since /clean doesn't support filters
+      const page = pages.find(p => p.slug === input.slug);
+      
+      if (!page) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `Page with slug '${input.slug}' not found`,
         });
       }
       
-      return response.results[0];
+      return page;
     }),
 
   getPages: publicProcedure
@@ -85,15 +80,27 @@ export const comingSoonRouter = createTRPCRouter({
       const params = new URLSearchParams();
       if (input.locale) params.set('locale', input.locale);
       
-      const response = await fetchFromStrapi<StrapiCollectionResponse<Page>>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      // Strapi /clean endpoints return arrays directly
+      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
       
-      if (!response.results || response.results.length === 0) {
+      if (!pages || pages.length === 0) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'No pages found',
         });
       }
       
-      return response.results;
+      return pages;
+    }),
+
+  getLocales: publicProcedure
+    .query(async (): Promise<string[]> => {
+      try {
+        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>('/api/i18n/locales');
+        return locales.map(l => l.code);
+      } catch {
+        console.warn('Failed to fetch locales from Strapi, using default');
+        return ['en'];
+      }
     }),
 });

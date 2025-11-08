@@ -40,11 +40,11 @@ const serversEnvs: EnvVarConfig[] = [
 ]
 
 export function validateEnvVar(env: EnvVarConfig): string {
-  if (!env.value && env.type === EnvVarType.REQUIRED_SERVER || env.type === EnvVarType.REQUIRED_CLIENT) {
+  if (!env.value && (env.type === EnvVarType.REQUIRED_SERVER || env.type === EnvVarType.REQUIRED_CLIENT)) {
     console.error(`[${env.type}] is missing: ${env.name}`);
     throw new Error(`Missing required environment variable: ${env.name}`);
   }
-  return env.value!;
+  return env.value ?? '';
 }
 
 

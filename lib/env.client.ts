@@ -4,18 +4,16 @@
  * Only import this file in client-side code (components, hooks, etc.)
  */
 
-import { EnvVarConfig, EnvVarType, validateEnvVar } from "./env.server";
-
-
-const clientEnvs: EnvVarConfig[] = [
-    {
-        name: 'NEXT_PUBLIC_CMS_API_URL',
-        value: process.env.NEXT_PUBLIC_CMS_API_URL,
-        type: EnvVarType.OPTIONAL_CLIENT,
-    },
-]
-
+function getClientEnv(name: string, required = false): string {
+  const value = process.env[name];
+  if (required && !value) {
+    console.error(`[Required client env] is missing: ${name}`);
+    throw new Error(`Missing required client environment variable: ${name}`);
+  }
+  return value || '';
+}
 
 export const envClient = {
-  NEXT_PUBLIC_CMS_API_URL: validateEnvVar(clientEnvs[0]),
+  NEXT_PUBLIC_CMS_API_URL: getClientEnv('NEXT_PUBLIC_CMS_API_URL', false),
+  NEXT_PUBLIC_STRAPI_URL: getClientEnv('NEXT_PUBLIC_STRAPI_API_URL', false),
 };

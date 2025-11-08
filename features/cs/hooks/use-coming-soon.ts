@@ -27,3 +27,11 @@ export function usePageBySlug(slug: string, locale = "en") {
 export function usePages(locale = "en") {
   return trpc.comingSoon.getPages.useQuery({ locale });
 }
+
+/**
+ * Hook to fetch available locales
+ * @returns Query result for available locales
+ */
+export function useLocales() {
+  return trpc.comingSoon.getLocales.useQuery();
+}

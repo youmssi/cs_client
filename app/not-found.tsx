@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { ContainerView } from '@/components/ui/state-views';
+import { ContainerView } from '@/components/state-views';
 
 export default function NotFound() {
   return (
