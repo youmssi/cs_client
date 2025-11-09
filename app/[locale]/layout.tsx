@@ -6,6 +6,7 @@ import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
 import { useParams } from 'next/navigation';
 import type { Locale } from '@/lib/i18n-config';
+import { ModeToggle } from '@/components/mode-toggle';
 
 export default function LocaleLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const params = useParams<{ locale: Locale }>();
@@ -24,6 +25,9 @@ export default function LocaleLayout({ children }: Readonly<{ children: React.Re
       <Navbar navbar={globalData.navbar} />
       {children}
       <Footer footer={globalData.footer} />
+      <div className="fixed bottom-4 right-4">
+        <ModeToggle />
+      </div>
     </>
   );
 }

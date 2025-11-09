@@ -1,8 +1,8 @@
-import type { Button, Link, Media, SEO } from './components';
+import type { Button, Link, Logo, SEO } from './components';
 
 export interface Navbar {
   id: number;
-  logo: Media;
+  logo: Logo;
   left_navbar_items: Button[];
   right_navbar_items: Button[];
 }
@@ -13,7 +13,7 @@ export interface Footer {
   copyright: string | null;
   designed_developed_by: string | null;
   built_with: string | null;
-  logo: Media;
+  logo: Logo;
   internal_links: Link[];
   policy_links: Link[];
   social_media_links: Link[];
