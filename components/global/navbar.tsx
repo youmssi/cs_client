@@ -42,7 +42,7 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
       <NavBody>
         <NavbarLogo logo={navbar.logo} />
         <NavItems items={navItems} />
-        <div className="relative z-[70] flex items-center gap-4">
+        <div className="relative z-70 flex items-center gap-4">
           {navbar.right_navbar_items?.map((button) => (
             <Button 
               key={`${button.id}`}

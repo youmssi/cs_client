@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-import type { DynamicBlock, HeroBlock, CTABlock, FAQBlock } from "@/types";
+import type { DynamicBlock } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Hero = dynamic(() => import("./hero").then((mod) => mod.Hero), {

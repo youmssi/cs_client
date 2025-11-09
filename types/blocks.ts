@@ -5,7 +5,7 @@ export interface HeroBlock {
   id: number;
   heading: string | null;
   sub_heading: string | null;
-  ctas: Button[];
+  CTAs: Button[];
 }
 
 export interface CTABlock {
@@ -13,7 +13,7 @@ export interface CTABlock {
   id: number;
   heading: string | null;
   sub_heading: string | null;
-  ctas: Button[];
+  CTAs: Button[];
 }
 
 export interface FAQBlock {
@@ -21,7 +21,7 @@ export interface FAQBlock {
   id: number;
   heading: string | null;
   sub_heading: string | null;
-  faqs: FAQ[];
+  FAQs: FAQ[];
 }
 
 export type DynamicBlock =
