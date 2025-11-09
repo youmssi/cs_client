@@ -24,7 +24,14 @@ export interface FAQBlock {
   FAQs: FAQ[];
 }
 
+export interface StoryBlock {
+  __component: 'blocks.story';
+  id: number;
+  content: string;
+}
+
 export type DynamicBlock =
   | HeroBlock
   | CTABlock
-  | FAQBlock;
+  | FAQBlock
+  | StoryBlock;

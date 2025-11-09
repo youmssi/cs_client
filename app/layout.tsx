@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Gabarito } from 'next/font/google';
 import './globals.css';
 
 import { ThemeProvider } from '@/components/theme-provider';
@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/client';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-const inter = Inter({
+const inter = Gabarito({
   subsets: ['latin'],
   variable: '--font-sans',
 });
