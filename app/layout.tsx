@@ -28,7 +28,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NuqsAdapter>
-              <main className="flex-1">{children}</main>
+              <main>{children}</main>
             </NuqsAdapter>
             <Toaster />
           </ThemeProvider>

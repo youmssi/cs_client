@@ -7,41 +7,50 @@ import { Footer } from '@/components/global/footer';
 import { useParams } from 'next/navigation';
 import type { Locale } from '@/lib/i18n-config';
 import { ModeToggle } from '@/components/mode-toggle';
-import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
+import { cn } from "@/lib/utils";
 
 export default function LocaleLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const params = useParams<{ locale: Locale }>();
   const locale = params?.locale ?? 'en';
-  const { data: globalData, isLoading, error } = useGlobal(locale);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading global data</div>;
+  const { data: globalData } = useGlobal(locale);
 
   if (!globalData?.navbar || !globalData?.footer) {
     return <>{children}</>;
   }
 
   return (
-    <div className="relative min-h-screen">
-      <DottedGlowBackground
-        className="fixed inset-0 pointer-events-none opacity-30 dark:opacity-100"
-        opacity={1}
-        gap={12}
-        radius={2}
-        colorLightVar="--color-neutral-400"
-        glowColorLightVar="--color-neutral-500" 
-        colorDarkVar="--color-neutral-600"
-        glowColorDarkVar="--color-primary"
-        backgroundOpacity={0}
-        speedMin={0.2}
-        speedMax={1.0}
-        speedScale={0.8}
-      />
+    <div className="relative bg-white dark:bg-black">
+      {/* Navbar - outside dot background */}
       <div className="relative z-10">
         <Navbar navbar={globalData.navbar} />
-        {children}
+      </div>
+      
+      {/* Children with Dot Background */}
+      <div className="relative">
+        {/* Dot Background Pattern - only for children */}
+        <div
+          className={cn(
+            "absolute inset-0",
+            "bg-size-[20px_20px]",
+            "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
+            "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]"
+          )}
+        />
+        
+        {/* Radial gradient for the container to give a faded look */}
+        <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+        
+        {/* Children Content */}
+        <div className="relative z-10">
+          {children}
+        </div>
+      </div>
+      
+      {/* Footer - outside dot background */}
+      <div className="relative z-10">
         <Footer footer={globalData.footer} />
       </div>
+      
       <div className="fixed bottom-4 right-4 z-50">
         <ModeToggle />
       </div>

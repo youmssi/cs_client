@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight';
 import type { HeroBlock } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -15,27 +16,38 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="container mx-auto px-4 text-center space-y-8"
-      >
+    <HeroHighlight containerClassName="min-h-screen">
+      <div className="container mx-auto px-4 text-center space-y-8">
         <motion.h1
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight max-w-6xl mx-auto"
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: [20, -5, 0],
+          }}
+          transition={{
+            duration: 0.5,
+            ease: [0.4, 0.0, 0.2, 1],
+          }}
+          className="text-4xl md:text-5xl lg:text-7xl font-bold text-neutral-700 dark:text-white max-w-6xl leading-relaxed lg:leading-snug text-center mx-auto"
         >
-          {heading}
+          {heading && (
+            <>
+              {heading.split(' ').slice(0, -1).join(' ')}{' '}
+              <Highlight className="text-black dark:text-white">
+                {heading.split(' ').slice(-1)[0]}
+              </Highlight>
+            </>
+          )}
         </motion.h1>
 
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto leading-relaxed"
         >
           {sub_heading}
         </motion.p>
@@ -69,11 +81,8 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
             ))}
           </motion.div>
         )}
-      </motion.div>
-
-      {/* Gradient overlay */}
-      {/* <div className="absolute inset-x-0 bottom-0 h-80 w-full bg-linear-to-t from-background to-transparent pointer-events-none" /> */}
-    </section>
+      </div>
+    </HeroHighlight>
   );
 }
 
