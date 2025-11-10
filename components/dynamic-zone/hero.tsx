@@ -15,6 +15,10 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
     default: 'default' as const,
   };
 
+  const words = heading ? heading.trim().split(/\s+/) : [];
+  const leadingHeading = words.slice(0, -1).join(' ');
+  const highlightedWord = words.at(-1) ?? '';
+
   return (
     <HeroHighlight containerClassName="min-h-screen">
       <div className="container mx-auto px-4 text-center space-y-8">
@@ -35,9 +39,9 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
         >
           {heading && (
             <>
-              {heading.split(' ').slice(0, -1).join(' ')}{' '}
+              {leadingHeading && `${leadingHeading} `}
               <Highlight className="text-black dark:text-white">
-                {heading.split(' ').slice(-1)[0]}
+                {highlightedWord}
               </Highlight>
             </>
           )}

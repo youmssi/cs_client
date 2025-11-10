@@ -25,7 +25,7 @@ export function LoadingView({ message }: Readonly<StateViewProps>) {
 
 export function ErrorView({ message }: Readonly<StateViewProps>) {
   return (
-    <div className="flex items-center justify-center h-full flex-1 flex-col gap-y-4 min-h-[400px]">
+    <div className="flex items-center justify-center h-full flex-1 flex-col gap-y-4 min-h-[400px] my-auto">
       <AlertTriangle className="size-8 text-destructive" />
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
     </div>
@@ -45,7 +45,7 @@ export function EmptyView({
   onAction,
 }: Readonly<EmptyViewProps>) {
   return (
-    <div className="flex items-center justify-center h-full flex-1 min-h-[400px]">
+    <div className="flex items-center justify-center h-full flex-1 min-h-[400px] my-auto">
       <Empty className="border border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">

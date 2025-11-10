@@ -170,7 +170,10 @@ export const DottedGlowBackground = ({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => {
+      resize();
+      regenDots();
+    });
     ro.observe(container);
     resize();
 

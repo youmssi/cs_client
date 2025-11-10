@@ -4,7 +4,9 @@ export const generateMetadataObject = (seo?: SEO | null, defaults?: { title?: st
   return {
     title: seo?.metaTitle || defaults?.title || 'Default Title',
     description: seo?.metaDescription || defaults?.description || 'Default Description',
-    keywords: seo?.keywords?.split(',').map((k) => k.trim()),
+    keywords: seo?.keywords
+      ? seo.keywords.split(',').map((k) => k.trim()).filter(Boolean)
+      : undefined,
     robots: seo?.metaRobots || 'index, follow',
     openGraph: {
       title: seo?.metaTitle || defaults?.title || 'Default Title',

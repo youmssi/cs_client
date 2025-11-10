@@ -1,4 +1,4 @@
-  import Link from 'next/link';
+import Link from 'next/link';
 
 import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import type { Footer as FooterType, Link as LinkType } from '@/types';

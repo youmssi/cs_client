@@ -1,43 +1,30 @@
-'use client';
-
 import { ErrorView, LoadingView } from '@/components/state-views';
-import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
-import { usePageBySlug } from '@/features/cs/hooks/use-coming-soon';
-import { useParams } from 'next/navigation';
+import { prefetchPageBySlug } from '@/features/cs/server/prefetch';
+import { PageContent } from '@/components/page-content';
+import { HydrateClient } from "@/trpc/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import type { Locale } from '@/lib/i18n-config';
 
-export default function HomePage() {
-  const params = useParams<{ locale: Locale }>();
-  const locale = params?.locale || 'en';
-  const { data: page, isLoading, error } = usePageBySlug('home', locale);
+interface PageProps {
+  params: Promise<{ slug: string; locale: Locale }>;
+}
 
-  if (isLoading) {
-    return (
-      <main className="min-h-screen">
-        <LoadingView message="Loading home page..." />
-      </main>
-    );
-  }
+export default async function HomePage({ params }: Readonly<PageProps>) {
+  const { locale } = await params;
+  const resolvedLocale = locale ?? 'en';
+  prefetchPageBySlug('home', resolvedLocale);
 
-  if (error) {
-    return (
-      <main className="min-h-screen">
-        <ErrorView message="Failed to load home page" />
-      </main>
-    );
-  }
-
-  if (!page) {
-    return (
-      <main className="min-h-screen">
-        <ErrorView message="Home page not found" />
-      </main>
-    );
-  }
 
   return (
-    <main className="min-h-screen">
-      <DynamicZoneManager blocks={page.dynamic_zone} />
-    </main>
+    <HydrateClient>
+      <ErrorBoundary fallback={<ErrorView message="Failed to load home page" />}>
+        <Suspense fallback={<LoadingView message="Loading home page..." />}>
+          <main>
+            <PageContent slug={'home'} locale={resolvedLocale} />
+          </main>
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
   );
 }

@@ -13,7 +13,7 @@ import { ContainerView } from '@/components/state-views';
 
 export default function NotFound() {
   return (
-    <ContainerView className="min-h-screen flex items-center justify-center">
+    <ContainerView className="min-h-screen flex items-center justify-center border">
       <Empty className="border border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">

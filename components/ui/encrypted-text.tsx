@@ -38,8 +38,7 @@ function generateGibberishPreservingSpaces(
 ): string {
   if (!original) return "";
   let result = "";
-  for (let i = 0; i < original.length; i += 1) {
-    const ch = original[i];
+  for (const ch of original) {
     result += ch === " " ? " " : generateRandomCharacter(charset);
   }
   return result;
@@ -61,9 +60,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
   const animationFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const lastFlipTimeRef = useRef<number>(0);
-  const scrambleCharsRef = useRef<string[]>(
-    text ? generateGibberishPreservingSpaces(text, charset).split("") : [],
-  );
+  const [scrambleChars, setScrambleChars] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isInView) return;
@@ -72,10 +69,15 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
     const initial = text
       ? generateGibberishPreservingSpaces(text, charset)
       : "";
-    scrambleCharsRef.current = initial.split("");
+    
+    // Use setTimeout to avoid synchronous setState in effect
+    const timeoutId = setTimeout(() => {
+      setScrambleChars(initial.split(""));
+      setRevealCount(0);
+    }, 0);
+    
     startTimeRef.current = performance.now();
     lastFlipTimeRef.current = startTimeRef.current;
-    setRevealCount(0);
 
     let isCancelled = false;
 
@@ -98,16 +100,17 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
       // Re-randomize unrevealed scramble characters on an interval
       const timeSinceLastFlip = now - lastFlipTimeRef.current;
       if (timeSinceLastFlip >= Math.max(0, flipDelayMs)) {
-        for (let index = 0; index < totalLength; index += 1) {
-          if (index >= currentRevealCount) {
-            if (text[index] !== " ") {
-              scrambleCharsRef.current[index] =
-                generateRandomCharacter(charset);
-            } else {
-              scrambleCharsRef.current[index] = " ";
-            }
+        setScrambleChars((prev) => {
+          if (prev.length === 0) return prev;
+          const next = [...prev];
+          for (let index = currentRevealCount; index < totalLength; index += 1) {
+            next[index] =
+              text[index] === ' '
+                ? ' '
+                : generateRandomCharacter(charset);
           }
-        }
+          return next;
+        });
         lastFlipTimeRef.current = now;
       }
 
@@ -118,6 +121,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
 
     return () => {
       isCancelled = true;
+      clearTimeout(timeoutId);
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -135,16 +139,19 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
     >
       {text.split("").map((char, index) => {
         const isRevealed = index < revealCount;
-        const displayChar = isRevealed
-          ? char
-          : char === " "
-            ? " "
-            : (scrambleCharsRef.current[index] ??
-              generateRandomCharacter(charset));
+        let displayChar;
+        
+        if (isRevealed) {
+          displayChar = char;
+        } else if (char === " ") {
+          displayChar = " ";
+        } else {
+          displayChar = scrambleChars[index] ?? generateRandomCharacter(charset);
+        }
 
         return (
           <span
-            key={index}
+            key={`char-${index}-${char}`}
             className={cn(isRevealed ? revealedClassName : encryptedClassName)}
           >
             {displayChar}

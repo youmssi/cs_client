@@ -2,7 +2,7 @@ import React from 'react';
 
 export const AmbientColor = () => {
   return (
-    <div className="absolute top-0 left-0 w-screen h-screen z-40 pointer-events-none">
+    <div className="absolute top-0 left-0 w-screen h-screen z-0 pointer-events-none">
       <div
         style={{
           transform: 'translateY(-350px) rotate(-45deg)',

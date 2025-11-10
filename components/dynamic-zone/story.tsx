@@ -11,8 +11,17 @@ import { cn } from '@/lib/utils';
 
 const markdownComponents: Components = {
   h1: ({ children }) => (
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-16 mb-8 leading-tight tracking-tight">
-      {children}
+    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-16 mb-8 leading-tight tracking-tight text-center">
+      {typeof children === 'string' ? (
+        <>
+          <span className="text-card-foreground/25">
+            {children?.split(' ').slice(0, 2).join(' ')}
+          </span> <br />
+          {children?.split(' ').slice(2).join(' ')}
+        </>
+      ) : (
+        children
+      )}
     </h1>
   ),
   h2: ({ children }) => (

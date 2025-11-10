@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/client';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-const inter = Gabarito({
+const gabarito = Gabarito({
   subsets: ['latin'],
   variable: '--font-sans',
 });
@@ -19,7 +19,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.variable} suppressHydrationWarning>
+      <body className={gabarito.variable} suppressHydrationWarning>
         <TRPCReactProvider>
           <ThemeProvider
             attribute="class"

@@ -16,8 +16,9 @@ function getLocale(request: NextRequest): string {
   if (acceptLanguage) {
     const preferredLocale = acceptLanguage
       .split(',')[0]
-      .split('-')[0]
-      .toLowerCase();
+      ?.split(';')[0]
+      ?.split('-')[0]
+      ?.toLowerCase();
     
     const matchedLocale = i18n.locales.find(
       (locale) => locale.toLowerCase() === preferredLocale
