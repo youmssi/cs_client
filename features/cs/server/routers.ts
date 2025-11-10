@@ -1,37 +1,22 @@
 import { createTRPCRouter, publicProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { PAGINATION, API_ENDPOINTS } from "@/lib/constants";
-import { env } from "@/lib/env.server";
-import type { Global } from "@/types/global";
-import type { Page } from "@/types/page";
-import type { SaaSProduct, ProductPage } from "@/types/products";
-
-/**
- * Strapi clean endpoint response types
- */
-interface StrapiCollectionResponse<T> {
-  results: T[];
-  pagination: {
-    page: number;
-    pageSize: number;
-    pageCount: number;
-    total: number;
-  };
-}
+import { API_ENDPOINTS } from "@/lib/constants";
+import { envServer } from "@/lib/env.server";
+import type { Global, Page } from "@/types";
 
 /**
  * Helper function to call Strapi clean endpoints
  */
 async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
-  const url = `${env.STRAPI_API_URL}${endpoint}`;
+  const url = `${envServer.STRAPI_API_URL}${endpoint}`;
   
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
   
-  if (env.STRAPI_API_TOKEN) {
-    headers['Authorization'] = `Bearer ${env.STRAPI_API_TOKEN}`;
+  if (envServer.STRAPI_API_TOKEN) {
+    headers['Authorization'] = `Bearer ${envServer.STRAPI_API_TOKEN}`;
   }
   
   const response = await fetch(url, { 
@@ -50,6 +35,7 @@ async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
 }
 
 export const comingSoonRouter = createTRPCRouter({
+  
   getGlobal: publicProcedure
     .input(z.object({ locale: z.string().optional() }))
     .query(async ({ input }): Promise<Global> => {
@@ -60,146 +46,61 @@ export const comingSoonRouter = createTRPCRouter({
       return fetchFromStrapi<Global>(endpoint);
     }),
 
-  getPage: publicProcedure
-    .input(z.object({ locale: z.string().optional() }))
-    .query(async ({ input }): Promise<Page> => {
-      // First try to get all pages to see what's available
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
-      
-      const endpoint = params.toString() ? `${API_ENDPOINTS.PAGE}?${params.toString()}` : API_ENDPOINTS.PAGE;
-      console.log('🔍 Fetching from endpoint:', endpoint);
-      
-      const response = await fetchFromStrapi<StrapiCollectionResponse<Page>>(endpoint);
-      
-      // Return home page or throw error
-      if (!response.results || response.results.length === 0) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'No pages found in Strapi',
-        });
-      }
-      
-      // Find the exact home page that matches slug "home"
-      const homePage = response.results.find(p => p.slug === 'home');
-      if (!homePage) {
-        // If no "home" page, return the first page for now
-        console.log('⚠️ No "home" page found, returning first page:', response.results[0].slug);
-        return response.results[0];
-      }
-      
-      return homePage;
-    }),
-
   getPageBySlug: publicProcedure
     .input(z.object({ slug: z.string(), locale: z.string().optional() }))
     .query(async ({ input }): Promise<Page> => {
-      const params = new URLSearchParams({
-        'filters[slug][$eq]': input.slug,
-      });
+      const params = new URLSearchParams();
       if (input.locale) params.set('locale', input.locale);
       
-      const response = await fetchFromStrapi<StrapiCollectionResponse<Page>>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
       
-      if (!response.results || response.results.length === 0) {
+      if (!pages || pages.length === 0) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No pages found`,
+        });
+      }
+      
+      // Filter by slug on the client side since /clean doesn't support filters
+      const page = pages.find(p => p.slug === input.slug);
+      
+      if (!page) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `Page with slug '${input.slug}' not found`,
         });
       }
       
-      // Find the exact page that matches the slug (should be the first and only result due to filter)
-      const page = response.results.find(p => p.slug === input.slug);
-      if (!page) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Page with slug '${input.slug}' not found in results`,
-        });
-      }
-      
       return page;
     }),
 
-  getProducts: publicProcedure
-    .input(
-      z.object({
-        page: z.number().int().min(1).default(PAGINATION.DEFAULT_PAGE),
-        pageSize: z.number().int().min(PAGINATION.MIN_PAGE_SIZE).max(PAGINATION.MAX_PAGE_SIZE).default(PAGINATION.DEFAULT_PAGE_SIZE),
-        search: z.string().optional(),
-        locale: z.string().optional(),
-      })
-    )
-    .query(async ({ input }): Promise<StrapiCollectionResponse<SaaSProduct>> => {
-      const params = new URLSearchParams({
-        'pagination[page]': input.page.toString(),
-        'pagination[pageSize]': input.pageSize.toString(),
-      });
-      
+  getPages: publicProcedure
+    .input(z.object({ locale: z.string().optional() }))
+    .query(async ({ input }): Promise<Page[]> => {
+      const params = new URLSearchParams();
       if (input.locale) params.set('locale', input.locale);
       
-      if (input.search) {
-        params.append('filters[$or][0][name][$containsi]', input.search);
-        params.append('filters[$or][1][short_description][$containsi]', input.search);
+      // Strapi /clean endpoints return arrays directly
+      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      
+      if (!pages || pages.length === 0) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'No pages found',
+        });
       }
       
-      return fetchFromStrapi<StrapiCollectionResponse<SaaSProduct>>(`${API_ENDPOINTS.PRODUCTS}?${params.toString()}`);
+      return pages;
     }),
 
-  getProductBySlug: publicProcedure
-    .input(z.object({ slug: z.string(), locale: z.string().optional() }))
-    .query(async ({ input }): Promise<SaaSProduct> => {
-      const params = new URLSearchParams({
-        'filters[slug][$eq]': input.slug,
-      });
-      if (input.locale) params.set('locale', input.locale);
-      
-      const response = await fetchFromStrapi<StrapiCollectionResponse<SaaSProduct>>(`${API_ENDPOINTS.PRODUCTS}?${params.toString()}`);
-      
-      if (!response.results || response.results.length === 0) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Product with slug '${input.slug}' not found`,
-        });
+  getLocales: publicProcedure
+    .query(async (): Promise<string[]> => {
+      try {
+        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>('/api/i18n/locales');
+        return locales.map(l => l.code);
+      } catch {
+        console.warn('Failed to fetch locales from Strapi, using default');
+        return ['en'];
       }
-      
-      // Find the exact product that matches the slug
-      const product = response.results.find(p => p.slug === input.slug);
-      if (!product) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Product with slug '${input.slug}' not found in results`,
-        });
-      }
-      
-      return product;
-    }),
-
-  getProductPage: publicProcedure
-    .input(z.object({ slug: z.string(), locale: z.string().optional() }))
-    .query(async ({ input }): Promise<ProductPage> => {
-      const params = new URLSearchParams({
-        'filters[slug][$eq]': input.slug,
-      });
-      if (input.locale) params.set('locale', input.locale);
-      
-      const response = await fetchFromStrapi<StrapiCollectionResponse<ProductPage>>(`${API_ENDPOINTS.PRODUCT_PAGE}?${params.toString()}`);
-      
-      if (!response.results || response.results.length === 0) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Product page with slug '${input.slug}' not found`,
-        });
-      }
-      
-      // Find the exact product page that matches the slug
-      const productPage = response.results.find(p => p.slug === input.slug);
-      if (!productPage) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `Product page with slug '${input.slug}' not found in results`,
-        });
-      }
-      
-      return productPage;
     }),
 });
