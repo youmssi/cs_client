@@ -1,27 +1,21 @@
 "use client";
 
 import React from "react";
-import { useGlobal } from '@/features/cs/hooks/use-coming-soon';
 import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
-import type { Locale } from '@/lib/i18n-config';
 import { ModeToggle } from '@/components/mode-toggle';
 import { cn } from "@/lib/utils";
-import { LoadingView } from '@/components/state-views';
+import type { Global } from '@/types';
 
 interface LayoutContentProps {
   children: React.ReactNode;
-  locale: Locale;
+  globalData: Global;
 }
 
-export function LayoutContent({ children, locale }: Readonly<LayoutContentProps>) {
-  const { data: globalData, isLoading } = useGlobal(locale);
+export function LayoutContent({ children, globalData }: Readonly<LayoutContentProps>) {
+  const { navbar, footer } = globalData;
 
-  if (isLoading) {
-    return <LoadingView message="Loading..." />;
-  }
-
-  if (!globalData?.navbar || !globalData?.footer) {
+  if (!navbar || !footer) {
     return <>{children}</>;
   }
 
@@ -29,7 +23,7 @@ export function LayoutContent({ children, locale }: Readonly<LayoutContentProps>
     <div className="relative bg-white dark:bg-black">
       {/* Navbar - outside dot background */}
       <div className="relative z-50">
-        <Navbar navbar={globalData.navbar} />
+        <Navbar navbar={navbar} />
       </div>
       
       {/* Children with Dot Background */}
@@ -55,7 +49,7 @@ export function LayoutContent({ children, locale }: Readonly<LayoutContentProps>
       
       {/* Footer - outside dot background */}
       <div className="relative z-10">
-        <Footer footer={globalData.footer} />
+        <Footer footer={footer} />
       </div>
       
       <div className="fixed bottom-4 right-4 z-60">

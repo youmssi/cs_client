@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import type { FAQBlock } from '@/types';
 
-export function FAQ({ heading, sub_heading, faqs }: Readonly<FAQBlock>) {
+export function FAQ({ heading, sub_heading, FAQs: faqs }: Readonly<FAQBlock>) {
   if (!faqs || faqs.length === 0) return null;
 
   return (

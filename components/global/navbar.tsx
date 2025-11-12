@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import Link from 'next/link';
 import { Button } from "@/components/ui/button"; 
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 interface NavbarProps {
   navbar: NavbarType;
@@ -52,6 +53,10 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
               <Link href={button.URL} target={button.target}>{button.text}</Link>
             </Button>
           ))}
+          {/* Locale Switcher */}
+          <div className="ml-2">
+            <LocaleSwitcher />
+          </div>
         </div>
       </NavBody>
 
@@ -91,6 +96,10 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 </Link>
               </Button>
             ))}
+            {/* Locale Switcher for mobile */}
+            <div className="w-full">
+              <LocaleSwitcher />
+            </div>
           </div>
         </MobileNavMenu>
       </MobileNav>

@@ -1,30 +1,27 @@
-import { prefetchGlobal } from '@/features/cs/server/prefetch';
-import { HydrateClient } from "@/trpc/server";
-import { Suspense } from "react";
+import { HydrateClient, getCaller } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
-import type { Locale } from '@/lib/i18n-config';
 import { LayoutContent } from '@/components/layout-content';
-import { LoadingView, ErrorView } from '@/components/state-views';
+import { ErrorView } from '@/components/state-views';
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 export default async function LocaleLayout({ children, params }: Readonly<LocaleLayoutProps>) {
   const { locale } = await params;
   const resolvedLocale = locale ?? 'en';
   
-  prefetchGlobal(resolvedLocale);
+  // Server-side data fetching for SSG
+  const caller = await getCaller();
+  const globalData = await caller.comingSoon.getGlobal({ locale: resolvedLocale });
 
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<ErrorView message="Failed to load layout" />}>
-        <Suspense fallback={<LoadingView message="Loading..." />}>
-          <LayoutContent locale={resolvedLocale}>
-            {children}
-          </LayoutContent>
-        </Suspense>
+        <LayoutContent globalData={globalData}>
+          {children}
+        </LayoutContent>
       </ErrorBoundary>
     </HydrateClient>
   );

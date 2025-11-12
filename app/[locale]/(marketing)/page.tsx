@@ -1,30 +1,37 @@
-import { ErrorView, LoadingView } from '@/components/state-views';
-import { prefetchPageBySlug } from '@/features/cs/server/prefetch';
+import { ErrorView } from '@/components/state-views';
 import { PageContent } from '@/components/page-content';
-import { HydrateClient } from "@/trpc/server";
-import { Suspense } from "react";
+import { HydrateClient, getCaller } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
-import type { Locale } from '@/lib/i18n-config';
 
 interface PageProps {
-  params: Promise<{ slug: string; locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 export default async function HomePage({ params }: Readonly<PageProps>) {
   const { locale } = await params;
   const resolvedLocale = locale ?? 'en';
-  prefetchPageBySlug('home', resolvedLocale);
-
+  
+  // Server-side data fetching for SSG - handle errors gracefully
+  const caller = await getCaller();
+  let page = null;
+  
+  try {
+    page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale: resolvedLocale });
+  } catch {
+    // Don't throw - let the page render with error state
+    console.warn(`Home page not found for locale: ${resolvedLocale}`);
+  }
 
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<ErrorView message="Failed to load home page" />}>
-        <Suspense fallback={<LoadingView message="Loading home page..." />}>
-          <main>
-            <PageContent slug={'home'} locale={resolvedLocale} />
-          </main>
-        </Suspense>
+        <main>
+          <PageContent page={page} />
+        </main>
       </ErrorBoundary>
     </HydrateClient>
   );
 }
+
+export const dynamic = 'force-static';
+export const revalidate = 3600;
