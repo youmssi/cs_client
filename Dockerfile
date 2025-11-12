@@ -8,6 +8,9 @@ WORKDIR /app
 # Install pnpm globally
 RUN npm install -g pnpm
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Copy package files first (for better cache)
 COPY package.json pnpm-lock.yaml ./
 
