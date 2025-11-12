@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import type { CTABlock } from '@/types';
 import { cn } from '@/lib/utils';
 
-export function CTA({ heading, sub_heading, ctas }: Readonly<CTABlock>) {
+export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
   const buttonVariantMap = {
     simple: 'ghost' as const,
     outline: 'outline' as const,
