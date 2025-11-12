@@ -1,25 +1,12 @@
-"use client";
-
-import { usePageBySlug } from '@/features/cs/hooks/use-coming-soon';
 import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
-import { ErrorView, LoadingView } from '@/components/state-views';
+import { ErrorView } from '@/components/state-views';
+import type { Page } from '@/types';
 
 interface PageContentProps {
-  slug: string;
-  locale: string;
+  page: Page;
 }
 
-export function PageContent({ slug, locale }: Readonly<PageContentProps>) {
-  const { data: page, isLoading, error } = usePageBySlug(slug, locale);
-
-  if (isLoading) {
-    return <LoadingView message="Loading page..." />;
-  }
-
-  if (error) {
-    return <ErrorView message="Failed to load page" />;
-  }
-
+export function PageContent({ page }: Readonly<PageContentProps>) {
   if (!page) {
     return <ErrorView message="Page not found" />;
   }

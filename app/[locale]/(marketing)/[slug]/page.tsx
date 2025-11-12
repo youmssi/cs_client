@@ -1,9 +1,8 @@
-import { ErrorView, LoadingView } from '@/components/state-views';
-import { prefetchPageBySlug } from '@/features/cs/server/prefetch';
+import { ErrorView } from '@/components/state-views';
 import { PageContent } from '@/components/page-content';
-import { HydrateClient } from "@/trpc/server";
-import { Suspense } from "react";
+import { HydrateClient, getCaller } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
+import { generatePageStaticParams } from '@/lib/static-params';
 
 interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
@@ -12,17 +11,22 @@ interface PageProps {
 export default async function DynamicPage({ params }: Readonly<PageProps>) {
   const { slug, locale } = await params;
   const resolvedLocale = locale ?? 'en';
-  prefetchPageBySlug(slug, resolvedLocale);
+  
+  // Server-side data fetching for SSG
+  const caller = await getCaller();
+  const page = await caller.comingSoon.getPageBySlug({ slug, locale: resolvedLocale });
 
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<ErrorView message="Failed to load page" />}>
-        <Suspense fallback={<LoadingView message="Loading page..." />}>
-          <main>
-            <PageContent slug={slug} locale={resolvedLocale} />
-          </main>
-        </Suspense>
+        <main>
+          <PageContent page={page} />
+        </main>
       </ErrorBoundary>
     </HydrateClient>
   );
+}
+
+export async function generateStaticParams() {
+  return generatePageStaticParams();
 }
