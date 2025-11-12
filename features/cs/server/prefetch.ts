@@ -27,3 +27,11 @@ export const prefetchPageBySlug = (slug: string, locale: string) => {
 export const prefetchPages = (locale: string) => {
   return prefetch(trpc.comingSoon.getPages.queryOptions({ locale }));
 };
+
+/**
+ * Prefetches available locales
+ * @returns Prefetch function for locales
+ */
+export const prefetchLocales = () => {
+  return prefetch(trpc.comingSoon.getLocales.queryOptions());
+};

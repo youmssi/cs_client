@@ -8,11 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { Locale } from '@/lib/i18n-config';
 import { useLocales } from '@/features/cs/hooks/use-coming-soon';
 
 export function LocaleSwitcher() {
-  const params = useParams<{ locale: Locale }>();
+  const params = useParams<{ locale: string }>();
   const pathname = usePathname();
   const router = useRouter();
   const { data: locales, isLoading } = useLocales();

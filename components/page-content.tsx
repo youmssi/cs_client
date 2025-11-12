@@ -3,11 +3,10 @@
 import { usePageBySlug } from '@/features/cs/hooks/use-coming-soon';
 import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
 import { ErrorView, LoadingView } from '@/components/state-views';
-import type { Locale } from '@/lib/i18n-config';
 
 interface PageContentProps {
   slug: string;
-  locale: Locale;
+  locale: string;
 }
 
 export function PageContent({ slug, locale }: Readonly<PageContentProps>) {

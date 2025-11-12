@@ -4,10 +4,9 @@ import { PageContent } from '@/components/page-content';
 import { HydrateClient } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import type { Locale } from '@/lib/i18n-config';
 
 interface PageProps {
-  params: Promise<{ slug: string; locale: Locale }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export default async function HomePage({ params }: Readonly<PageProps>) {

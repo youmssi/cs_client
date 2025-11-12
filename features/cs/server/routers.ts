@@ -95,12 +95,13 @@ export const comingSoonRouter = createTRPCRouter({
 
   getLocales: publicProcedure
     .query(async (): Promise<string[]> => {
-      try {
-        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>('/api/i18n/locales');
+        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>(API_ENDPOINTS.LOCALES);
+        if (!locales || locales.length === 0) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'No locales found',
+          });
+        }
         return locales.map(l => l.code);
-      } catch {
-        console.warn('Failed to fetch locales from Strapi, using default');
-        return ['en'];
-      }
     }),
 });

@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { i18n } from './lib/i18n-config';
+import { i18n, getAvailableLocales } from './lib/i18n-config';
 
-function getLocale(request: NextRequest): string {
+function getLocale(request: NextRequest, locales: string[]): string {
   // Check if locale is in the pathname
   const pathname = request.nextUrl.pathname;
-  const pathnameLocale = i18n.locales.find(
+  const pathnameLocale = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
@@ -20,7 +20,7 @@ function getLocale(request: NextRequest): string {
       ?.split('-')[0]
       ?.toLowerCase();
     
-    const matchedLocale = i18n.locales.find(
+    const matchedLocale = locales.find(
       (locale) => locale.toLowerCase() === preferredLocale
     );
     
@@ -30,7 +30,7 @@ function getLocale(request: NextRequest): string {
   return i18n.defaultLocale;
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Skip API routes, static files, and Next.js internals
@@ -43,8 +43,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Resolve available locales via SSR-friendly util
+  const locales = await getAvailableLocales();
   // Check if pathname already has a locale
-  const pathnameHasLocale = i18n.locales.some(
+  const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
@@ -53,7 +55,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect to locale-prefixed path
-  const locale = getLocale(request);
+  const locale = getLocale(request, locales);
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }

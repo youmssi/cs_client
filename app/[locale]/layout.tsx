@@ -1,14 +1,13 @@
-import { prefetchGlobal } from '@/features/cs/server/prefetch';
+import { prefetchGlobal, prefetchLocales } from '@/features/cs/server/prefetch';
 import { HydrateClient } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import type { Locale } from '@/lib/i18n-config';
 import { LayoutContent } from '@/components/layout-content';
 import { LoadingView, ErrorView } from '@/components/state-views';
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 export default async function LocaleLayout({ children, params }: Readonly<LocaleLayoutProps>) {
@@ -16,6 +15,7 @@ export default async function LocaleLayout({ children, params }: Readonly<Locale
   const resolvedLocale = locale ?? 'en';
   
   prefetchGlobal(resolvedLocale);
+  prefetchLocales();
 
   return (
     <HydrateClient>

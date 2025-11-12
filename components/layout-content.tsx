@@ -4,14 +4,13 @@ import React from "react";
 import { useGlobal } from '@/features/cs/hooks/use-coming-soon';
 import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
-import type { Locale } from '@/lib/i18n-config';
 import { ModeToggle } from '@/components/mode-toggle';
 import { cn } from "@/lib/utils";
 import { LoadingView } from '@/components/state-views';
 
 interface LayoutContentProps {
   children: React.ReactNode;
-  locale: Locale;
+  locale: string;
 }
 
 export function LayoutContent({ children, locale }: Readonly<LayoutContentProps>) {

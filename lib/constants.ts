@@ -33,4 +33,5 @@ export const API_ENDPOINTS = {
   PAGE: '/api/page/clean',
   FAQS: '/api/faqs/clean',
   LOGOS: '/api/logos/clean',
+  LOCALES: '/api/i18n/locales',
 } as const;
