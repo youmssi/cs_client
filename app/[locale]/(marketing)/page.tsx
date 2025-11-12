@@ -11,9 +11,16 @@ export default async function HomePage({ params }: Readonly<PageProps>) {
   const { locale } = await params;
   const resolvedLocale = locale ?? 'en';
   
-  // Server-side data fetching for SSG
+  // Server-side data fetching for SSG - handle errors gracefully
   const caller = await getCaller();
-  const page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale: resolvedLocale });
+  let page = null;
+  
+  try {
+    page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale: resolvedLocale });
+  } catch {
+    // Don't throw - let the page render with error state
+    console.warn(`Home page not found for locale: ${resolvedLocale}`);
+  }
 
   return (
     <HydrateClient>

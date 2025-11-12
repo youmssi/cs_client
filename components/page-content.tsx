@@ -3,7 +3,7 @@ import { ErrorView } from '@/components/state-views';
 import type { Page } from '@/types';
 
 interface PageContentProps {
-  page: Page;
+  page: Page | null;
 }
 
 export function PageContent({ page }: Readonly<PageContentProps>) {
