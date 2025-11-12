@@ -1,34 +1,38 @@
-# Use lightweight Node.js base image
+# ---- Base Image ----
+# Use a lightweight Node.js image
 ARG NODE_VERSION=22.14.0-alpine
 FROM node:${NODE_VERSION} AS base
 
 # Set working directory
 WORKDIR /app
 
+# ---- Dependencies ----
 # Install pnpm globally
 RUN npm install -g pnpm
 
-# Copy package files first (for better cache)
+# Copy only package files first (for better Docker caching)
 COPY package.json pnpm-lock.yaml ./
 
-# Install all dependencies with pnpm
+# Install dependencies with pnpm using frozen lockfile for reproducibility
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of your project
+# ---- Build Phase ----
+# Copy all source files
 COPY . .
 
-# Build the Next.js app for production
+# Build Next.js for production
 RUN pnpm build
 
-# Create cache directory with proper permissions (for Next.js images)
+# Fix permissions for Next.js cache directory (avoids EACCES errors)
 RUN mkdir -p .next/cache/images && \
-    chown -R node:node .next
+    chown -R node:node .next .next/cache /app
 
-# Use non-root user for security
+# ---- Runtime ----
+# Use non-root user for better security
 USER node
 
-# Expose Next.js default port
+# Expose Next.js port
 EXPOSE 3000
 
-# Start Next.js in production
+# Start the Next.js production server
 CMD ["pnpm", "start"]
