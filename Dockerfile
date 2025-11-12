@@ -5,19 +5,22 @@ FROM node:${NODE_VERSION} AS base
 # Set working directory
 WORKDIR /app
 
-# Copy package files first (better cache)
-COPY package.json package-lock.json ./
+# Install pnpm globally
+RUN npm install -g pnpm
 
-# Install all dependencies
-RUN npm ci --no-audit
+# Copy package files first (for better cache)
+COPY package.json pnpm-lock.yaml ./
 
-# Copy project files
+# Install all dependencies with pnpm
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of your project
 COPY . .
 
 # Build the Next.js app for production
-RUN npm run build
+RUN pnpm build
 
-# Create cache directory with proper permissions
+# Create cache directory with proper permissions (for Next.js images)
 RUN mkdir -p .next/cache/images && \
     chown -R node:node .next
 
@@ -28,4 +31,4 @@ USER node
 EXPOSE 3000
 
 # Start Next.js in production
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "start"]
