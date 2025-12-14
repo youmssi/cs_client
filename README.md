@@ -1,12 +1,12 @@
 # CS Client - MRVIN100 Frontend
 
-Next.js frontend application for MRVIN100, built with TypeScript, shadcn/ui, and Aceternity UI components.
+Next.js frontend application for MRVIN100, built with TypeScript and shadcn/ui.
 
 ## Features
 
 - ✅ **Type-Safe**: Full TypeScript support with proper Strapi CMS types
 - ✅ **SSG/ISR**: Static Site Generation with Incremental Static Regeneration
-- ✅ **Component-Based**: Reusable components from shadcn/ui and Aceternity UI
+- ✅ **Component-Based**: Reusable components from shadcn/ui
 - ✅ **Dynamic Zones**: Flexible content management via Strapi dynamic zones
 - ✅ **Best Practices**: Follows Next.js 16 best practices and patterns
 
@@ -15,7 +15,7 @@ Next.js frontend application for MRVIN100, built with TypeScript, shadcn/ui, and
 - **Framework**: Next.js 16
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui, Aceternity UI
+- **UI Components**: shadcn/ui
 - **Animations**: Framer Motion
 - **CMS**: Strapi 5
 
@@ -69,8 +69,6 @@ cs_client/
 │   ├── layout.tsx          # Root layout
 │   └── page.tsx            # Home page (SSG/ISR)
 ├── components/
-│   ├── aceternity/         # Aceternity UI components
-│   │   └── card-stack.tsx  # Animated card stack
 │   ├── dynamic-zone/       # Dynamic zone components
 │   │   ├── manager.tsx     # Dynamic zone manager
 │   │   ├── hero.tsx        # Hero section
@@ -133,10 +131,6 @@ The home page automatically:
 4. Passes enriched data to components
 
 ## Components
-
-### Aceternity UI
-
-- **CardStack**: Animated stacked cards for testimonials
 
 ### shadcn/ui
 

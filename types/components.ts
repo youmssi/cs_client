@@ -29,13 +29,26 @@ export interface Media {
 
 export interface Link {
   id: number;
-  text: string;
-  URL: string;
-  target: '_blank' | '_self' | '_parent' | '_top';
+  text: string | null;
+  URL: string | null;
+  target: '_blank' | '_self' | '_parent' | '_top' | null;
 }
 
 export interface Button extends Link {
-  variant?: 'simple' | 'outline' | 'primary' | 'muted';
+  /**
+   * Strapi currently uses the shadcn-ish set (default/outline/ghost/secondary/...),
+   * while some client components still support legacy values (primary/muted/simple).
+   */
+  variant?:
+    | 'default'
+    | 'outline'
+    | 'ghost'
+    | 'destructive'
+    | 'secondary'
+    | 'link'
+    | 'primary'
+    | 'muted'
+    | 'simple';
 }
 
 export interface Logo {

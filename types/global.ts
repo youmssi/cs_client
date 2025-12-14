@@ -2,9 +2,9 @@ import type { Button, Link, Logo, SEO } from './components';
 
 export interface Navbar {
   id: number;
-  logo: Logo;
-  left_navbar_items: Button[];
-  right_navbar_items: Button[];
+  logo: Logo | null;
+  left_navbar_items: Link[] | null;
+  right_navbar_items: Button[] | null;
 }
 
 export interface Footer {
@@ -13,10 +13,10 @@ export interface Footer {
   copyright: string | null;
   designed_developed_by: string | null;
   built_with: string | null;
-  logo: Logo;
-  internal_links: Link[];
-  policy_links: Link[];
-  social_media_links: Link[];
+  logo: Logo | null;
+  internal_links: Link[] | null;
+  policy_links: Link[] | null;
+  social_media_links: Link[] | null;
 }
 
 export interface Global {

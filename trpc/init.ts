@@ -23,6 +23,6 @@ export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
 
-export const publicProcedure = baseProcedure.use(async ({ctx, next}) => {
-    return next()
-})
+export const publicProcedure = baseProcedure.use(async ({ next }) => {
+  return next();
+});

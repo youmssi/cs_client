@@ -1,26 +1,16 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-
 import type { DynamicBlock } from "@/types";
-import { Skeleton } from "@/components/ui/skeleton";
 
-const Hero = dynamic(() => import("./hero").then((mod) => mod.Hero), {
-  loading: () => <Skeleton className="h-screen w-full" />,
-});
-
-const FAQ = dynamic(() => import("./faq").then((mod) => mod.FAQ), {
-  loading: () => <Skeleton className="h-96 w-full" />,
-});
-
-const CTA = dynamic(() => import("./cta").then((mod) => mod.CTA), {
-  loading: () => <Skeleton className="h-96 w-full" />,
-});
-
-const Story = dynamic(() => import("./story").then((mod) => mod.Story), {
-  loading: () => <Skeleton className="h-96 w-full" />,
-});
+import { Hero } from "./hero";
+import { SocialProof } from "./social-proof";
+import { BentoGrid } from "./bento-grid";
+import { Documentation } from "./documentation";
+import { Testimonials } from "./testimonials";
+import { Pricing } from "./pricing";
+import { FAQ } from "./faq";
+import { CTA } from "./cta";
+import { Story } from "./story";
 
 interface DynamicZoneManagerProps {
   blocks?: DynamicBlock[] | null;
@@ -39,35 +29,44 @@ export function DynamicZoneManager({
         switch (block.__component) {
           case "dynamic-zone.hero": {
             const props = block;
-            return (
-              <Suspense key={`hero-${block.id}-${index}`} fallback={<Skeleton className="h-96 w-full" />}>
-                <Hero {...props} />
-              </Suspense>
-            );
+            return <Hero key={`hero-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.brillance-hero": {
+            // Deprecated block type: render the same Brillance hero layout as `dynamic-zone.hero`.
+            const props = block as unknown as { heading: string | null; sub_heading: string | null };
+            return <Hero key={`brillance-hero-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.social-proof": {
+            const props = block;
+            return <SocialProof key={`social-proof-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.bento-grid": {
+            const props = block;
+            return <BentoGrid key={`bento-grid-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.documentation": {
+            const props = block;
+            return <Documentation key={`documentation-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.testimonials": {
+            const props = block;
+            return <Testimonials key={`testimonials-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.pricing": {
+            const props = block;
+            return <Pricing key={`pricing-${block.id}-${index}`} {...props} />;
           }
           case "dynamic-zone.cta": {
             const props = block;
-            return (
-              <Suspense key={`cta-${block.id}-${index}`} fallback={<Skeleton className="h-96 w-full" />}>
-                <CTA {...props} />
-              </Suspense>
-            );
+            return <CTA key={`cta-${block.id}-${index}`} {...props} />;
           }
           case "dynamic-zone.faq": {
             const props = block;
-            return (
-              <Suspense key={`faq-${block.id}-${index}`} fallback={<Skeleton className="h-96 w-full" />}>
-                <FAQ {...props} />
-              </Suspense>
-            );
+            return <FAQ key={`faq-${block.id}-${index}`} {...props} />;
           }
           case "blocks.story": {
             const props = block;
-            return (
-              <Suspense key={`story-${block.id}-${index}`} fallback={<Skeleton className="h-96 w-full" />}>
-                <Story {...props} />
-              </Suspense>
-            );
+            return <Story key={`story-${block.id}-${index}`} {...props} />;
           }
           default: {
             console.warn('No component found for this block type');

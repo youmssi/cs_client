@@ -2,6 +2,7 @@ import { HydrateClient, getCaller } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
 import { LayoutContent } from '@/components/layout-content';
 import { ErrorView } from '@/components/state-views';
+import type { Global } from "@/types";
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
@@ -12,9 +13,15 @@ export default async function LocaleLayout({ children, params }: Readonly<Locale
   const { locale } = await params;
   const resolvedLocale = locale ?? 'en';
   
-  // Server-side data fetching for SSG
+  // Server-side data fetching for SSG (must be resilient for builds when Strapi is offline)
   const caller = await getCaller();
-  const globalData = await caller.comingSoon.getGlobal({ locale: resolvedLocale });
+  let globalData: Global = { seo: null, navbar: null, footer: null, localizations: [] };
+
+  try {
+    globalData = await caller.comingSoon.getGlobal({ locale: resolvedLocale });
+  } catch {
+    console.warn(`Global data not found for locale: ${resolvedLocale}`);
+  }
 
   return (
     <HydrateClient>

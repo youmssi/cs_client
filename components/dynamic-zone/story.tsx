@@ -2,7 +2,6 @@
 
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -184,17 +183,15 @@ const markdownComponents: Components = {
 };
 
 export function Story({ content }: Readonly<StoryBlock>) {
+  const safeContent = (content ?? "").trim();
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/10">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <article className="prose prose-lg max-w-none text-pretty">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-              components={markdownComponents}
-            >
-              {content}
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+              {safeContent}
             </ReactMarkdown>
           </article>
         </div>
