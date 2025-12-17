@@ -104,3 +104,9 @@ export interface FeatureCard {
   description: string;
   background_style: 'blue' | 'purple' | 'green';
 }
+
+export interface BentoGridItem {
+  title: string;
+  description: string;
+  illustration: 'smart-simple-brilliant' | 'your-work-in-sync' | 'effortless-integration' | 'numbers-that-speak';
+}

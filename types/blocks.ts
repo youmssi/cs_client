@@ -1,4 +1,4 @@
-import type { Button, FAQ, Testimonial, HeaderSection, Logo, FeatureCard } from './components';
+import type { Button, FAQ, Testimonial, HeaderSection, Logo, FeatureCard, BentoGridItem } from './components';
 
 export interface HeroBlock {
   __component: 'dynamic-zone.hero';
@@ -40,12 +40,29 @@ export interface TestimonialsBlock {
 
 export type DynamicBlock =
   | HeroBlock
+  | BrillanceHeroBlock
   | CTABlock
   | FAQBlock
   | StoryBlock
   | TestimonialsBlock
   | SocialProofBlock
-  | DocumentationBlock;
+  | BentoGridBlock
+  | DocumentationBlock
+  | PricingBlock;
+
+export interface BrillanceHeroBlock {
+  __component: 'dynamic-zone.brillance-hero';
+  id: number;
+  heading: string | null;
+  sub_heading: string | null;
+}
+
+export interface PricingBlock {
+  __component: 'dynamic-zone.pricing';
+  id: number;
+  heading: string | null;
+  sub_heading: string | null;
+}
 
 export interface SocialProofBlock {
   __component: 'dynamic-zone.social-proof';
@@ -59,5 +76,12 @@ export interface DocumentationBlock {
   id: number;
   header_section?: HeaderSection | null;
   cards: FeatureCard[];
+}
+
+export interface BentoGridBlock {
+  __component: 'dynamic-zone.bento-grid';
+  id: number;
+  header_section?: HeaderSection | null;
+  items?: BentoGridItem[] | null;
 }
 
