@@ -79,3 +79,28 @@ export interface FAQ {
   question: string | null;
   answer: string | null;
 }
+
+export interface Testimonial {
+  id: number;
+  quote: string | null;
+  name: string | null;
+  company: string | null;
+  image: Media | null;
+}
+
+export interface Badge {
+  text: string | null;
+  variant: 'grid' | 'dot' | 'bar';
+}
+
+export interface HeaderSection {
+  badge: Badge | null;
+  heading: string | null;
+  sub_heading: string | null;
+}
+
+export interface FeatureCard {
+  title: string;
+  description: string;
+  background_style: 'blue' | 'purple' | 'green';
+}

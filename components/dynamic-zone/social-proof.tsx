@@ -2,45 +2,33 @@ import type React from "react";
 
 import type { SocialProofBlock } from "@/types";
 import { BrillanceBadge } from "@/components/brillance/badge";
+import { getStrapiMediaUrl } from "@/lib/media.strapi";
 
-export function SocialProof({ heading, sub_heading }: Readonly<SocialProofBlock>) {
+export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock>) {
+  const badgeVariant = header_section?.badge?.variant;
+  const badgeText = header_section?.badge?.text ?? "Social Proof";
+  const title = header_section?.heading ?? "Confidence backed by results";
+  const subtitle =
+    header_section?.sub_heading ??
+    "Our customers achieve more each day\nbecause their tools are simple, powerful, and clear.";
   return (
     <div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
       {/* Social Proof Section */}
       <div className="self-stretch px-4 sm:px-6 md:px-24 py-8 sm:py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
         <div className="w-full max-w-[586px] px-4 sm:px-6 py-4 sm:py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-3 sm:gap-4 shadow-none">
-          <BrillanceBadge
-            icon={
-              <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="1" y="3" width="4" height="6" stroke="#37322F" strokeWidth="1" fill="none" />
-                <rect x="7" y="1" width="4" height="8" stroke="#37322F" strokeWidth="1" fill="none" />
-                <rect x="2" y="4" width="1" height="1" fill="#37322F" />
-                <rect x="3.5" y="4" width="1" height="1" fill="#37322F" />
-                <rect x="2" y="5.5" width="1" height="1" fill="#37322F" />
-                <rect x="3.5" y="5.5" width="1" height="1" fill="#37322F" />
-                <rect x="8" y="2" width="1" height="1" fill="#37322F" />
-                <rect x="9.5" y="2" width="1" height="1" fill="#37322F" />
-                <rect x="8" y="3.5" width="1" height="1" fill="#37322F" />
-                <rect x="9.5" y="3.5" width="1" height="1" fill="#37322F" />
-                <rect x="8" y="5" width="1" height="1" fill="#37322F" />
-                <rect x="9.5" y="5" width="1" height="1" fill="#37322F" />
-              </svg>
-            }
-            text="Social Proof"
-          />
+          <BrillanceBadge iconVariant={badgeVariant} text={badgeText} />
 
           <div className="w-full max-w-[472.55px] text-center flex justify-center flex-col text-[#49423D] text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
-            {heading ?? "Confidence backed by results"}
+            {title}
           </div>
 
           <div className="self-stretch text-center text-[#605A57] text-sm sm:text-base font-normal leading-6 sm:leading-7 font-sans">
-            {sub_heading ?? (
-              <>
-                Our customers achieve more each day
-                <br className="hidden sm:block" />
-                because their tools are simple, powerful, and clear.
-              </>
-            )}
+            {subtitle.split('\n').map((line, idx) => (
+              <span key={idx}>
+                {line}
+                {idx === 0 ? <br className="hidden sm:block" /> : null}
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -59,7 +47,7 @@ export function SocialProof({ heading, sub_heading }: Readonly<SocialProofBlock>
         </div>
 
         <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-0 border-l border-r border-[rgba(55,50,47,0.12)]">
-          {Array.from({ length: 8 }).map((_, index) => {
+          {(logos ?? []).map((logo, index) => {
             const isMobileFirstColumn = index % 2 === 0;
             const isDesktopFirstColumn = index % 4 === 0;
             const isDesktopLastColumn = index % 4 === 3;
@@ -84,11 +72,10 @@ export function SocialProof({ heading, sub_heading }: Readonly<SocialProofBlock>
                 `}
               >
                 <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 relative shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] overflow-hidden rounded-full">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/horizon-icon.svg" alt="Horizon" className="w-full h-full object-contain" />
+                  <img src={getStrapiMediaUrl(logo.image?.url)} alt={logo.company || "Logo"} className="w-full h-full object-contain" />
                 </div>
                 <div className="text-center flex justify-center flex-col text-[#37322F] text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-tight md:leading-9 font-sans">
-                  Acute
+                  {logo.company ?? ""}
                 </div>
               </div>
             );
