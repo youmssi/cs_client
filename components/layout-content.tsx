@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import type { Global } from '@/types';
-
 import { Navbar } from '@/components/global/navbar';
 import { Footer } from '@/components/global/footer';
 import { ModeToggle } from '@/components/mode-toggle';
@@ -13,11 +11,6 @@ interface LayoutContentProps {
   globalData: Global;
 }
 
-/**
- * Brillance landing page shell.
- * We keep data-driven Global navbar/footer (Strapi) but render them in the
- * exact Brillance visual frame (rails, background, spacing).
- */
 export function LayoutContent({ children, globalData }: Readonly<LayoutContentProps>) {
   const { navbar, footer } = globalData;
 

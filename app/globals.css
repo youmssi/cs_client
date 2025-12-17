@@ -61,15 +61,14 @@
 }
 
 .dark {
-  /* Brillance (dark) */
-  --background: #0B0B0B;
-  --foreground: #FBFAF9;
+  --background: oklch(0 0 0);
+  --foreground: oklch(1.0000 0 0);
   --card: oklch(0.3211 0 0);
   --card-foreground: oklch(1.0000 0 0);
   --popover: oklch(0.3211 0 0);
   --popover-foreground: oklch(1.0000 0 0);
-  --primary: #FBFAF9;
-  --primary-foreground: #0B0B0B;
+  --primary: oklch(0.7316 0.1186 226.0409);
+  --primary-foreground: oklch(0 0 0);
   --secondary: oklch(0.9691 0.2005 109.6228);
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.2178 0 0);
@@ -80,7 +79,7 @@
   --destructive-foreground: oklch(0 0 0);
   --border: oklch(1.0000 0 0);
   --input: oklch(1.0000 0 0);
-  --ring: #FBFAF9;
+  --ring: oklch(0.7316 0.1186 226.0409);
   --chart-1: oklch(0.7316 0.1186 226.0409);
   --chart-2: oklch(0.9691 0.2005 109.6228);
   --chart-3: oklch(0.6755 0.1765 252.2592);
@@ -185,27 +184,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  ::selection {
-    background: color-mix(in oklab, var(--ring) 20%, transparent);
-  }
-}
-
-/* Brillance helpers */
-.text-balance {
-  text-wrap: balance;
-}
-
-.text-pretty {
-  text-wrap: pretty;
-}
-
-.mix-blend-multiply {
-  mix-blend-mode: multiply;
-}
-
-.backdrop-blur-custom {
-  backdrop-filter: blur(8.25px);
 }
 
 /* Landing template helpers */

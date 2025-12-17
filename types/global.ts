@@ -2,9 +2,9 @@ import type { Button, Link, Logo, SEO, SocialLink } from './components';
 
 export interface Navbar {
   id: number;
-  logo: Logo | null;
-  left_navbar_items: Link[] | null;
-  right_navbar_items: Button[] | null;
+  logo: Logo;
+  left_navbar_items: Button[];
+  right_navbar_items: Button[];
 }
 
 export interface Footer {

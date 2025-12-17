@@ -1,25 +1,41 @@
-"use client";
-
-import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-
 import type { Navbar as NavbarType } from '@/types';
-import { getStrapiMediaUrl } from '@/lib/media.strapi';
-import { LocaleSwitcher } from '@/components/locale-switcher';
-import { ModeToggle } from "@/components/mode-toggle";
+
+import {
+  Navbar as ResizableNavbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
+import { useState } from "react";
+import Link from 'next/link';
+import { Button } from "@/components/ui/button"; 
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 interface NavbarProps {
   navbar: NavbarType;
 }
 
 export function Navbar({ navbar }: Readonly<NavbarProps>) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const logoUrl = navbar.logo?.image?.url ? getStrapiMediaUrl(navbar.logo.image.url) : null;
-  const brandName = navbar.logo?.company ?? 'Brillance';
-  const leftItems = navbar.left_navbar_items ?? [];
-  const rightItems = navbar.right_navbar_items ?? [];
+  const navItems = navbar.left_navbar_items?.map(item => ({
+    id: item.id,
+    name: item.text,
+    target: item.target,
+    link: item.URL,
+    variant: item.variant,
+  })) || [];
+
+  const buttonVariantMap: Record<string, 'default' | 'secondary' | 'outline' | 'ghost'> = {
+    primary: 'default',
+    outline: 'outline',
+    simple: 'ghost',
+    muted: 'secondary',
+  };
 
   return (
     <ResizableNavbar className="w-full bg-transparent">
@@ -49,7 +65,7 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
             ))}
           </div>
         </div>
-      </div>
+      </NavBody>
 
       <MobileNav className="bg-[#F7F5F3]">
         <MobileNavHeader>
@@ -81,15 +97,18 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 variant={buttonVariantMap[button.variant || 'primary'] || 'default'}
                 asChild
               >
-                {item.text ?? ''}
-              </Link>
+                <Link href={button.URL} target={button.target} onClick={() => setIsMobileMenuOpen(false)}>
+                  {button.text}
+                </Link>
+              </Button>
             ))}
-            <div className="pt-2">
+            {/* Locale Switcher for mobile */}
+            <div className="w-full">
               <LocaleSwitcher />
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        </MobileNavMenu>
+      </MobileNav>
+    </ResizableNavbar>
   );
 }
