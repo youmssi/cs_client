@@ -32,6 +32,7 @@ interface NavItemsProps {
   }[];
   className?: string;
   onItemClick?: () => void;
+  linkClassName?: string;
 }
 
 interface MobileNavProps {
@@ -109,7 +110,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+export const NavItems = ({ items, className, onItemClick, linkClassName }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
@@ -127,7 +128,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           prefetch
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-foreground"
+          className={cn("relative inline-flex items-center h-9 px-3", linkClassName ?? "text-foreground")}
         >
           {hovered === idx && (
             <motion.div

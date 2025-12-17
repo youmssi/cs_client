@@ -10,6 +10,7 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  preload: true,
 });
 
 const instrumentSerif = Instrument_Serif({
@@ -17,6 +18,7 @@ const instrumentSerif = Instrument_Serif({
   variable: '--font-instrument-serif',
   weight: ['400'],
   display: 'swap',
+  preload: true,
 });
 
 export default async function RootLayout({

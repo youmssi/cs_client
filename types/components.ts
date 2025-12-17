@@ -51,6 +51,14 @@ export interface Button extends Link {
     | 'simple';
 }
 
+export interface SocialLink {
+  id: number;
+  platform: 'x' | 'linkedin' | 'github';
+  URL: string;
+  target: '_blank' | '_self' | '_parent' | '_top';
+  label?: string | null;
+}
+
 export interface Logo {
   company: string | null;
   image: Media | null;

@@ -22,7 +22,6 @@ export interface FAQBlock {
   id: number;
   heading: string | null;
   sub_heading: string | null;
-  /** Strapi component field is `faqs` (lowercase). */
   faqs: FAQ[];
 }
 
