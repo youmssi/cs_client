@@ -55,7 +55,7 @@ export function Testimonials(props: Readonly<TestimonialsBlock>) {
                 transition:
                   "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
               }}
-              src={getStrapiMediaUrl(current?.image?.url)}
+              src={getStrapiMediaUrl(current?.image ?? undefined)}
               alt={current?.name || "Testimonial"}
             />
             <div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 shadow-none pb-0 pt-0">

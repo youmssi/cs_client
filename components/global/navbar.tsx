@@ -22,19 +22,24 @@ interface NavbarProps {
 export function Navbar({ navbar }: Readonly<NavbarProps>) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems = navbar.left_navbar_items?.map(item => ({
-    id: item.id,
-    name: item.text,
-    target: item.target,
-    link: item.URL,
-    variant: item.variant,
-  })) || [];
+  const navItems =
+    navbar.left_navbar_items
+      ?.filter((item) => item.text && item.URL)
+      .map((item) => ({
+        name: item.text as string,
+        link: item.URL as string,
+      })) ?? [];
 
-  const buttonVariantMap: Record<string, 'default' | 'secondary' | 'outline' | 'ghost'> = {
-    primary: 'default',
-    outline: 'outline',
-    simple: 'ghost',
-    muted: 'secondary',
+  const buttonVariantMap: Record<
+    string,
+    "default" | "outline" | "ghost" | "destructive" | "secondary" | "link"
+  > = {
+    default: "default",
+    outline: "outline",
+    ghost: "ghost",
+    destructive: "destructive",
+    secondary: "secondary",
+    link: "link",
   };
 
   return (
@@ -57,10 +62,19 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
             {navbar.right_navbar_items?.map((button) => (
               <Button
                 key={`${button.id}`}
-                variant={buttonVariantMap[button.variant || 'primary'] || 'default'}
+                variant={
+                  button.variant
+                    ? buttonVariantMap[button.variant] ?? "default"
+                    : "default"
+                }
                 asChild
               >
-                <Link href={button.URL} target={button.target}>{button.text}</Link>
+                <Link
+                  href={button.URL ?? "#"}
+                  target={button.target ?? "_self"}
+                >
+                  {button.text}
+                </Link>
               </Button>
             ))}
           </div>
@@ -94,10 +108,18 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
             {navbar.right_navbar_items?.map((button) => (
               <Button
                 key={`${button.id}`}
-                variant={buttonVariantMap[button.variant || 'primary'] || 'default'}
+                variant={
+                  button.variant
+                    ? buttonVariantMap[button.variant] ?? "default"
+                    : "default"
+                }
                 asChild
               >
-                <Link href={button.URL} target={button.target} onClick={() => setIsMobileMenuOpen(false)}>
+                <Link
+                  href={button.URL ?? "#"}
+                  target={button.target ?? "_self"}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   {button.text}
                 </Link>
               </Button>

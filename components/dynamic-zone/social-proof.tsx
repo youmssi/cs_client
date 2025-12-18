@@ -5,7 +5,7 @@ import { BrillanceBadge } from "@/components/brillance/badge";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
 
 export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock>) {
-  const badgeVariant = header_section?.badge?.variant;
+  const badgeVariant = header_section?.badge?.variant ?? "dot";
   const badgeText = header_section?.badge?.text ?? "Social Proof";
   const title = header_section?.heading ?? "Confidence backed by results";
   const subtitle =
@@ -16,7 +16,7 @@ export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock
       {/* Social Proof Section */}
       <div className="self-stretch px-4 sm:px-6 md:px-24 py-8 sm:py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
         <div className="w-full max-w-[586px] px-4 sm:px-6 py-4 sm:py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-3 sm:gap-4 shadow-none">
-          <BrillanceBadge iconVariant={badgeVariant} text={badgeText} />
+          {badgeText ? <BrillanceBadge iconVariant={badgeVariant} text={badgeText} /> : null}
 
           <div className="w-full max-w-[472.55px] text-center flex justify-center flex-col text-[#49423D] text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
             {title}
@@ -72,7 +72,11 @@ export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock
                 `}
               >
                 <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 relative shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] overflow-hidden rounded-full">
-                  <img src={getStrapiMediaUrl(logo.image?.url)} alt={logo.company || "Logo"} className="w-full h-full object-contain" />
+                  <img
+                    src={getStrapiMediaUrl(logo.image ?? undefined)}
+                    alt={logo.company || "Logo"}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div className="text-center flex justify-center flex-col text-[#37322F] text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-tight md:leading-9 font-sans">
                   {logo.company ?? ""}

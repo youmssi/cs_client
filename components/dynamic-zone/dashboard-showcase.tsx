@@ -1,0 +1,174 @@
+/* Dashboard + feature cards composite section based on the Brillance template. */
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import type { DashboardShowcaseBlock } from "@/types";
+import { getStrapiMediaUrl } from "@/lib/media.strapi";
+
+export function DashboardShowcase({
+  primary_image,
+  secondary_image,
+  tertiary_image,
+  features,
+}: Readonly<DashboardShowcaseBlock>) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const mountedRef = useRef(true);
+
+  const list = (features ?? []).slice(0, 3);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!mountedRef.current) return;
+
+      setProgress((prev) => {
+        if (prev >= 100) {
+          if (mountedRef.current) {
+            setActiveIndex((current) =>
+              list.length > 0 ? (current + 1) % list.length : 0,
+            );
+          }
+          return 0;
+        }
+        return prev + 2;
+      });
+    }, 100);
+
+    return () => {
+      clearInterval(interval);
+      mountedRef.current = false;
+    };
+  }, [list.length]);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  const handleCardClick = (index: number) => {
+    if (!mountedRef.current) return;
+    setActiveIndex(index);
+    setProgress(0);
+  };
+
+  const currentFeature = list[activeIndex] ?? null;
+  const slot = currentFeature?.image_slot ?? "primary";
+
+  const imageSrc =
+    slot === "secondary"
+      ? getStrapiMediaUrl(secondary_image ?? undefined)
+      : slot === "tertiary"
+        ? getStrapiMediaUrl(tertiary_image ?? undefined)
+        : getStrapiMediaUrl(primary_image ?? undefined);
+
+  return (
+    <section className="w-full flex flex-col justify-center items-center">
+      <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-[216px] pb-8 sm:pb-12 md:pb-16 flex flex-col justify-start items-center px-2 sm:px-4 md:px-8 lg:px-0 w-full">
+
+        {/* Dashboard image area */}
+        <div className="w-full max-w-[960px] lg:w-[960px] pt-2 sm:pt-4 pb-6 sm:pb-8 md:pb-10 px-2 sm:px-4 md:px-6 lg:px-11 flex flex-col justify-center items-center gap-2 relative z-5 my-8 sm:my-12 md:my-16 lg:my-16 mb-0 lg:pb-0">
+          <div className="w-full max-w-[960px] lg:w-[960px] h-[200px] sm:h-[280px] md:h-[450px] lg:h-[695.55px] bg-white shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] overflow-hidden rounded-[6px] sm:rounded-[8px] lg:rounded-[9.06px] flex flex-col justify-start items-start">
+            <div className="self-stretch flex-1 flex justify-start items-start">
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="relative w-full h-full overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageSrc}
+                    alt={currentFeature?.title ?? "Dashboard"}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature cards with progress bar */}
+        <div className="self-stretch border-t border-[#E0DEDB] border-b border-[#E0DEDB] flex justify-center items-start">
+          <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
+            <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+              {Array.from({ length: 50 }).map((_, i) => (
+                <div
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={i}
+                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1 px-0 sm:px-2 md:px-0 flex flex-col md:flex-row justify-center items-stretch gap-0">
+            {list.map((feature, index) => (
+              <FeatureCard
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                title={feature.title ?? ""}
+                description={feature.description ?? ""}
+                isActive={index === activeIndex}
+                progress={index === activeIndex ? progress : 0}
+                onClick={() => handleCardClick(index)}
+              />
+            ))}
+          </div>
+
+          <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
+            <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+              {Array.from({ length: 50 }).map((_, i) => (
+                <div
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={i}
+                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeatureCard({
+  title,
+  description,
+  isActive,
+  progress,
+  onClick,
+}: {
+  title: string;
+  description: string;
+  isActive: boolean;
+  progress: number;
+  onClick: () => void;
+}) {
+  return (
+    <div
+      className={`w-full md:flex-1 self-stretch px-6 py-5 overflow-hidden flex flex-col justify-start items-start gap-2 cursor-pointer relative border-b md:border-b-0 last:border-b-0 ${
+        isActive
+          ? "bg-white shadow-[0px_0px_0px_0.75px_#E0DEDB_inset]"
+          : "border-l-0 border-r-0 md:border border-[#E0DEDB]/80"
+      }`}
+      onClick={onClick}
+    >
+      {isActive && (
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-[rgba(50,45,43,0.08)]">
+          <div
+            className="h-full bg-[#322D2B] transition-all duration-100 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+
+      <div className="self-stretch flex justify-center flex-col text-[#49423D] text-sm md:text-sm font-semibold leading-6 md:leading-6 font-sans">
+        {title}
+      </div>
+      <div className="self-stretch text-[#605A57] text-[13px] md:text-[13px] font-normal leading-[22px] md:leading-[22px] font-sans">
+        {description}
+      </div>
+    </div>
+  );
+}
+
+

@@ -1,7 +1,17 @@
-import type { Button, FAQ, Testimonial, HeaderSection, Logo, FeatureCard, BentoGridItem } from './components';
+import type {
+  Button,
+  FAQ,
+  Testimonial,
+  HeaderSection,
+  Logo,
+  FeatureCard,
+  BentoGridItem,
+  PricingPlan,
+  DashboardShowcaseFeature,
+} from "./components";
 
 export interface HeroBlock {
-  __component: 'dynamic-zone.hero';
+  __component: "dynamic-zone.hero";
   id: number;
   heading: string | null;
   sub_heading: string | null;
@@ -40,28 +50,31 @@ export interface TestimonialsBlock {
 
 export type DynamicBlock =
   | HeroBlock
-  | BrillanceHeroBlock
   | CTABlock
   | FAQBlock
   | StoryBlock
   | TestimonialsBlock
   | SocialProofBlock
   | BentoGridBlock
-  | DocumentationBlock
-  | PricingBlock;
+  | PlatformFeaturesBlock
+  | PricingBlock
+  | DashboardShowcaseBlock;
 
-export interface BrillanceHeroBlock {
-  __component: 'dynamic-zone.brillance-hero';
-  id: number;
-  heading: string | null;
-  sub_heading: string | null;
-}
 
 export interface PricingBlock {
-  __component: 'dynamic-zone.pricing';
+  __component: "dynamic-zone.pricing";
   id: number;
-  heading: string | null;
-  sub_heading: string | null;
+  /**
+   * Preferred source of copy for the pricing section.
+   * Mirrors the `shared.heading` (Section Header) component in Strapi.
+   */
+  header_section?: HeaderSection | null;
+  frequency_toggle_label_monthly?: string | null;
+  frequency_toggle_label_yearly?: string | null;
+  /**
+   * Fully configurable pricing plans managed from Strapi.
+   */
+  plans?: PricingPlan[] | null;
 }
 
 export interface SocialProofBlock {
@@ -71,11 +84,18 @@ export interface SocialProofBlock {
   logos?: Logo[] | null;
 }
 
-export interface DocumentationBlock {
+export interface PlatformFeaturesBlock {
   __component: 'dynamic-zone.documentation';
   id: number;
+  /**
+   * Header section containing badge, heading, and sub_heading.
+   * Uses the shared HeaderSection component for consistency.
+   */
   header_section?: HeaderSection | null;
-  cards: FeatureCard[];
+  /**
+   * Feature cards showcasing platform capabilities.
+   */
+  cards?: FeatureCard[] | null;
 }
 
 export interface BentoGridBlock {
@@ -84,4 +104,20 @@ export interface BentoGridBlock {
   header_section?: HeaderSection | null;
   items?: BentoGridItem[] | null;
 }
+
+export interface DashboardShowcaseBlock {
+  __component: "dynamic-zone.dashboard-showcase";
+  id: number;
+  /**
+   * Up to three dashboard images that are swapped when the feature changes.
+   */
+  primary_image?: string | null;
+  secondary_image?: string | null;
+  tertiary_image?: string | null;
+  /**
+   * Feature descriptions that control the active dashboard image.
+   */
+  features?: DashboardShowcaseFeature[] | null;
+}
+
 

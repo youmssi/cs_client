@@ -49,8 +49,8 @@ function renderBentoIllustration(illustration?: string) {
 }
 
 export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
-  const badgeVariant = header_section?.badge?.variant;
-  const badgeText = header_section?.badge?.text ?? "Bento grid";
+  const badgeVariant = header_section?.badge?.variant ?? "grid";
+  const badgeText = header_section?.badge?.text ?? "Bento Grid";
   const title = header_section?.heading ?? "Built for absolute clarity and focused work";
   const subtitle =
     header_section?.sub_heading ??
@@ -62,7 +62,7 @@ export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
     <div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
       <div className="self-stretch px-4 sm:px-6 md:px-8 lg:px-0 lg:max-w-[1060px] lg:w-[1060px] py-8 sm:py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
         <div className="w-full max-w-[616px] lg:w-[616px] px-4 sm:px-6 py-4 sm:py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-3 sm:gap-4 shadow-none">
-          <BrillanceBadge iconVariant={badgeVariant} text={badgeText} />
+          {badgeText ? <BrillanceBadge iconVariant={badgeVariant} text={badgeText} /> : null}
 
           <div className="w-full max-w-[598.06px] lg:w-[598.06px] text-center flex justify-center flex-col text-[#49423D] text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
             {title}

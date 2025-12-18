@@ -35,20 +35,13 @@ export interface Link {
 }
 
 export interface Button extends Link {
-  /**
-   * Strapi currently uses the shadcn-ish set (default/outline/ghost/secondary/...),
-   * while some client components still support legacy values (primary/muted/simple).
-   */
   variant?:
     | 'default'
     | 'outline'
     | 'ghost'
     | 'destructive'
     | 'secondary'
-    | 'link'
-    | 'primary'
-    | 'muted'
-    | 'simple';
+    | 'link';
 }
 
 export interface SocialLink {
@@ -90,7 +83,7 @@ export interface Testimonial {
 
 export interface Badge {
   text: string | null;
-  variant: 'grid' | 'dot' | 'bar';
+  variant: "grid" | "dot" | "bar" | "pricing";
 }
 
 export interface HeaderSection {
@@ -109,4 +102,40 @@ export interface BentoGridItem {
   title: string;
   description: string;
   illustration: 'smart-simple-brilliant' | 'your-work-in-sync' | 'effortless-integration' | 'numbers-that-speak';
+}
+
+export interface PricingPlan {
+  /**
+   * Plan name (e.g. Starter, Professional, Enterprise).
+   */
+  name: string | null;
+  description: string | null;
+  /**
+   * Prices are stored as numbers or numeric strings by Strapi.
+   */
+  monthly_price: number | string | null;
+  annual_price: number | string | null;
+  /**
+   * Visual style of the card. "dark" is the highlighted/primary card.
+   */
+  card_theme: 'light' | 'dark';
+  /**
+   * Simple list of plan features.
+   */
+  features?: string | string[] | null;
+}
+
+export interface DashboardShowcaseFeature {
+  /**
+   * Title shown in the feature card.
+   */
+  title: string | null;
+  /**
+   * Short description for the feature card.
+   */
+  description: string | null;
+  /**
+   * Which dashboard image this feature controls.
+   */
+  image_slot: 'primary' | 'secondary' | 'tertiary';
 }

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import type { DocumentationBlock } from "@/types";
+import type { PlatformFeaturesBlock } from "@/types";
 import { BrillanceBadge } from "@/components/brillance/badge";
 
-export function Documentation({ header_section, cards }: Readonly<DocumentationBlock>) {
+export function PlatformFeatures({ header_section, cards }: Readonly<PlatformFeaturesBlock>) {
   const [activeCard, setActiveCard] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
 
@@ -17,7 +17,7 @@ export function Documentation({ header_section, cards }: Readonly<DocumentationB
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [cards.length]);
+  }, [cards]);
 
   const handleCardClick = (index: number) => {
     setActiveCard(index);
@@ -28,7 +28,12 @@ export function Documentation({ header_section, cards }: Readonly<DocumentationB
     <div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
       <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
         <div className="w-full max-w-[586px] px-6 py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-4 shadow-none">
-          <BrillanceBadge iconVariant={header_section?.badge?.variant} text={header_section?.badge?.text ?? "Platform Features"} />
+          {(header_section?.badge?.text ?? "Platform Features") ? (
+            <BrillanceBadge 
+              iconVariant={header_section?.badge?.variant ?? "bar"} 
+              text={header_section?.badge?.text ?? "Platform Features"} 
+            />
+          ) : null}
           <div className="self-stretch text-center flex justify-center flex-col text-[#49423D] text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
             {header_section?.heading ?? "Streamline your business operations"}
           </div>

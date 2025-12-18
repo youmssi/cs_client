@@ -1,53 +1,116 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import type { JSX } from "react";
 
-import type { PricingBlock } from "@/types";
+import type { PricingBlock, PricingPlan } from "@/types";
+import { SectionHeader } from "@/components/global/section-header";
+import { Button } from "@/components/ui/button";
 
-export function Pricing({ heading, sub_heading }: Readonly<PricingBlock>) {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("annually");
+function normalizePrice(value: number | string | null | undefined): number {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+}
 
-  const pricing = {
-    starter: { monthly: 0, annually: 0 },
-    professional: { monthly: 20, annually: 16 },
-    enterprise: { monthly: 200, annually: 160 },
-  };
+function normalizeFeatures(features?: string | string[] | null): string[] {
+  if (!features) return [];
+  if (Array.isArray(features)) return features.filter((f) => f.trim() !== "");
+  // Treat as multiline text
+  return features
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line !== "");
+}
+
+export function Pricing({
+  header_section,
+  frequency_toggle_label_monthly,
+  frequency_toggle_label_yearly,
+  plans,
+}: Readonly<PricingBlock>): JSX.Element {
+  const [billingPeriod, setBillingPeriod] =
+    useState<"monthly" | "annually">("annually");
+
+  const effectivePlans: PricingPlan[] = useMemo(() => {
+    if (plans && plans.length > 0) {
+      return plans;
+    }
+
+    // Fallback to the original hard-coded plans when Strapi content is missing.
+    return [
+      {
+        name: "Starter",
+        description: "Perfect for individuals and small teams getting started.",
+        monthly_price: 0,
+        annual_price: 0,
+        card_theme: "light",
+        features: [
+          "Up to 3 projects",
+          "Basic documentation tools",
+          "Community support",
+          "Standard templates",
+          "Basic analytics",
+        ],
+      },
+      {
+        name: "Professional",
+        description: "Advanced features for growing teams and businesses.",
+        monthly_price: 20,
+        annual_price: 16,
+        card_theme: "dark",
+        features: [
+          "Unlimited projects",
+          "Advanced documentation tools",
+          "Priority support",
+          "Custom templates",
+          "Advanced analytics",
+          "Team collaboration",
+          "API access",
+          "Custom integrations",
+        ],
+      },
+      {
+        name: "Enterprise",
+        description:
+          "Complete solution for large organizations and enterprises.",
+        monthly_price: 200,
+        annual_price: 160,
+        card_theme: "light",
+        features: [
+          "Everything in Professional",
+          "Dedicated account manager",
+          "24/7 phone support",
+          "Custom onboarding",
+          "Advanced security features",
+          "SSO integration",
+          "Custom contracts",
+          "White-label options",
+        ],
+      },
+    ];
+  }, [plans]);
+
+  const defaultHeading = "Choose the perfect plan for your business";
+  const defaultSubHeading =
+    "Scale your operations with flexible pricing that grows with your team.\nStart free, upgrade when you're ready.";
+
+  const monthlyLabel = frequency_toggle_label_monthly ?? "Monthly";
+  const yearlyLabel = frequency_toggle_label_yearly ?? "Annually";
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2">
       <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
-        <div className="w-full max-w-[586px] px-6 py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-4 shadow-none">
-          <div className="px-[14px] py-[6px] bg-white shadow-[0px_0px_0px_4px_rgba(55,50,47,0.05)] overflow-hidden rounded-[90px] flex justify-start items-center gap-[8px] border border-[rgba(2,6,23,0.08)] shadow-xs">
-            <div className="w-[14px] h-[14px] relative overflow-hidden flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M6 1V11M8.5 3H4.75C4.28587 3 3.84075 3.18437 3.51256 3.51256C3.18437 3.84075 3 4.28587 3 4.75C3 5.21413 3.18437 5.65925 3.51256 5.98744C3.84075 6.31563 4.28587 6.5 4.75 6.5H7.25C7.71413 6.5 8.15925 6.68437 8.48744 7.01256C8.81563 7.34075 9 7.78587 9 8.25C9 8.71413 8.81563 9.15925 8.48744 9.48744C8.15925 9.81563 7.71413 10 7.25 10H3.5"
-                  stroke="#37322F"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="text-center flex justify-center flex-col text-[#37322F] text-xs font-medium leading-3 font-sans">
-              Plans & Pricing
-            </div>
-          </div>
-
-          <div className="self-stretch text-center flex justify-center flex-col text-[#49423D] text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
-            {heading ?? "Choose the perfect plan for your business"}
-          </div>
-
-          <div className="self-stretch text-center text-[#605A57] text-base font-normal leading-7 font-sans">
-            {sub_heading ?? (
-              <>
-                Scale your operations with flexible pricing that grows with your team.
-                <br />
-                Start free, upgrade when you&apos;re ready.
-              </>
-            )}
-          </div>
-        </div>
+        <SectionHeader
+          header={header_section ?? null}
+          defaultBadgeText="Plans & Pricing"
+          defaultBadgeVariant="pricing"
+          defaultHeading={defaultHeading}
+          defaultSubHeading={defaultSubHeading}
+        />
       </div>
 
       <div className="self-stretch px-6 md:px-16 py-9 relative flex justify-center items-center gap-4">
@@ -61,33 +124,35 @@ export function Pricing({ heading, sub_heading }: Readonly<PricingBlock>) {
               }`}
             />
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={() => setBillingPeriod("annually")}
-              className="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1"
+              className="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1 bg-transparent hover:bg-transparent"
             >
-              <div
+              <span
                 className={`text-[13px] font-medium leading-5 font-sans transition-colors duration-300 ${
                   billingPeriod === "annually" ? "text-[#37322F]" : "text-[#6B7280]"
                 }`}
               >
-                Annually
-              </div>
-            </button>
+                {yearlyLabel}
+              </span>
+            </Button>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={() => setBillingPeriod("monthly")}
-              className="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1"
+              className="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1 bg-transparent hover:bg-transparent"
             >
-              <div
+              <span
                 className={`text-[13px] font-medium leading-5 font-sans transition-colors duration-300 ${
                   billingPeriod === "monthly" ? "text-[#37322F]" : "text-[#6B7280]"
                 }`}
               >
-                Monthly
-              </div>
-            </button>
+                {monthlyLabel}
+              </span>
+            </Button>
           </div>
 
           <div className="w-[3px] h-[3px] absolute left-[5px] top-[5.25px] bg-[rgba(55,50,47,0.10)] shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-[99px]" />
@@ -103,72 +168,44 @@ export function Pricing({ heading, sub_heading }: Readonly<PricingBlock>) {
             <div className="w-[162px] left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
               {Array.from({ length: 200 }).map((_, i) => (
                 <div
-                  key={i}
-                  className="self-stretch h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                  key={`pattern-left-${i}`}
+                  className="self-stretch h-4 -rotate-45 origin-top-left outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
                 />
               ))}
             </div>
           </div>
 
           <div className="flex-1 flex flex-col md:flex-row justify-center items-center gap-6 py-12 md:py-0">
-            <PricingCard
-              variant="light"
-              title="Starter"
-              description="Perfect for individuals and small teams getting started."
-              price={pricing.starter[billingPeriod]}
-              period={billingPeriod}
-              ctaText="Start for free"
-              ctaVariant="dark"
-              features={["Up to 3 projects", "Basic documentation tools", "Community support", "Standard templates", "Basic analytics"]}
-            />
+            {effectivePlans.map((plan, index) => {
+              const isDark = (plan.card_theme ?? "light") === "dark";
+              const isPrimary = isDark || index === 1;
 
-            <PricingCard
-              variant="dark"
-              title="Professional"
-              description="Advanced features for growing teams and businesses."
-              price={pricing.professional[billingPeriod]}
-              period={billingPeriod}
-              ctaText="Get started"
-              ctaVariant="light"
-              features={[
-                "Unlimited projects",
-                "Advanced documentation tools",
-                "Priority support",
-                "Custom templates",
-                "Advanced analytics",
-                "Team collaboration",
-                "API access",
-                "Custom integrations",
-              ]}
-            />
-
-            <PricingCard
-              variant="light"
-              title="Enterprise"
-              description="Complete solution for large organizations and enterprises."
-              price={pricing.enterprise[billingPeriod]}
-              period={billingPeriod}
-              ctaText="Contact sales"
-              ctaVariant="dark"
-              features={[
-                "Everything in Professional",
-                "Dedicated account manager",
-                "24/7 phone support",
-                "Custom onboarding",
-                "Advanced security features",
-                "SSO integration",
-                "Custom contracts",
-                "White-label options",
-              ]}
-            />
+              return (
+                <PricingCard
+                  key={`${plan.name ?? "plan"}-${index}`}
+                  variant={isPrimary ? "dark" : "light"}
+                  title={plan.name ?? ""}
+                  description={plan.description ?? ""}
+                  price={normalizePrice(
+                    billingPeriod === "monthly"
+                      ? plan.monthly_price
+                      : plan.annual_price,
+                  )}
+                  period={billingPeriod}
+                  ctaText={isPrimary ? "Get started" : "Start for free"}
+                  ctaVariant={isPrimary ? "light" : "dark"}
+                  features={normalizeFeatures(plan.features)}
+                />
+              );
+            })}
           </div>
 
           <div className="w-12 self-stretch relative overflow-hidden hidden md:block">
             <div className="w-[162px] left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
               {Array.from({ length: 200 }).map((_, i) => (
                 <div
-                  key={i}
-                  className="self-stretch h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                  key={`pattern-right-${i}`}
+                  className="self-stretch h-4 -rotate-45 origin-top-left outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
                 />
               ))}
             </div>
@@ -246,7 +283,7 @@ function PricingCard({
 
       <div className="self-stretch flex flex-col justify-start items-start gap-2">
         {features.map((feature, index) => (
-          <div key={index} className="self-stretch flex justify-start items-center gap-[13px]">
+          <div key={`${feature}-${index}`} className="self-stretch flex justify-start items-center gap-[13px]">
             <div className="w-4 h-4 relative flex items-center justify-center">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3L4.5 8.5L2 6" stroke={isDark ? "#FF8000" : "#9CA3AF"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

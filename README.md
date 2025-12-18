@@ -71,9 +71,7 @@ cs_client/
 ├── components/
 │   ├── dynamic-zone/       # Dynamic zone components
 │   │   ├── manager.tsx     # Dynamic zone manager
-│   │   ├── hero.tsx        # Hero section
-│   │   ├── feature.tsx     # Feature cards
-│   │   ├── how-it-work.tsx # How it works steps
+│   │   ├── pricing.tsx     # Pricing section
 │   │   ├── testimonials.tsx # Testimonials with card stack
 │   │   ├── faq.tsx         # FAQ accordion
 │   │   └── cta.tsx         # Call to action
@@ -107,12 +105,18 @@ All Strapi data is fully typed using TypeScript interfaces defined in `types/str
 
 The `DynamicZoneManager` component maps Strapi dynamic zone components to React components:
 
-- `dynamic-zone.hero` → `<Hero />`
-- `dynamic-zone.feature` → `<Feature />`
-- `dynamic-zone.how-it-work` → `<HowItWork />`
-- `dynamic-zone.testimonial` → `<Testimonials />`
-- `dynamic-zone.faq` → `<FAQ />`
-- `dynamic-zone.cta` → `<CTA />`
+- `dynamic-zone.hero` → `<Hero />` - Hero section with heading, subheading, and CTA buttons
+- `dynamic-zone.dashboard-showcase` → `<DashboardShowcase />` - Dashboard preview with feature cards
+- `dynamic-zone.social-proof` → `<SocialProof />` - Logo grid showing trusted companies
+- `dynamic-zone.bento-grid` → `<BentoGrid />` - Feature grid with illustrations
+- `dynamic-zone.documentation` → `<PlatformFeatures />` - Platform features with interactive cards
+- `dynamic-zone.pricing` → `<Pricing />` - Pricing plans with toggle (Monthly/Annually)
+- `dynamic-zone.testimonials` → `<Testimonials />` - Customer testimonials carousel
+- `dynamic-zone.faq` → `<FAQ />` - Frequently asked questions accordion
+- `dynamic-zone.cta` → `<CTA />` - Call-to-action section
+- `blocks.story` → `<Story />` - Rich text content block
+
+All dynamic zone components use the shared `HeaderSection` component (Badge + Heading + Sub-heading) for consistency across the landing page.
 
 ## Strapi CMS Integration
 
