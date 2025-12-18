@@ -166,6 +166,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
 
         {/* Figma - 315° */}
         <div
+          suppressHydrationWarning
           style={{
             width: "32px",
             height: "32px",
@@ -186,6 +187,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
 
         {/* Discord - 135° */}
         <div
+          suppressHydrationWarning
           style={{
             width: "32px",
             height: "32px",
@@ -210,6 +212,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
 
         {/* Notion - 225° */}
         <div
+          suppressHydrationWarning
           style={{
             width: "32px",
             height: "32px",
@@ -315,6 +318,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
 
           {/* Middle ring connections */}
           <line
+            suppressHydrationWarning
             x1={centerX}
             y1={centerY}
             x2={getPositionOnRing(120, -Math.PI / 4).x}
@@ -324,6 +328,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
             opacity="0.15"
           />
           <line
+            suppressHydrationWarning
             x1={centerX}
             y1={centerY}
             x2={getPositionOnRing(120, (3 * Math.PI) / 4).x}
@@ -333,6 +338,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
             opacity="0.15"
           />
           <line
+            suppressHydrationWarning
             x1={centerX}
             y1={centerY}
             x2={getPositionOnRing(120, (5 * Math.PI) / 4).x}
@@ -344,6 +350,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
 
           {/* Outer ring connections */}
           <line
+            suppressHydrationWarning
             x1={centerX}
             y1={centerY}
             x2={getPositionOnRing(160, 0).x}
@@ -353,6 +360,7 @@ const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 4
             opacity="0.1"
           />
           <line
+            suppressHydrationWarning
             x1={centerX}
             y1={centerY}
             x2={getPositionOnRing(160, Math.PI).x}
