@@ -52,7 +52,7 @@ export function Footer({ footer }: Readonly<FooterProps>) {
                 {footer.social_media_links.map((link: SocialLinkType) => (
                   <Link
                     key={link.id}
-                    href={link.URL}
+                    href={link.URL ?? '#'}
                     target={link.target || '_blank'}
                     rel="noopener noreferrer"
                     className="w-6 h-6 relative overflow-hidden"
@@ -75,7 +75,7 @@ export function Footer({ footer }: Readonly<FooterProps>) {
                   {footer.internal_links.map((link: LinkType) => (
                     <li key={link.id}>
                       <Link
-                        href={link.URL}
+                        href={link.URL ?? '#'}
                         target={link.target || '_self'}
                         className="text-sm text-[#49423D] hover:text-[#37322F] transition-colors"
                       >
@@ -93,7 +93,7 @@ export function Footer({ footer }: Readonly<FooterProps>) {
                   {footer.policy_links.map((link: LinkType) => (
                     <li key={link.id}>
                       <Link
-                        href={link.URL}
+                        href={link.URL ?? '#'}
                         target={link.target || '_self'}
                         className="text-sm text-[#49423D] hover:text-[#37322F] transition-colors"
                       >
