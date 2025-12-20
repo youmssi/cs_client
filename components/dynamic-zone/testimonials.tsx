@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { TestimonialsBlock } from "@/types";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
+import Image from "next/image";
 
 export function Testimonials(props: Readonly<TestimonialsBlock>) {
   const { items } = props;
@@ -46,8 +47,9 @@ export function Testimonials(props: Readonly<TestimonialsBlock>) {
       <div className="self-stretch px-2 overflow-hidden flex justify-start items-center bg-background border border-b border-l-0 border-r-0 border-t-0">
         <div className="flex-1 py-16 md:py-17 flex flex-col md:flex-row justify-center items-end gap-6">
           <div className="self-stretch px-3 md:px-12 justify-center items-start gap-4 flex flex-col md:flex-row">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
+              width={192}
+              height={200}
               className="w-48 h-50 md:w-48 md:h-50 rounded-lg object-cover transition-all duration-700 ease-in-out"
               style={{
                 opacity: isTransitioning ? 0.6 : 1,

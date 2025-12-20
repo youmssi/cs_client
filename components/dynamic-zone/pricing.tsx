@@ -34,64 +34,10 @@ export function Pricing({
 }: Readonly<PricingBlock>): JSX.Element {
   const [billingPeriod, setBillingPeriod] =
     useState<"monthly" | "annually">("annually");
+    
 
   const effectivePlans: PricingPlan[] = useMemo(() => {
-    if (plans && plans.length > 0) {
-      return plans;
-    }
-
-    // Fallback to the original hard-coded plans when Strapi content is missing.
-    return [
-      {
-        name: "Starter",
-        description: "Perfect for individuals and small teams getting started.",
-        monthly_price: 0,
-        annual_price: 0,
-        card_theme: "light",
-        features: [
-          "Up to 3 projects",
-          "Basic documentation tools",
-          "Community support",
-          "Standard templates",
-          "Basic analytics",
-        ],
-      },
-      {
-        name: "Professional",
-        description: "Advanced features for growing teams and businesses.",
-        monthly_price: 20,
-        annual_price: 16,
-        card_theme: "dark",
-        features: [
-          "Unlimited projects",
-          "Advanced documentation tools",
-          "Priority support",
-          "Custom templates",
-          "Advanced analytics",
-          "Team collaboration",
-          "API access",
-          "Custom integrations",
-        ],
-      },
-      {
-        name: "Enterprise",
-        description:
-          "Complete solution for large organizations and enterprises.",
-        monthly_price: 200,
-        annual_price: 160,
-        card_theme: "light",
-        features: [
-          "Everything in Professional",
-          "Dedicated account manager",
-          "24/7 phone support",
-          "Custom onboarding",
-          "Advanced security features",
-          "SSO integration",
-          "Custom contracts",
-          "White-label options",
-        ],
-      },
-    ];
+    return Array.isArray(plans) ? plans : [];
   }, [plans]);
 
   const defaultHeading = "Choose the perfect plan for your business";

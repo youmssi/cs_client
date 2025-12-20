@@ -73,7 +73,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
 
   // Debug: Log the media object structure
   if (process.env.NODE_ENV === "development") {
-    console.log("[getStrapiMediaUrl] Media object:", JSON.stringify(media, null, 2));
+    // console.log("[getStrapiMediaUrl] Media object:", JSON.stringify(media, null, 2));
   }
 
   // Check if it's wrapped in a data object (Strapi response format)

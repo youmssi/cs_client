@@ -77,6 +77,8 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 </Link>
               </Button>
             ))}
+            {/* Locale switcher as text button on desktop (e.g., EN, FR) */}
+            <LocaleSwitcher className="h-9 px-3 rounded-md justify-center text-xs font-medium" />
           </div>
         </div>
       </NavBody>
@@ -124,9 +126,9 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 </Link>
               </Button>
             ))}
-            {/* Locale Switcher for mobile */}
+            {/* Locale Switcher for mobile - full width */}
             <div className="w-full">
-              <LocaleSwitcher />
+              <LocaleSwitcher className="w-full" />
             </div>
           </div>
         </MobileNavMenu>
