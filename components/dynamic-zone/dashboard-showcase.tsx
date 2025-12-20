@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { DashboardShowcaseBlock } from "@/types";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
@@ -17,6 +17,20 @@ export function DashboardShowcase({
   const mountedRef = useRef(true);
 
   const list = (features ?? []).slice(0, 3);
+
+  // Memoize image URLs - only calculate once when images change
+  const primaryImageSrc = useMemo(
+    () => getStrapiMediaUrl(primary_image ?? undefined),
+    [primary_image]
+  );
+  const secondaryImageSrc = useMemo(
+    () => getStrapiMediaUrl(secondary_image ?? undefined),
+    [secondary_image]
+  );
+  const tertiaryImageSrc = useMemo(
+    () => getStrapiMediaUrl(tertiary_image ?? undefined),
+    [tertiary_image]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,12 +70,13 @@ export function DashboardShowcase({
   const currentFeature = list[activeIndex] ?? null;
   const slot = currentFeature?.image_slot ?? "primary";
 
+  // Select memoized image URL based on slot - no function calls on re-render
   const imageSrc =
     slot === "secondary"
-      ? getStrapiMediaUrl(secondary_image ?? undefined)
+      ? secondaryImageSrc
       : slot === "tertiary"
-        ? getStrapiMediaUrl(tertiary_image ?? undefined)
-        : getStrapiMediaUrl(primary_image ?? undefined);
+        ? tertiaryImageSrc
+        : primaryImageSrc;
 
   return (
     <section className="w-full flex flex-col justify-center items-center">
