@@ -38,7 +38,7 @@ export function LayoutContent({ children, globalData }: Readonly<LayoutContentPr
           </div>
         </div>
       </div>
-      <div className="fixed bottom-4 right-4 z-60">
+      <div className="fixed bottom-4 right-4 z-60 hidden">
         <ModeToggle />
       </div>
     </div>

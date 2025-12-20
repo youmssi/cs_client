@@ -1,15 +1,18 @@
 import type { HeroBlock } from "@/types";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
   return (
-    // <section className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-[216px] pb-8 sm:pb-12 md:pb-16">
-    <section className="relative">
+    <section className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-[108px] pb-8 sm:pb-12 md:pb-16">
       {/* Decorative background pattern overlay */}
-      <div className="absolute top-[232px] sm:top-[248px] md:top-[264px] lg:top-[320px] left-1/2 transform -translate-x-1/2 z-0 pointer-events-none">
-        <img
+      <div className="absolute top-[232px] sm:top-[248px] md:top-[132px] lg:top-[320px] left-1/2 transform -translate-x-1/2 z-0 pointer-events-none">
+        <Image
           src="/mask-group-pattern.svg"
           alt=""
+          width={936}
+          height={936}
           className="w-[936px] sm:w-[1404px] md:w-[2106px] lg:w-[2808px] h-auto opacity-30 sm:opacity-40 md:opacity-50 mix-blend-multiply"
           style={{
             filter: "hue-rotate(15deg) saturate(0.7) brightness(1.2)",
@@ -39,13 +42,13 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
                   size="default"
                   asChild
                 >
-                  <a
+                  <Link
                     href={cta.URL ?? "#"}
                     target={cta.target ?? "_self"}
                     rel={cta.target === "_blank" ? "noopener noreferrer" : undefined}
                   >
                     {cta.text ?? "Get Started"}
-                  </a>
+                  </Link>
                 </Button>
               ))}
             </div>

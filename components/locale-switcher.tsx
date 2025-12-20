@@ -9,8 +9,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useLocales } from '@/features/cs/hooks/use-coming-soon';
+import { cn } from '@/lib/utils';
 
-export function LocaleSwitcher() {
+interface LocaleSwitcherProps {
+  className?: string;
+}
+
+export function LocaleSwitcher( { className }: Readonly<LocaleSwitcherProps> ) {
   const params = useParams<{ locale: string }>();
   const pathname = usePathname();
   const router = useRouter();
@@ -35,7 +40,7 @@ export function LocaleSwitcher() {
 
   return (
     <Select value={currentLocale} onValueChange={handleLocaleChange}>
-      <SelectTrigger className="w-[100px]">
+      <SelectTrigger className={cn("w-[100px]", className)}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
