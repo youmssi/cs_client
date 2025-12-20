@@ -1,10 +1,10 @@
-/* Dashboard + feature cards composite section based on the Brillance template. */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 
 import type { DashboardShowcaseBlock } from "@/types";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
+import Image from "next/image";
 
 export function DashboardShowcase({
   primary_image,
@@ -73,10 +73,11 @@ export function DashboardShowcase({
             <div className="self-stretch flex-1 flex justify-start items-start">
               <div className="w-full h-full flex items-center justify-center">
                 <div className="relative w-full h-full overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={imageSrc}
                     alt={currentFeature?.title ?? "Dashboard"}
+                    width={960}
+                    height={695.55}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -91,7 +92,6 @@ export function DashboardShowcase({
             <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
               {Array.from({ length: 50 }).map((_, i) => (
                 <div
-                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                   className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
                 />
@@ -102,7 +102,6 @@ export function DashboardShowcase({
           <div className="flex-1 px-0 sm:px-2 md:px-0 flex flex-col md:flex-row justify-center items-stretch gap-0">
             {list.map((feature, index) => (
               <FeatureCard
-                // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 title={feature.title ?? ""}
                 description={feature.description ?? ""}
@@ -117,7 +116,6 @@ export function DashboardShowcase({
             <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
               {Array.from({ length: 50 }).map((_, i) => (
                 <div
-                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                   className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
                 />
@@ -136,13 +134,13 @@ function FeatureCard({
   isActive,
   progress,
   onClick,
-}: {
+}: Readonly<{
   title: string;
   description: string;
   isActive: boolean;
   progress: number;
   onClick: () => void;
-}) {
+}>) {
   return (
     <div
       className={`w-full md:flex-1 self-stretch px-6 py-5 overflow-hidden flex flex-col justify-start items-start gap-2 cursor-pointer relative border-b md:border-b-0 last:border-b-0 ${
