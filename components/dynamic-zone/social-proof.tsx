@@ -3,9 +3,11 @@ import type React from "react";
 import type { SocialProofBlock } from "@/types";
 import { BrillanceBadge } from "@/components/brillance/badge";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
+import Image from "next/image";
 
 export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock>) {
-  const badgeVariant = header_section?.badge?.variant ?? "dot";
+  
+  const badgeVariant = header_section?.badge?.variant ?? "bar";
   const badgeText = header_section?.badge?.text ?? "Social Proof";
   const title = header_section?.heading ?? "Confidence backed by results";
   const subtitle =
@@ -72,8 +74,10 @@ export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock
                 `}
               >
                 <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 relative shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] overflow-hidden rounded-full">
-                  <img
-                    src={getStrapiMediaUrl(logo.image ?? undefined)}
+                  <Image
+                    src={getStrapiMediaUrl(logo.image?.url ?? undefined)}
+                    width={logo.image?.width ?? 100}
+                    height={logo.image?.height ?? 100}
                     alt={logo.company || "Logo"}
                     className="w-full h-full object-contain"
                   />

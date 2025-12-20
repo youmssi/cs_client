@@ -1,5 +1,6 @@
 "use client";
 import { ROUTES } from "@/lib/constants";
+import { getStrapiMediaUrl } from "@/lib/media.strapi";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/types";
 import { MenuIcon, XIcon } from "lucide-react";
@@ -226,9 +227,9 @@ export const NavbarLogo: React.FC<{ logo: Logo }> = ({ logo }) => {
       prefetch
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-foreground"
     >
-      {logo.image ? (
+      {!logo.image?.url ? (
         <Image
-          src={logo.image?.url}
+          src={getStrapiMediaUrl(logo.image?.url ?? undefined)}
           alt={logo.company ?? "Company Logo"}
           width={logo.image?.width ?? 100}
           height={logo.image?.height ?? 40}

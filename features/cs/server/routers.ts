@@ -21,7 +21,8 @@ async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
   
   const response = await fetch(url, { 
     headers,
-    next: { revalidate: 3600 } // Cache for 1 hour
+    cache: 'no-store',
+    next: { revalidate: 0 }
   });
   
   if (!response.ok) {

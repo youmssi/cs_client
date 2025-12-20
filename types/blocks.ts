@@ -8,6 +8,7 @@ import type {
   BentoGridItem,
   PricingPlan,
   DashboardShowcaseFeature,
+  Media,
 } from "./components";
 
 export interface HeroBlock {
@@ -110,10 +111,11 @@ export interface DashboardShowcaseBlock {
   id: number;
   /**
    * Up to three dashboard images that are swapped when the feature changes.
+   * Can be either Media objects or URL strings for flexibility.
    */
-  primary_image?: string | null;
-  secondary_image?: string | null;
-  tertiary_image?: string | null;
+  primary_image?: Media | string | null;
+  secondary_image?: Media | string | null;
+  tertiary_image?: Media | string | null;
   /**
    * Feature descriptions that control the active dashboard image.
    */

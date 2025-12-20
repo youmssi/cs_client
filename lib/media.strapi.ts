@@ -1,17 +1,30 @@
 const PLACEHOLDER_IMAGE = "/placeholder.svg";
 
+import type { Media } from "@/types";
+
+// Accept our project's Media type, common Strapi shapes, and primitives
 type MediaLike =
   | string
   | number
   | null
   | undefined
+  | Media
   | {
       url?: string | null;
       provider_metadata?: {
         secure_url?: string;
         [key: string]: unknown;
       } | null;
-      [key: string]: unknown;
+      // Strapi v4 style nested attributes
+      attributes?: {
+        url?: string | null;
+        formats?: Record<string, unknown> | null;
+        provider_metadata?: { secure_url?: string } | null;
+      } | null;
+      // Optional formats on flat objects
+      formats?: Record<string, unknown> | null;
+      // Optional id presence used for logging
+      id?: number;
     };
 
 /**
