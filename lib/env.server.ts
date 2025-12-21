@@ -33,8 +33,8 @@ const serversEnvs: EnvVarConfig[] = [
         type: EnvVarType.OPTIONAL_SERVER,
     },
     {
-        name: 'WEBHOOK_SECRET',
-        value: process.env.WEBHOOK_SECRET,
+        name: 'WEBHOOK_AUTH_TOKEN',
+        value: process.env.WEBHOOK_AUTH_TOKEN,
         type: EnvVarType.OPTIONAL_SERVER,
     },
 ]
@@ -52,5 +52,5 @@ export const envServer = {
   CMS_URL: validateEnvVar(serversEnvs[0]),
   NODE_ENV: validateEnvVar(serversEnvs[1]),
   CMS_API_TOKEN: validateEnvVar(serversEnvs[2]),
-  WEBHOOK_SECRET: validateEnvVar(serversEnvs[3]),
+  WEBHOOK_AUTH_TOKEN: validateEnvVar(serversEnvs[3]),
 };

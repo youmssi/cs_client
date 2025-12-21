@@ -2,22 +2,29 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { envServer } from '@/lib/env.server';
 
+const AUTH_HEADER = 'authorization';
+const AUTH_SCHEME = 'bearer';
+
 // Allow Strapi webhooks to POST here to trigger ISR revalidation without rebuilding the container.
 // Security: require a shared secret.
 
 export async function POST(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const secretFromQuery = url.searchParams.get('secret');
-    const secretFromHeader = req.headers.get('x-revalidate-secret');
-    const secret = secretFromQuery || secretFromHeader || '';
+    // Prefer Authorization: Bearer <token>; fallback to query param 'secret' for compatibility
+    const providedAuth = req.headers.get(AUTH_HEADER) || '';
+    const tokenFromAuth = providedAuth.toLowerCase().startsWith(`${AUTH_SCHEME} `)
+      ? providedAuth.slice(AUTH_SCHEME.length + 1).trim()
+      : '';
+    const tokenFromQuery = url.searchParams.get('secret') || '';
+    const providedToken = tokenFromAuth || tokenFromQuery;
 
-    if (!envServer.WEBHOOK_SECRET) {
-      console.warn('[revalidate] WEBHOOK_SECRET is not set. Rejecting request.');
+    if (!envServer.WEBHOOK_AUTH_TOKEN) {
+      console.warn('[revalidate] WEBHOOK_AUTH_TOKEN is not set. Rejecting request.');
       return NextResponse.json({ revalidated: false, message: 'Missing server secret' }, { status: 500 });
     }
 
-    if (secret !== envServer.WEBHOOK_SECRET) {
+    if (providedToken !== envServer.WEBHOOK_AUTH_TOKEN) {
       return NextResponse.json({ revalidated: false, message: 'Invalid secret' }, { status: 401 });
     }
 
