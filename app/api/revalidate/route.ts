@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { envServer } from '@/lib/env.server';
 
 // Allow Strapi webhooks to POST here to trigger ISR revalidation without rebuilding the container.
 // Security: require a shared secret.
@@ -11,12 +12,12 @@ export async function POST(req: NextRequest) {
     const secretFromHeader = req.headers.get('x-revalidate-secret');
     const secret = secretFromQuery || secretFromHeader || '';
 
-    if (!process.env.REVALIDATE_SECRET) {
-      console.warn('[revalidate] REVALIDATE_SECRET is not set. Rejecting request.');
+    if (!envServer.WEBHOOK_SECRET) {
+      console.warn('[revalidate] WEBHOOK_SECRET is not set. Rejecting request.');
       return NextResponse.json({ revalidated: false, message: 'Missing server secret' }, { status: 500 });
     }
 
-    if (secret !== process.env.REVALIDATE_SECRET) {
+    if (secret !== envServer.WEBHOOK_SECRET) {
       return NextResponse.json({ revalidated: false, message: 'Invalid secret' }, { status: 401 });
     }
 

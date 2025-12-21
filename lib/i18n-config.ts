@@ -19,7 +19,7 @@ export async function getAvailableLocales(): Promise<string[]> {
   }
 
   try {
-    const base = envServer.STRAPI_API_URL;
+    const base = envServer.CMS_URL;
     const res = await fetch(`${base}${API_ENDPOINTS.LOCALES}`);
     if (!res.ok) throw new Error('Failed to fetch locales');
     const data = await res.json();

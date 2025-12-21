@@ -1,6 +1,7 @@
 const PLACEHOLDER_IMAGE = "/placeholder.svg";
 
 import type { Media } from "@/types";
+import { envClient } from "./env.client";
 
 // Accept our project's Media type, common Strapi shapes, and primitives
 type MediaLike =
@@ -62,7 +63,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
     
     // If it's a relative URL, prepend the Strapi URL
     if (trimmed.startsWith("/")) {
-      const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:1337";
+      const strapiUrl = envClient.NEXT_PUBLIC_CMS_URL;
       return `${strapiUrl}${trimmed}`;
     }
     return trimmed;
@@ -91,7 +92,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
       const trimmed = attrs.url.trim();
       if (trimmed) {
         if (trimmed.startsWith("/")) {
-          const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:1337";
+          const strapiUrl = envClient.NEXT_PUBLIC_CMS_URL;
           return `${strapiUrl}${trimmed}`;
         }
         return trimmed;
@@ -108,7 +109,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
           const trimmed = formatUrl.trim();
           if (trimmed) {
             if (trimmed.startsWith("/")) {
-              const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:1337";
+              const strapiUrl = envClient.NEXT_PUBLIC_CMS_URL;
               return `${strapiUrl}${trimmed}`;
             }
             return trimmed;
@@ -141,7 +142,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
       }
       // If it's a relative URL, prepend Strapi URL
       if (trimmed.startsWith("/")) {
-        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:1337";
+        const strapiUrl = envClient.NEXT_PUBLIC_CMS_URL;
         return `${strapiUrl}${trimmed}`;
       }
       return trimmed;
@@ -180,7 +181,7 @@ export function getStrapiMediaUrl(input?: MediaLike): string {
         const trimmed = formatUrl.trim();
         if (trimmed) {
           if (trimmed.startsWith("/")) {
-            const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || process.env.NEXT_PUBLIC_CMS_API_URL || "http://localhost:1337";
+            const strapiUrl = envClient.NEXT_PUBLIC_CMS_URL;
             return `${strapiUrl}${trimmed}`;
           }
           return trimmed;

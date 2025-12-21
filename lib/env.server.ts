@@ -18,8 +18,8 @@ export interface EnvVarConfig {
 
 const serversEnvs: EnvVarConfig[] = [
     {
-        name: 'STRAPI_API_URL',
-        value: process.env.STRAPI_API_URL,
+        name: 'CMS_URL',
+        value: process.env.CMS_URL,
         type: EnvVarType.REQUIRED_SERVER,
     },
     {
@@ -28,8 +28,8 @@ const serversEnvs: EnvVarConfig[] = [
         type: EnvVarType.REQUIRED_SERVER,
     },
     {
-        name: 'STRAPI_API_TOKEN',
-        value: process.env.STRAPI_API_TOKEN,
+        name: 'CMS_API_TOKEN',
+        value: process.env.CMS_API_TOKEN,
         type: EnvVarType.OPTIONAL_SERVER,
     },
     {
@@ -49,8 +49,8 @@ export function validateEnvVar(env: EnvVarConfig): string {
 
 
 export const envServer = {
-  STRAPI_API_URL: validateEnvVar(serversEnvs[0]),
+  CMS_URL: validateEnvVar(serversEnvs[0]),
   NODE_ENV: validateEnvVar(serversEnvs[1]),
-  STRAPI_API_TOKEN: validateEnvVar(serversEnvs[2]),
+  CMS_API_TOKEN: validateEnvVar(serversEnvs[2]),
   WEBHOOK_SECRET: validateEnvVar(serversEnvs[3]),
 };

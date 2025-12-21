@@ -9,14 +9,14 @@ import type { Global, Page } from "@/types";
  * Helper function to call Strapi clean endpoints
  */
 async function fetchFromStrapi<T>(endpoint: string, opts?: { tags?: string[]; revalidate?: number }): Promise<T> {
-  const url = `${envServer.STRAPI_API_URL}${endpoint}`;
+  const url = `${envServer.CMS_URL}${endpoint}`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
 
-  if (envServer.STRAPI_API_TOKEN) {
-    headers['Authorization'] = `Bearer ${envServer.STRAPI_API_TOKEN}`;
+  if (envServer.CMS_API_TOKEN) {
+    headers['Authorization'] = `Bearer ${envServer.CMS_API_TOKEN}`;
   }
 
   const response = await fetch(url, {
