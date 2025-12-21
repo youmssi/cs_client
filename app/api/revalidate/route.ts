@@ -120,13 +120,34 @@ export async function POST(request: NextRequest) {
       [key: string]: unknown;
     };
 
+    // Read and validate request body
+    const bodyText = await request.text();
+    
+    if (!bodyText || bodyText.trim() === '') {
+      return NextResponse.json(
+        { 
+          message: 'Empty request body',
+          expected: 'JSON payload with event and model fields',
+          example: {
+            event: 'entry.update',
+            model: 'api::page.page',
+            entry: { slug: 'home', locale: 'en' }
+          }
+        },
+        { status: 400 }
+      );
+    }
+
     let rawPayload: unknown;
     try {
-      rawPayload = await request.json();
+      rawPayload = JSON.parse(bodyText);
     } catch (error: unknown) {
       console.error('[revalidate] Invalid JSON payload', error);
       return NextResponse.json(
-        { message: 'Invalid JSON payload' },
+        { 
+          message: 'Invalid JSON payload',
+          received: bodyText.substring(0, 100)
+        },
         { status: 400 }
       );
     }
@@ -166,9 +187,10 @@ export async function POST(request: NextRequest) {
     };
 
     // Revalidate based on content type
+    // Note: revalidateTag uses 'max' profile, revalidatePath uses 'layout' or 'page'
     if (model === 'api::page.page') {
       // Always revalidate pages tag
-      revalidateTag('pages', 'page');
+      revalidateTag('pages', 'max');
       revalidated.tags.push('pages');
       
       // If we have entry details, revalidate specific page path
@@ -181,7 +203,7 @@ export async function POST(request: NextRequest) {
       }
     } else if (model === 'api::global.global') {
       // Revalidate global data (affects all pages)
-      revalidateTag('global', 'page');
+      revalidateTag('global', 'max');
       revalidated.tags.push('global');
       
       // Revalidate home pages in all locales
@@ -189,11 +211,11 @@ export async function POST(request: NextRequest) {
       revalidated.paths.push('/');
     } else if (model === 'api::logo.logo') {
       // Revalidate pages that use logos
-      revalidateTag('logos', 'page');
+      revalidateTag('logos', 'max');
       revalidated.tags.push('logos');
     } else if (model === 'api::faq.faq') {
       // Revalidate FAQ data
-      revalidateTag('faqs', 'page');
+      revalidateTag('faqs', 'max');
       revalidated.tags.push('faqs');
     } else if (event?.startsWith('media.')) {
       // Media changed - revalidate all pages to be safe

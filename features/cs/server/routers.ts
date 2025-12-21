@@ -52,7 +52,17 @@ export const comingSoonRouter = createTRPCRouter({
       const params = new URLSearchParams();
       if (input.locale) params.set('locale', input.locale);
       
-      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      const pages = await fetchFromStrapi<Page[]>(
+        `${API_ENDPOINTS.PAGE}?${params.toString()}`,
+        { 
+          tags: [
+            'pages', 
+            `pages:${input.locale ?? 'default'}`,
+            `page:${input.slug}:${input.locale ?? 'default'}`
+          ], 
+          revalidate: 3600 
+        }
+      );
       
       if (!pages || pages.length === 0) {
         throw new TRPCError({
@@ -71,8 +81,6 @@ export const comingSoonRouter = createTRPCRouter({
         });
       }
       
-      // Also tag this specific page by slug+locale for targeted revalidation
-      // Consumers should use revalidateTag(`page:${input.slug}:${input.locale ?? 'default'}`)
       return page;
     }),
 
