@@ -33,5 +33,3 @@ export default async function HomePage({ params }: Readonly<PageProps>) {
   );
 }
 
-export const dynamic = 'force-static';
-export const revalidate = 3600;

@@ -13,6 +13,5 @@ function getClientEnv(value: string | undefined, name: string, required = false)
 }
 
 export const envClient = {
-  NEXT_PUBLIC_CMS_API_URL: getClientEnv(process.env.NEXT_PUBLIC_CMS_API_URL, 'NEXT_PUBLIC_CMS_API_URL', false),
-  NEXT_PUBLIC_STRAPI_URL: getClientEnv(process.env.NEXT_PUBLIC_STRAPI_API_URL, 'NEXT_PUBLIC_STRAPI_API_URL', false),
+  NEXT_PUBLIC_CMS_URL: getClientEnv(process.env.NEXT_PUBLIC_CMS_URL, 'NEXT_PUBLIC_CMS_URL', false),
 };

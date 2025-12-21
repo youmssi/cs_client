@@ -48,7 +48,7 @@ cp .env.example .env.local
 3. Update `.env.local` with your Strapi API URL:
 
 ```env
-NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+NEXT_PUBLIC_CMS_URL=http://localhost:1337
 ```
 
 4. Run the development server:
@@ -144,7 +144,7 @@ All components from `components/ui/` are reusable shadcn/ui components:
 ## Environment Variables
 
 ```env
-NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+NEXT_PUBLIC_CMS_URL=http://localhost:1337
 ```
 
 ## Build

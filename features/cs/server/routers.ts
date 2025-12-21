@@ -8,30 +8,29 @@ import type { Global, Page } from "@/types";
 /**
  * Helper function to call Strapi clean endpoints
  */
-async function fetchFromStrapi<T>(endpoint: string): Promise<T> {
-  const url = `${envServer.STRAPI_API_URL}${endpoint}`;
-  
+async function fetchFromStrapi<T>(endpoint: string, opts?: { tags?: string[]; revalidate?: number }): Promise<T> {
+  const url = `${envServer.CMS_URL}${endpoint}`;
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
-  
-  if (envServer.STRAPI_API_TOKEN) {
-    headers['Authorization'] = `Bearer ${envServer.STRAPI_API_TOKEN}`;
+
+  if (envServer.CMS_API_TOKEN) {
+    headers['Authorization'] = `Bearer ${envServer.CMS_API_TOKEN}`;
   }
-  
-  const response = await fetch(url, { 
+
+  const response = await fetch(url, {
     headers,
-    cache: 'no-store',
-    next: { revalidate: 0 }
+    next: { revalidate: opts?.revalidate ?? 3600, tags: opts?.tags },
   });
-  
+
   if (!response.ok) {
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: `Strapi API error: ${response.statusText}`,
     });
   }
-  
+
   return response.json();
 }
 
@@ -44,7 +43,7 @@ export const comingSoonRouter = createTRPCRouter({
       if (input.locale) params.set('locale', input.locale);
       const queryString = params.toString();
       const endpoint = queryString ? `${API_ENDPOINTS.GLOBAL}?${queryString}` : API_ENDPOINTS.GLOBAL;
-      return fetchFromStrapi<Global>(endpoint);
+      return fetchFromStrapi<Global>(endpoint, { tags: ['global'], revalidate: 3600 });
     }),
 
   getPageBySlug: publicProcedure
@@ -72,6 +71,8 @@ export const comingSoonRouter = createTRPCRouter({
         });
       }
       
+      // Also tag this specific page by slug+locale for targeted revalidation
+      // Consumers should use revalidateTag(`page:${input.slug}:${input.locale ?? 'default'}`)
       return page;
     }),
 
@@ -82,7 +83,7 @@ export const comingSoonRouter = createTRPCRouter({
       if (input.locale) params.set('locale', input.locale);
       
       // Strapi /clean endpoints return arrays directly
-      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`);
+      const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`, { tags: ['pages', `pages:${input.locale ?? 'default'}`], revalidate: 3600 });
       
       if (!pages || pages.length === 0) {
         throw new TRPCError({
@@ -96,7 +97,7 @@ export const comingSoonRouter = createTRPCRouter({
 
   getLocales: publicProcedure
     .query(async (): Promise<string[]> => {
-        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>(API_ENDPOINTS.LOCALES);
+        const locales = await fetchFromStrapi<Array<{ code: string; name: string }>>(API_ENDPOINTS.LOCALES, { tags: ['locales'], revalidate: 86400 });
         if (!locales || locales.length === 0) {
           throw new TRPCError({
             code: 'NOT_FOUND',
