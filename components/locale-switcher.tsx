@@ -21,15 +21,29 @@ export function LocaleSwitcher( { className }: Readonly<LocaleSwitcherProps> ) {
   const router = useRouter();
   const { data: locales, isLoading } = useLocales();
 
-  const currentLocale = params?.locale || 'en';
+  const currentLocale = params?.locale;
 
   const handleLocaleChange = (newLocale: string) => {
-    if (!pathname) return;
+    if (!pathname || !locales) return;
     
-    // Replace the locale in the current path
-    const segments = pathname.split('/');
-    segments[1] = newLocale;
-    const newPath = segments.join('/');
+    // Split pathname and filter out empty segments
+    const segments = pathname.split('/').filter(Boolean);
+    
+    // Check if first segment is a valid locale
+    const firstSegmentIsLocale = segments.length > 0 && locales.includes(segments[0]);
+    
+    // Build the new path by replacing locale
+    let restOfPath = '';
+    if (firstSegmentIsLocale && segments.length > 1) {
+      // Remove the locale, keep the rest (e.g., /en/about -> /about)
+      restOfPath = '/' + segments.slice(1).join('/');
+    } else if (!firstSegmentIsLocale && segments.length > 0) {
+      // No locale in path, keep everything
+      restOfPath = '/' + segments.join('/');
+    }
+    
+    // Construct final path with new locale
+    const newPath = `/${newLocale}${restOfPath}`;
     
     router.push(newPath);
   };

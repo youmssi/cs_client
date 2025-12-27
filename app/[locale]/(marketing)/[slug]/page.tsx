@@ -10,7 +10,8 @@ interface PageProps {
 
 export default async function DynamicPage({ params }: Readonly<PageProps>) {
   const { slug, locale } = await params;
-  const resolvedLocale = locale ?? 'en';
+  // Locale is always provided by middleware
+  const resolvedLocale = locale;
   
   // Server-side data fetching for SSG - handle errors gracefully
   const caller = await getCaller();
@@ -37,3 +38,6 @@ export default async function DynamicPage({ params }: Readonly<PageProps>) {
 export async function generateStaticParams() {
   return generatePageStaticParams();
 }
+
+// Allow dynamic routes for newly added locales/pages
+export const dynamicParams = true;
