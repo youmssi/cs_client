@@ -12,6 +12,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { LocaleLink } from "@/components/locale-link";
 
 import React, { useRef, useState } from "react";
 
@@ -123,7 +124,7 @@ export const NavItems = ({ items, className, onItemClick, linkClassName }: NavIt
       )}
     >
       {items.map((item, idx) => (
-        <Link
+        <LocaleLink
           key={`link-${idx}`}
           href={item.link}
           prefetch
@@ -138,7 +139,7 @@ export const NavItems = ({ items, className, onItemClick, linkClassName }: NavIt
             />
           )}
           <span className="relative z-20">{item.name}</span>
-        </Link>
+        </LocaleLink>
       ))}
     </motion.div>
   );
@@ -222,7 +223,7 @@ export const MobileNavToggle = ({
 
 export const NavbarLogo: React.FC<{ logo: Logo }> = ({ logo }) => {
   return (
-    <Link
+    <LocaleLink
       href={ROUTES.HOME}
       prefetch
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-foreground"
@@ -237,6 +238,6 @@ export const NavbarLogo: React.FC<{ logo: Logo }> = ({ logo }) => {
       ) : (
         <span className="font-bold text-lg text-foreground">{logo.company}</span>
       )}
-    </Link>
+    </LocaleLink>
   );
 };

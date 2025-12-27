@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     // Revalidate based on content type
     // Note: revalidateTag uses 'max' profile, revalidatePath uses 'layout' or 'page'
     if (model === 'api::page.page') {
-      // Always revalidate pages tag
+      // Always revalidate pages tag to invalidate static params cache
       revalidateTag('pages', 'max');
       revalidated.tags.push('pages');
       
@@ -200,6 +200,14 @@ export async function POST(request: NextRequest) {
         const path = `/${locale}${slug === 'home' ? '' : `/${slug}`}`;
         revalidatePath(path, 'page');
         revalidated.paths.push(path);
+        
+        // Also revalidate the locale-specific pages cache tag
+        revalidateTag(`pages:${locale}`, 'max');
+        revalidated.tags.push(`pages:${locale}`);
+      } else {
+        // If no locale specified, revalidate all locale pages caches
+        revalidatePath('/', 'layout');
+        revalidated.paths.push('/ (all locales)');
       }
     } else if (model === 'api::global.global') {
       // Revalidate global data (affects all pages)

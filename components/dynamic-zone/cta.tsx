@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { LocaleLink } from '@/components/locale-link';
 
 import { Button } from '@/components/ui/button';
 import type { CTABlock } from '@/types';
@@ -59,13 +59,13 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
                   className={cn('transition-all duration-200')}
                 >
                   {cta.URL ? (
-                    <Link
+                    <LocaleLink
                       href={cta.URL}
                       target={cta.target || '_self'}
                       rel={cta.target === '_blank' ? 'noopener noreferrer' : undefined}
                     >
                       {cta.text}
-                    </Link>
+                    </LocaleLink>
                   ) : (
                     <span>{cta.text}</span>
                   )}

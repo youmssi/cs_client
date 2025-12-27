@@ -1,5 +1,5 @@
 import { AlertCircle, FileQuestion, Search, XCircle } from 'lucide-react';
-import Link from 'next/link';
+import { LocaleLink } from '@/components/locale-link';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -65,7 +65,7 @@ export function EmptyState({
       {actionLabel && (
         <EmptyContent>
           <Button asChild>
-            <Link href={actionHref}>{actionLabel}</Link>
+            <LocaleLink href={actionHref}>{actionLabel}</LocaleLink>
           </Button>
         </EmptyContent>
       )}

@@ -11,7 +11,7 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
-import Link from 'next/link';
+import { LocaleLink } from "@/components/locale-link";
 import { Button } from "@/components/ui/button"; 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
@@ -69,12 +69,12 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 }
                 asChild
               >
-                <Link
+                <LocaleLink
                   href={button.URL ?? "#"}
                   target={button.target ?? "_self"}
                 >
                   {button.text}
-                </Link>
+                </LocaleLink>
               </Button>
             ))}
             {/* Locale switcher as text button on desktop (e.g., EN, FR) */}
@@ -97,14 +97,14 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           className="bg-[#F7F5F3] border-[#37322f]/10"
         >
           {navItems.map((item) => (
-            <Link
+            <LocaleLink
               key={`mobile-link-${item.name}-${item.link}`}
               href={item.link}
               onClick={() => setIsMobileMenuOpen(false)}
               className="relative text-[#37322f]"
             >
               <span className="block">{item.name}</span>
-            </Link>
+            </LocaleLink>
           ))}
           <div className="flex w-full flex-col gap-4">
             {navbar.right_navbar_items?.map((button) => (
@@ -117,13 +117,13 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 }
                 asChild
               >
-                <Link
+                <LocaleLink
                   href={button.URL ?? "#"}
                   target={button.target ?? "_self"}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {button.text}
-                </Link>
+                </LocaleLink>
               </Button>
             ))}
             {/* Locale Switcher for mobile - full width */}
