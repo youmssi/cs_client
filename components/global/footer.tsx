@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { LocaleLink } from '@/components/locale-link';
 import type { Footer as FooterType, Link as LinkType, SocialLink as SocialLinkType } from '@/types';
 
 interface FooterProps {
@@ -74,13 +75,13 @@ export function Footer({ footer }: Readonly<FooterProps>) {
                 <ul className="space-y-2 mt-3">
                   {footer.internal_links.map((link: LinkType) => (
                     <li key={link.id}>
-                      <Link
+                      <LocaleLink
                         href={link.URL ?? '#'}
                         target={link.target || '_self'}
                         className="text-sm text-[#49423D] hover:text-[#37322F] transition-colors"
                       >
                         {link.text}
-                      </Link>
+                      </LocaleLink>
                     </li>
                   ))}
                 </ul>
@@ -92,13 +93,13 @@ export function Footer({ footer }: Readonly<FooterProps>) {
                 <ul className="space-y-2 mt-3">
                   {footer.policy_links.map((link: LinkType) => (
                     <li key={link.id}>
-                      <Link
+                      <LocaleLink
                         href={link.URL ?? '#'}
                         target={link.target || '_self'}
                         className="text-sm text-[#49423D] hover:text-[#37322F] transition-colors"
                       >
                         {link.text}
-                      </Link>
+                      </LocaleLink>
                     </li>
                   ))}
                 </ul>

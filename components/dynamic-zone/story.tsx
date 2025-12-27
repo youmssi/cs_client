@@ -3,6 +3,7 @@
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
+import { LocaleLink } from '@/components/locale-link';
 import Image from 'next/image';
 
 import type { StoryBlock } from '@/types';
@@ -125,13 +126,13 @@ const markdownComponents: Components = {
     }
 
     return (
-      <Link
+      <LocaleLink
         href={href}
         className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors font-medium"
         {...props}
       >
         {children}
-      </Link>
+      </LocaleLink>
     );
   },
   img: ({ src, alt }) => (

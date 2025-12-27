@@ -1,7 +1,7 @@
 import type { HeroBlock } from "@/types";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/locale-link";
 
 export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
   return (
@@ -42,13 +42,13 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
                   size="default"
                   asChild
                 >
-                  <Link
+                  <LocaleLink
                     href={cta.URL ?? "#"}
                     target={cta.target ?? "_self"}
                     rel={cta.target === "_blank" ? "noopener noreferrer" : undefined}
                   >
                     {cta.text ?? "Get Started"}
-                  </Link>
+                  </LocaleLink>
                 </Button>
               ))}
             </div>
