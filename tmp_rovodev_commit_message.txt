@@ -1,0 +1,14 @@
+cs-3: Fix locale synchronization and dynamic locale routing
+
+- Add dynamic default locale detection from Strapi CMS
+- Respect Strapi's isDefault flag instead of hardcoded 'en' fallback
+- Implement getDefaultLocale() function to fetch default locale from API
+- Update middleware to use dynamic default locale resolution
+- Add Authorization headers to locale API requests for secure fetching
+- Enable dynamicParams on all locale-based routes for ISR support
+- Fix locale switcher to properly replace locale prefix in URL paths
+- Remove hardcoded 'en' fallbacks from layout and page components
+- Add locale caching (1 hour) to reduce API calls
+- Prevent locale concatenation bug in URL routing (e.g., /en/fr/fr)
+- Support on-demand page generation for newly published locales
+- Ensure French (fr) works as default when configured in Strapi

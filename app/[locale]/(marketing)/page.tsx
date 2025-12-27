@@ -7,9 +7,13 @@ interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
+// Allow dynamic routes for newly added locales
+export const dynamicParams = true;
+
 export default async function HomePage({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const resolvedLocale = locale ?? 'en';
+  // Locale is always provided by middleware
+  const resolvedLocale = locale;
   
   // Server-side data fetching for SSG - handle errors gracefully
   const caller = await getCaller();

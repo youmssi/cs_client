@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { i18n, getAvailableLocales } from './lib/i18n-config';
+import { getAvailableLocales, getDefaultLocale } from './lib/i18n-config';
 
-function getLocale(request: NextRequest, locales: string[]): string {
+async function getLocale(request: NextRequest, locales: string[]): Promise<string> {
   // Check if locale is in the pathname
   const pathname = request.nextUrl.pathname;
   const pathnameLocale = locales.find(
@@ -27,7 +27,8 @@ function getLocale(request: NextRequest, locales: string[]): string {
     if (matchedLocale) return matchedLocale;
   }
 
-  return i18n.defaultLocale;
+  // Get default locale from Strapi (respects isDefault flag)
+  return await getDefaultLocale();
 }
 
 export async function middleware(request: NextRequest) {
@@ -55,7 +56,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect to locale-prefixed path
-  const locale = getLocale(request, locales);
+  const locale = await getLocale(request, locales);
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }
