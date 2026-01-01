@@ -19,14 +19,15 @@ export default async function DynamicPage({ params }: Readonly<PageProps>) {
   
   try {
     page = await caller.comingSoon.getPageBySlug({ slug, locale: resolvedLocale });
-  } catch {
+  } catch (error) {
     // Don't throw - let the page render with error state
-    console.warn(`Page not found: ${slug} for locale: ${resolvedLocale}`);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.warn(`[DynamicPage] Failed to load page ${slug} for locale ${resolvedLocale}:`, errorMessage);
   }
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<ErrorView message="Failed to load page" />}>
+      <ErrorBoundary fallback={<ErrorView message={`Failed to load page '${slug}'. Please check that content is created in the CMS.`} />}>
         <main>
           <PageContent page={page} />
         </main>
