@@ -21,14 +21,15 @@ export default async function HomePage({ params }: Readonly<PageProps>) {
   
   try {
     page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale: resolvedLocale });
-  } catch {
+  } catch (error) {
     // Don't throw - let the page render with error state
-    console.warn(`Home page not found for locale: ${resolvedLocale}`);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.warn(`[HomePage] Failed to load page for locale ${resolvedLocale}:`, errorMessage);
   }
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<ErrorView message="Failed to load home page" />}>
+      <ErrorBoundary fallback={<ErrorView message="Failed to load home page. Please check that content is created in the CMS." />}>
         <main>
           <PageContent page={page} />
         </main>
