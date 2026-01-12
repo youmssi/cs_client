@@ -37,7 +37,7 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
             <div className="w-full max-w-[497px] lg:w-[497px] flex justify-center items-center gap-4 mt-6 sm:mt-8 md:mt-10 lg:mt-12 flex-wrap">
               {CTAs.map((cta, index) => (
                 <Button
-                  key={index}
+                  key={`${cta.URL}-${index}`}
                   variant={cta.variant ?? "default"}
                   size="default"
                   asChild

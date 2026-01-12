@@ -50,9 +50,9 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
 
           {ctas && ctas.length > 0 && (
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {ctas.map((cta) => (
+              {ctas.map((cta, index) => (
                 <Button
-                  key={cta.URL}
+                  key={`${cta.URL}-${index}`}
                   asChild
                   variant={cta.variant ? buttonVariantMap[cta.variant] ?? 'default' : 'default'}
                   size="lg"
