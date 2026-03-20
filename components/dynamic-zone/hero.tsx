@@ -57,14 +57,14 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
         </div>
       </div>
 
-      {/* Full-width diagonal pattern separator */}
+      {/* Full-width diagonal pattern separator — same pattern as CTA section */}
       <div className="w-full h-12 relative overflow-hidden border-t border-b border-[rgba(55,50,47,0.12)] mt-8 sm:mt-12 md:mt-16">
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 60 }).map((_, i) => (
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          {Array.from({ length: 300 }).map((_, i) => (
             <div
               key={i}
-              className="absolute h-16 w-[300px] border border-[rgba(3,7,18,0.06)]"
-              style={{ left: `${i * 48 - 96}px`, top: "-120px", transform: "rotate(-45deg)", transformOrigin: "top left" }}
+              className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+              style={{ top: `${i * 16 - 120}px`, left: "-100%", width: "300%" }}
             />
           ))}
         </div>
