@@ -1,4 +1,5 @@
 import { LocaleLink } from '@/components/locale-link';
+import { ANCHORS } from "@/lib/constants";
 
 import { Button } from '@/components/ui/button';
 import type { CTABlock } from '@/types';
@@ -15,7 +16,7 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
   };
 
   return (
-    <section className="w-full relative overflow-hidden flex flex-col justify-center items-center gap-2">
+    <section id={ANCHORS.CONTACT} className="w-full relative overflow-hidden flex flex-col justify-center items-center gap-2">
       {/* Content with oblique lines background */}
       <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-t border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6 relative z-10">
         {/* Oblique lines pattern background */}

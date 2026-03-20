@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { ANCHORS } from "@/lib/constants";
 import type { FAQBlock } from '@/types';
 
 export function FAQ({ heading, sub_heading, faqs }: Readonly<FAQBlock>) {
@@ -13,7 +14,7 @@ export function FAQ({ heading, sub_heading, faqs }: Readonly<FAQBlock>) {
   };
 
   return (
-    <section className="w-full flex justify-center items-start">
+    <section id={ANCHORS.FAQ} className="w-full flex justify-center items-start">
       <div className="flex-1 px-4 md:px-12 py-16 md:py-20 flex flex-col lg:flex-row justify-start items-start gap-6 lg:gap-12">
         <div className="w-full lg:flex-1 flex flex-col justify-center items-start gap-4 lg:py-5">
           <h2 className="w-full flex flex-col justify-center text-[#49423D] font-semibold leading-tight md:leading-[44px] text-4xl tracking-tight text-center lg:text-left">

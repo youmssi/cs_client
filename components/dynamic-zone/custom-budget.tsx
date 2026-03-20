@@ -1,9 +1,14 @@
 import type { CustomBudgetBlock } from "@/types";
 import { LocaleLink } from "@/components/locale-link";
+import { ANCHORS } from "@/lib/constants";
 
-function parseTrustSignals(value: string | null | undefined): string[] {
-  if (!value) return ["No commitment", "Response within 48h", "Any budget considered"];
-  return value.split("\n").map((s) => s.trim()).filter(Boolean);
+const DEFAULT_SIGNALS = ["No commitment", "Response within 48h", "Any budget considered"];
+
+function parseTrustSignals(value: unknown): string[] {
+  if (!value) return DEFAULT_SIGNALS;
+  if (typeof value === "string") return value.split("\n").map((s) => s.trim()).filter(Boolean);
+  if (Array.isArray(value)) return (value as { text?: string }[]).map((v) => v?.text ?? String(v)).filter(Boolean);
+  return DEFAULT_SIGNALS;
 }
 
 export function CustomBudget({
@@ -17,7 +22,7 @@ export function CustomBudget({
 
   return (
     <section
-      id="custom-project"
+      id={ANCHORS.CUSTOM_PROJECT}
       className="w-full border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center"
     >
       <div className="flex-1 px-4 md:px-12 py-16 md:py-20 flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-16">
@@ -67,7 +72,7 @@ export function CustomBudget({
           </div>
 
           <LocaleLink
-            href={cta_url ?? "#custom-project"}
+            href={cta_url ?? `#${ANCHORS.CUSTOM_PROJECT}`}
             className="self-stretch px-4 py-3 bg-[#37322F] text-[#FBFAF9] text-sm font-medium text-center rounded-sm hover:bg-[#49423D] transition-colors duration-200"
           >
             {cta_text ?? "Submit your project & budget"}

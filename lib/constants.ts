@@ -7,6 +7,22 @@ export const ROUTES = {
 } as const;
 
 /**
+ * Section anchor IDs — used as `id` attributes on sections and as `href` targets.
+ * Always reference these instead of hardcoding strings.
+ */
+export const ANCHORS = {
+  HERO: 'hero',
+  HOW_IT_WORKS: 'how-it-works',
+  PRICING: 'pricing',
+  CUSTOM_PROJECT: 'custom-project',
+  TESTIMONIALS: 'testimonials',
+  FAQ: 'faq',
+  CONTACT: 'contact',
+} as const;
+
+export type AnchorId = typeof ANCHORS[keyof typeof ANCHORS];
+
+/**
  * Default metadata values
  */
 
