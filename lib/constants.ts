@@ -35,3 +35,12 @@ export const API_ENDPOINTS = {
   LOGOS: '/api/logos/clean',
   LOCALES: '/api/i18n/locales',
 } as const;
+
+/**
+ * Supported locales — must match Strapi i18n configuration.
+ * When adding a new locale in Strapi, add it here too.
+ * First entry = default locale (must match isDefault:true in Strapi).
+ */
+export const LOCALES = ['fr', 'en'] as const;
+export type Locale = typeof LOCALES[number];
+export const DEFAULT_LOCALE = LOCALES[0];

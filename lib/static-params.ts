@@ -1,7 +1,5 @@
 import { getCaller } from '@/trpc/server';
-
-// Must match middleware.ts LOCALES constant
-const LOCALES = ['fr', 'en'];
+import { LOCALES } from '@/lib/constants';
 
 export async function generatePageStaticParams() {
   const caller = await getCaller();

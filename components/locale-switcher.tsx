@@ -3,9 +3,7 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-
-// Must match middleware.ts LOCALES constant
-const LOCALES = ['fr', 'en'] as const;
+import { LOCALES } from '@/lib/constants';
 
 interface LocaleSwitcherProps {
   className?: string;
