@@ -33,7 +33,7 @@ export function Pricing({
   plans,
 }: Readonly<PricingBlock>): JSX.Element {
   const [billingPeriod, setBillingPeriod] =
-    useState<"monthly" | "annually">("annually");
+    useState<"monthly" | "annually">("monthly");
     
 
   const effectivePlans: PricingPlan[] = useMemo(() => {
@@ -44,8 +44,8 @@ export function Pricing({
   const defaultSubHeading =
     "Scale your operations with flexible pricing that grows with your team.\nStart free, upgrade when you're ready.";
 
-  const monthlyLabel = frequency_toggle_label_monthly ?? "Monthly";
-  const yearlyLabel = frequency_toggle_label_yearly ?? "Annually";
+  const monthlyLabel = frequency_toggle_label_monthly ?? "Part-time";
+  const yearlyLabel = frequency_toggle_label_yearly ?? "Full-time";
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-2">
@@ -138,7 +138,7 @@ export function Pricing({
                       : plan.annual_price,
                   )}
                   period={billingPeriod}
-                  ctaText={isPrimary ? "Get started" : "Start for free"}
+                  ctaText={isPrimary ? "Book a call" : "Get started"}
                   ctaVariant={isPrimary ? "light" : "dark"}
                   features={normalizeFeatures(plan.features)}
                 />
@@ -204,11 +204,11 @@ function PricingCard({
         <div className="self-stretch flex flex-col justify-start items-start gap-2">
           <div className="flex flex-col justify-start items-start gap-1">
             <div className={isDark ? "relative h-[60px] flex items-center text-[#F0EFEE] text-5xl font-medium leading-[60px] font-serif" : "relative h-[60px] flex items-center text-[#37322F] text-5xl font-medium leading-[60px] font-serif"}>
-              <span className="invisible">${price}</span>
-              <span className="absolute inset-0 flex items-center">${price}</span>
+              <span className="invisible">€{price}</span>
+              <span className="absolute inset-0 flex items-center">€{price}</span>
             </div>
             <div className={isDark ? "text-[#D2C6BF] text-sm font-medium font-sans" : "text-[#847971] text-sm font-medium font-sans"}>
-              per {period === "monthly" ? "month" : "year"}, per user.
+              per {period === "monthly" ? "part-time (80h)" : "full-time (160h)"}
             </div>
           </div>
         </div>
