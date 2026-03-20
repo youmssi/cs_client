@@ -1,40 +1,35 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getAvailableLocales, getDefaultLocale } from './lib/i18n-config';
 
-async function getLocale(request: NextRequest, locales: string[]): Promise<string> {
-  // Check if locale is in the pathname
+// Hardcoded locales — must match what's configured in Strapi
+// French is default (isDefault: true in Strapi), English is secondary
+const LOCALES = ['fr', 'en'] as const;
+const DEFAULT_LOCALE = 'fr';
+
+function getLocale(request: NextRequest): string {
   const pathname = request.nextUrl.pathname;
-  const pathnameLocale = locales.find(
+
+  // Already has a locale prefix
+  const pathnameLocale = LOCALES.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
-
   if (pathnameLocale) return pathnameLocale;
 
   // Check Accept-Language header
   const acceptLanguage = request.headers.get('accept-language');
   if (acceptLanguage) {
-    const preferredLocale = acceptLanguage
-      .split(',')[0]
-      ?.split(';')[0]
-      ?.split('-')[0]
-      ?.toLowerCase();
-    
-    const matchedLocale = locales.find(
-      (locale) => locale.toLowerCase() === preferredLocale
-    );
-    
-    if (matchedLocale) return matchedLocale;
+    const preferred = acceptLanguage.split(',')[0]?.split(';')[0]?.split('-')[0]?.toLowerCase();
+    const matched = LOCALES.find((l) => l === preferred);
+    if (matched) return matched;
   }
 
-  // Get default locale from Strapi (respects isDefault flag)
-  return await getDefaultLocale();
+  return DEFAULT_LOCALE;
 }
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Skip API routes, static files, and Next.js internals
+  // Skip API routes, static files, Next.js internals
   if (
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
@@ -44,29 +39,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Resolve available locales via SSR-friendly util
-  const locales = await getAvailableLocales();
-  // Check if pathname already has a locale
-  const pathnameHasLocale = locales.some(
+  const pathnameHasLocale = LOCALES.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale) {
-    return NextResponse.next();
-  }
+  if (pathnameHasLocale) return NextResponse.next();
 
-  // Redirect to locale-prefixed path
-  const locale = await getLocale(request, locales);
+  const locale = getLocale(request);
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }
 
 export const config = {
-  matcher: [
-    // Match all pathnames except for:
-    // - API routes
-    // - _next (Next.js internals)
-    // - static files
-    '/((?!api|_next|static|.*\\..*).*)',
-  ],
+  matcher: ['/((?!api|_next|static|.*\\..*).*)',],
 };
