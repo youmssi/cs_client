@@ -55,7 +55,7 @@ export interface CustomBudgetBlock {
   id: number;
   heading: string | null;
   sub_heading: string | null;
-  trust_signals: Array<{ id: number; text: string | null }> | null;
+  trust_signals: string | null;  // newline-separated list
   cta_text: string | null;
   cta_url: string | null;
 }
