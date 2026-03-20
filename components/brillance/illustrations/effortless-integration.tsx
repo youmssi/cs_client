@@ -1,375 +1,92 @@
 import type React from "react";
 
-interface EffortlessIntegrationProps {
+/**
+ * Illustration 3 — "Your SDM takes over"
+ * Shows a sprint board with columns: To Do / In Progress / Done, plus a daily standup note.
+ */
+interface Props {
   width?: number | string;
   height?: number | string;
   className?: string;
+  theme?: "light" | "dark";
 }
 
-/**
- * Effortless Integration – Service integration constellation.
- * (Ported from brillance-saa-s-landing-page)
- */
-const EffortlessIntegration: React.FC<EffortlessIntegrationProps> = ({ width = 482, height = 300, className = "" }) => {
-  const centerX = 250;
-  const centerY = 179;
+const columns = [
+  {
+    label: "To Do",
+    color: "rgba(55,50,47,0.20)",
+    tasks: ["API auth module", "DB schema v2"],
+  },
+  {
+    label: "In Progress",
+    color: "#F59E0B",
+    tasks: ["Dashboard UI", "CI/CD pipeline"],
+  },
+  {
+    label: "Done",
+    color: "#10B981",
+    tasks: ["Project setup", "Design system"],
+  },
+];
 
-  const getPositionOnRing = (ringRadius: number, angle: number) => ({
-    x: centerX + ringRadius * Math.cos(angle),
-    y: centerY + ringRadius * Math.sin(angle),
-  });
+const EffortlessIntegration: React.FC<Props> = ({ width = 482, height = 300, className = "" }) => {
+  const bg = "#ffffff";
+  const border = "rgba(55,50,47,0.12)";
+  const labelColor = "rgba(55,50,47,0.45)";
+  const textColor = "#37322F";
 
   return (
     <div
       className={className}
-      style={{
-        width,
-        height,
-        position: "relative",
-        overflow: "hidden",
-        maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
-      }}
+      style={{ width, height, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent" }}
+      role="img"
+      aria-label="Sprint board managed by SDM"
     >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 20%, transparent 80%, rgba(255,255,255,0.1) 100%)",
-          pointerEvents: "none",
-          zIndex: 10,
-        }}
-      />
-
-      {/* Rings */}
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "320px",
-          height: "320px",
-          borderRadius: "50%",
-          border: "1px solid rgba(55, 50, 47, 0.2)",
-          opacity: 0.8,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "240px",
-          height: "240px",
-          borderRadius: "50%",
-          border: "1px solid rgba(55, 50, 47, 0.25)",
-          opacity: 0.7,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "160px",
-          height: "160px",
-          borderRadius: "50%",
-          border: "1px solid rgba(55, 50, 47, 0.3)",
-          opacity: 0.6,
-        }}
-      />
-
-      {/* Company logos */}
-      <div
-        style={{
-          width: "500px",
-          height: "358px",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          position: "absolute",
-        }}
-      >
-        {/* Central hub */}
-        <div
-          style={{
-            width: "72px",
-            height: "72px",
-            left: `${centerX - 36}px`,
-            top: `${centerY - 36}px`,
-            position: "absolute",
-            background: "#37322f",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "99px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: 700,
-            fontSize: "32px",
-            color: "#ffffff",
-          }}
-        >
-          b
+      <div style={{ width: 300, display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* SDM header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#37322F", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 9, color: "#FBFAF9" }}>SDM</span>
+            </div>
+            <div>
+              <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 10, color: textColor }}>Sprint 3 — Week 2</span>
+            </div>
+          </div>
+          <div style={{ background: "rgba(16,185,129,0.12)", borderRadius: 99, padding: "2px 7px" }}>
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: 8, fontWeight: 600, color: "#059669" }}>On track</span>
+          </div>
         </div>
 
-        {/* GitHub - 180° */}
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(80, Math.PI).x - 16}px`,
-            top: `${getPositionOnRing(80, Math.PI).y - 16}px`,
-            position: "absolute",
-            background: "#000000",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg"
-            alt="GitHub"
-            style={{ width: "18px", height: "18px", filter: "brightness(0) invert(1)" }}
-          />
+        {/* Sprint board */}
+        <div style={{ display: "flex", gap: 6 }}>
+          {columns.map((col) => (
+            <div key={col.label} style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
+              {/* Column header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 4, paddingBottom: 4, borderBottom: `1.5px solid ${col.color}` }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: col.color }} />
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: 8, fontWeight: 600, color: labelColor, textTransform: "uppercase", letterSpacing: "0.05em" }}>{col.label}</span>
+              </div>
+              {/* Tasks */}
+              {col.tasks.map((task) => (
+                <div key={task} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 5, padding: "5px 7px", boxShadow: "0px 1px 3px rgba(55,50,47,0.06)" }}>
+                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: 9, fontWeight: 500, color: textColor, lineHeight: 1.4 }}>{task}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
 
-        {/* Slack - 0° */}
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(80, 0).x - 16}px`,
-            top: `${getPositionOnRing(80, 0).y - 16}px`,
-            position: "absolute",
-            background: "#ffffff",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/slack.svg" alt="Slack" style={{ width: "18px", height: "18px" }} />
+        {/* Daily standup note */}
+        <div style={{ background: "#F7F5F3", border: `1px solid ${border}`, borderRadius: 6, padding: "8px 10px", display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ marginTop: 1, flexShrink: 0 }}>
+            <path d="M6 1a5 5 0 100 10A5 5 0 006 1zm0 2.5v3l2 1.5" stroke={labelColor} strokeWidth="1" strokeLinecap="round" />
+          </svg>
+          <div>
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: 9, fontWeight: 600, color: textColor }}>Daily standup — 9:00 AM</span>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 8, color: labelColor, margin: "2px 0 0", lineHeight: 1.5 }}>Progress report sent to client. 2 blockers resolved.</p>
+          </div>
         </div>
-
-        {/* Figma - 315° */}
-        <div
-          suppressHydrationWarning
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(120, -Math.PI / 4).x - 16}px`,
-            top: `${getPositionOnRing(120, -Math.PI / 4).y - 16}px`,
-            position: "absolute",
-            background: "#EEEFE8",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/figma.svg" alt="Figma" style={{ width: "16px", height: "16px" }} />
-        </div>
-
-        {/* Discord - 135° */}
-        <div
-          suppressHydrationWarning
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(120, (3 * Math.PI) / 4).x - 16}px`,
-            top: `${getPositionOnRing(120, (3 * Math.PI) / 4).y - 16}px`,
-            position: "absolute",
-            background: "#5865F2",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/discord.svg"
-            alt="Discord"
-            style={{ width: "18px", height: "18px", filter: "brightness(0) invert(1)" }}
-          />
-        </div>
-
-        {/* Notion - 225° */}
-        <div
-          suppressHydrationWarning
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(120, (5 * Math.PI) / 4).x - 16}px`,
-            top: `${getPositionOnRing(120, (5 * Math.PI) / 4).y - 16}px`,
-            position: "absolute",
-            background: "#ffffff",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/notion.svg" alt="Notion" style={{ width: "18px", height: "18px" }} />
-        </div>
-
-        {/* Stripe - 180° */}
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(160, Math.PI).x - 16}px`,
-            top: `${getPositionOnRing(160, Math.PI).y - 16}px`,
-            position: "absolute",
-            background: "#635BFF",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/stripe.svg"
-            alt="Stripe"
-            style={{ width: "18px", height: "18px", filter: "brightness(0) invert(1)" }}
-          />
-        </div>
-
-        {/* Framer - 0° */}
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            left: `${getPositionOnRing(160, 0).x - 16}px`,
-            top: `${getPositionOnRing(160, 0).y - 16}px`,
-            position: "absolute",
-            background: "#000000",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/framer.svg"
-            alt="Framer"
-            style={{ width: "16px", height: "16px", filter: "brightness(0) invert(1)" }}
-          />
-        </div>
-
-        <svg
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-          }}
-        >
-          <defs>
-            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(55, 50, 47, 0.1)" />
-              <stop offset="50%" stopColor="rgba(55, 50, 47, 0.05)" />
-              <stop offset="100%" stopColor="rgba(55, 50, 47, 0.1)" />
-            </linearGradient>
-          </defs>
-
-          {/* Inner ring connections */}
-          <line
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(80, 0).x}
-            y2={getPositionOnRing(80, 0).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.2"
-          />
-          <line
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(80, Math.PI).x}
-            y2={getPositionOnRing(80, Math.PI).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.2"
-          />
-
-          {/* Middle ring connections */}
-          <line
-            suppressHydrationWarning
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(120, -Math.PI / 4).x}
-            y2={getPositionOnRing(120, -Math.PI / 4).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.15"
-          />
-          <line
-            suppressHydrationWarning
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(120, (3 * Math.PI) / 4).x}
-            y2={getPositionOnRing(120, (3 * Math.PI) / 4).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.15"
-          />
-          <line
-            suppressHydrationWarning
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(120, (5 * Math.PI) / 4).x}
-            y2={getPositionOnRing(120, (5 * Math.PI) / 4).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.15"
-          />
-
-          {/* Outer ring connections */}
-          <line
-            suppressHydrationWarning
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(160, 0).x}
-            y2={getPositionOnRing(160, 0).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.1"
-          />
-          <line
-            suppressHydrationWarning
-            x1={centerX}
-            y1={centerY}
-            x2={getPositionOnRing(160, Math.PI).x}
-            y2={getPositionOnRing(160, Math.PI).y}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1"
-            opacity="0.1"
-          />
-        </svg>
       </div>
     </div>
   );
