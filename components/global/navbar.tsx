@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import { LocaleLink } from "@/components/locale-link";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 interface NavbarProps {
@@ -61,23 +61,15 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           <div className="flex items-center gap-2 sm:gap-3">
             {navbar.right_navbar_items?.map((button) => (
               <Button
-                key={`${button.id}`}
-                variant={
-                  button.variant
-                    ? buttonVariantMap[button.variant] ?? "default"
-                    : "default"
-                }
+                key={button.id}
+                variant={button.variant ? buttonVariantMap[button.variant] ?? "default" : "default"}
                 asChild
               >
-                <LocaleLink
-                  href={button.URL ?? "#"}
-                  target={button.target ?? "_self"}
-                >
+                <LocaleLink href={button.URL ?? "#"} target={button.target ?? "_self"}>
                   {button.text}
                 </LocaleLink>
               </Button>
             ))}
-            {/* Locale switcher as text button on desktop (e.g., EN, FR) */}
             <LocaleSwitcher className="h-9 px-3 rounded-md justify-center text-xs font-medium" />
           </div>
         </div>
@@ -92,10 +84,7 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           />
         </MobileNavHeader>
 
-        <MobileNavMenu
-          isOpen={isMobileMenuOpen}
-          className="bg-[#F7F5F3] border-[#37322f]/10"
-        >
+        <MobileNavMenu isOpen={isMobileMenuOpen} className="bg-[#F7F5F3] border-[#37322f]/10">
           {navItems.map((item) => (
             <LocaleLink
               key={`mobile-link-${item.name}-${item.link}`}
@@ -109,12 +98,8 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           <div className="flex w-full flex-col gap-4">
             {navbar.right_navbar_items?.map((button) => (
               <Button
-                key={`${button.id}`}
-                variant={
-                  button.variant
-                    ? buttonVariantMap[button.variant] ?? "default"
-                    : "default"
-                }
+                key={button.id}
+                variant={button.variant ? buttonVariantMap[button.variant] ?? "default" : "default"}
                 asChild
               >
                 <LocaleLink
@@ -126,7 +111,6 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
                 </LocaleLink>
               </Button>
             ))}
-            {/* Locale Switcher for mobile - full width */}
             <div className="w-full">
               <LocaleSwitcher className="w-full" />
             </div>

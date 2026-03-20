@@ -12,6 +12,7 @@ import { DashboardShowcase } from "./dashboard-showcase";
 import { FAQ } from "./faq";
 import { CTA } from "./cta";
 import { Story } from "./story";
+import { CustomBudget } from "./custom-budget";
 
 interface DynamicZoneManagerProps {
   blocks?: DynamicBlock[] | null;
@@ -68,6 +69,10 @@ export function DynamicZoneManager({
           case "dynamic-zone.faq": {
             const props = block;
             return <FAQ key={`faq-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.custom-budget": {
+            const props = block;
+            return <CustomBudget key={`custom-budget-${block.id}-${index}`} {...props} />;
           }
           case "blocks.story": {
             const props = block;

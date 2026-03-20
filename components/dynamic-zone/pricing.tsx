@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { JSX } from "react";
 
 import type { PricingBlock, PricingPlan } from "@/types";
+import { ANCHORS } from "@/lib/constants";
 import { SectionHeader } from "@/components/global/section-header";
 import { Button } from "@/components/ui/button";
 
@@ -48,7 +49,7 @@ export function Pricing({
   const yearlyLabel = frequency_toggle_label_yearly ?? "Full-time";
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2">
+    <section id={ANCHORS.PRICING} className="w-full flex flex-col justify-center items-center gap-2">
       <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
         <SectionHeader
           header={header_section ?? null}
@@ -158,7 +159,7 @@ export function Pricing({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

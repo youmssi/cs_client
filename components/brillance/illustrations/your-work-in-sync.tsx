@@ -1,284 +1,79 @@
 import type React from "react";
 
-interface YourWorkInSyncProps {
+/**
+ * Illustration 2 — "We match your team"
+ * Shows 3 developer profile cards with skills, availability badge, and a match score.
+ */
+interface Props {
   width?: number | string;
   height?: number | string;
   className?: string;
   theme?: "light" | "dark";
 }
 
-const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
-  width = 482,
-  height = 300,
-  className = "",
-  theme = "dark",
-}) => {
-  const themeVars =
-    theme === "light"
-      ? {
-          "--yws-surface": "#ffffff",
-          "--yws-text-primary": "#37322f",
-          "--yws-text-secondary": "#6b7280",
-          "--yws-bubble-light": "#e8e5e3",
-          "--yws-bubble-dark": "#37322f",
-          "--yws-bubble-white": "#ffffff",
-          "--yws-border": "rgba(0,0,0,0.08)",
-          "--yws-shadow": "rgba(0,0,0,0.08)",
-        }
-      : ({
-          "--yws-surface": "#1f2937",
-          "--yws-text-primary": "#f9fafb",
-          "--yws-text-secondary": "#d1d5db",
-          "--yws-bubble-light": "#374151",
-          "--yws-bubble-dark": "#111827",
-          "--yws-bubble-white": "#ffffff",
-          "--yws-border": "rgba(255,255,255,0.12)",
-          "--yws-shadow": "rgba(0,0,0,0.24)",
-        } as React.CSSProperties);
+const profiles = [
+  { initials: "AK", name: "Armel K.", role: "Full-Stack Dev", skills: ["React", "Node.js"], score: 98, available: true, color: "#4F46E5" },
+  { initials: "CM", name: "Carine M.", role: "Backend Engineer", skills: ["Python", "PostgreSQL"], score: 95, available: true, color: "#0EA5E9" },
+  { initials: "JN", name: "Jules N.", role: "DevOps Engineer", skills: ["Docker", "AWS"], score: 91, available: false, color: "#10B981" },
+];
 
-  const imgFrame2147223205 = "/professional-woman-avatar-with-short-brown-hair-an.jpg";
-  const imgFrame2147223206 = "/professional-man-avatar-with-beard-and-glasses-loo.jpg";
-  const imgFrame2147223207 = "/professional-person-avatar-with-curly-hair-and-war.jpg";
-  const imgArrowUp =
-    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='3' strokeLinecap='round' strokeLinejoin='round'%3E%3Cpath d='m5 12 7-7 7 7'/%3E%3Cpath d='M12 19V5'/%3E%3C/svg%3E";
+const YourWorkInSync: React.FC<Props> = ({ width = 482, height = 300, className = "", theme = "light" }) => {
+  const bg = theme === "light" ? "#ffffff" : "#2a2522";
+  const border = theme === "light" ? "rgba(55,50,47,0.12)" : "rgba(255,255,255,0.10)";
+  const labelColor = theme === "light" ? "rgba(55,50,47,0.50)" : "rgba(255,255,255,0.40)";
+  const textColor = theme === "light" ? "#37322F" : "#F0EFEE";
+  const tagBg = theme === "light" ? "#EDE9E6" : "rgba(255,255,255,0.10)";
+  const rowBg = theme === "light" ? "#F7F5F3" : "rgba(255,255,255,0.04)";
 
   return (
     <div
       className={className}
-      style={
-        {
-          width,
-          height,
-          position: "relative",
-          background: "transparent",
-          ...themeVars,
-        } as React.CSSProperties
-      }
+      style={{ width, height, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent" }}
       role="img"
-      aria-label="Chat conversation showing team collaboration sync"
+      aria-label="Developer profile matching cards"
     >
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "356px",
-          height: "216px",
-        }}
-      >
-        <div style={{ width: "356px", height: "216px", position: "relative", transform: "scale(1.1)" }}>
-          <div
-            style={{
-              position: "absolute",
-              left: "0px",
-              top: "0px",
-              display: "flex",
-              gap: "10px",
-              alignItems: "flex-start",
-              width: "356px",
-              height: "36px",
-            }}
-          >
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "44px",
-                backgroundImage: `url('${imgFrame2147223205}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                border: "1px solid var(--yws-border)",
-                flexShrink: 0,
-              }}
-            />
-            <div
-              style={{
-                background: theme === "light" ? "#e8e5e3" : "var(--yws-bubble-light)",
-                borderRadius: "999px",
-                padding: "0px 12px",
-                height: "36px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "13px",
-                  lineHeight: "16px",
-                  letterSpacing: "-0.4px",
-                  color: theme === "light" ? "#37322f" : "var(--yws-text-primary)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Team updates flow seamlessly
-              </span>
-            </div>
-          </div>
+      <div style={{ width: 280, display: "flex", flexDirection: "column", gap: 6 }}>
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+          <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 10, color: textColor, letterSpacing: "0.04em", textTransform: "uppercase" }}>Matched Profiles</span>
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 9, color: labelColor }}>3 of 12 vetted</span>
+        </div>
 
-          <div
-            style={{
-              position: "absolute",
-              right: "0px",
-              top: "60px",
-              display: "flex",
-              gap: "10px",
-              alignItems: "flex-start",
-              justifyContent: "flex-end",
-            }}
-          >
-            <div
-              style={{
-                background: theme === "light" ? "#37322f" : "var(--yws-bubble-dark)",
-                borderRadius: "999px",
-                padding: "0px 12px",
-                height: "36px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "13px",
-                  lineHeight: "16px",
-                  letterSpacing: "-0.4px",
-                  color: "#ffffff",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Hi everyone
-              </span>
+        {profiles.map((p) => (
+          <div key={p.initials} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 8, padding: "10px 12px", display: "flex", alignItems: "center", gap: 10, boxShadow: "0px 2px 8px rgba(55,50,47,0.06)" }}>
+            {/* Avatar */}
+            <div style={{ width: 32, height: 32, borderRadius: "50%", background: p.color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, color: "#ffffff" }}>{p.initials}</span>
             </div>
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "44px",
-                backgroundImage: `url('${imgFrame2147223206}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                border: "1px solid var(--yws-border)",
-                flexShrink: 0,
-              }}
-            />
-          </div>
 
-          <div
-            style={{
-              position: "absolute",
-              left: "0px",
-              top: "120px",
-              display: "flex",
-              gap: "10px",
-              alignItems: "flex-start",
-              width: "210px",
-              height: "36px",
-            }}
-          >
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "44px",
-                backgroundImage: `url('${imgFrame2147223207}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                border: "1px solid var(--yws-border)",
-                flexShrink: 0,
-              }}
-            />
-            <div
-              style={{
-                background: theme === "light" ? "#e8e5e3" : "var(--yws-bubble-light)",
-                borderRadius: "999px",
-                padding: "0px 12px",
-                height: "36px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "13px",
-                  lineHeight: "16px",
-                  letterSpacing: "-0.4px",
-                  color: theme === "light" ? "#37322f" : "var(--yws-text-primary)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                How about this instead?
-              </span>
+            {/* Info */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 3 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 10, color: textColor }}>{p.name}</span>
+                <div style={{ background: p.available ? "rgba(16,185,129,0.12)" : rowBg, borderRadius: 99, padding: "1px 6px" }}>
+                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: 8, fontWeight: 500, color: p.available ? "#059669" : labelColor }}>{p.available ? "Available" : "On project"}</span>
+                </div>
+              </div>
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 9, color: labelColor }}>{p.role}</span>
+              <div style={{ display: "flex", gap: 3, marginTop: 1 }}>
+                {p.skills.map((s) => (
+                  <span key={s} style={{ background: tagBg, borderRadius: 99, padding: "1px 6px", fontFamily: "Inter, sans-serif", fontSize: 8, fontWeight: 500, color: textColor }}>{s}</span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              position: "absolute",
-              left: "146px",
-              top: "180px",
-              display: "flex",
-              gap: "10px",
-              alignItems: "center",
-              height: "36px",
-            }}
-          >
-            <div
-              style={{
-                background: "#ffffff",
-                borderRadius: "16px",
-                padding: "0px 12px",
-                height: "36px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0px 0px 0px 1px rgba(0,0,0,0.08), 0px 1px 2px -0.4px rgba(0,0,0,0.08)",
-                overflow: "hidden",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "14px",
-                  lineHeight: "20px",
-                  color: "#030712",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Great work, everyone!
-              </span>
-            </div>
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "44px",
-                background: theme === "light" ? "#37322f" : "var(--yws-bubble-dark)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0px 1px 2px 0px rgba(0,0,0,0.08)",
-                cursor: "pointer",
-                flexShrink: 0,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={imgArrowUp || "/placeholder.svg"}
-                alt="Send"
-                style={{ width: "20px", height: "20px", filter: "brightness(0) invert(1)" }}
-              />
+            {/* Match score */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, flexShrink: 0 }}>
+              <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 13, color: textColor }}>{p.score}%</span>
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 8, color: labelColor }}>match</span>
             </div>
           </div>
+        ))}
+
+        {/* Footer note */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, marginTop: 2 }}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM5 3.5v2l1.5 1" stroke={labelColor} strokeWidth="1" strokeLinecap="round" /></svg>
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 9, color: labelColor }}>Replacement guaranteed within 72h</span>
         </div>
       </div>
     </div>

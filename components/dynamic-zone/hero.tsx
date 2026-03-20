@@ -1,11 +1,12 @@
 import type { HeroBlock } from "@/types";
+import { ANCHORS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { LocaleLink } from "@/components/locale-link";
 
 export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
   return (
-    <section className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-[108px] pb-8 sm:pb-12 md:pb-16">
+    <section id={ANCHORS.HERO} className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-[108px] pb-8 sm:pb-12 md:pb-16">
       {/* Decorative background pattern overlay */}
       <div className="absolute top-[232px] sm:top-[248px] md:top-[132px] lg:top-[320px] left-1/2 transform -translate-x-1/2 z-0 pointer-events-none">
         <Image
@@ -53,6 +54,19 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
               ))}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Full-width diagonal pattern separator — same pattern as CTA section */}
+      <div className="w-full h-12 relative overflow-hidden border-t border-b border-[rgba(55,50,47,0.12)] mt-8 sm:mt-12 md:mt-16">
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          {Array.from({ length: 300 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+              style={{ top: `${i * 16 - 120}px`, left: "-100%", width: "300%" }}
+            />
+          ))}
         </div>
       </div>
     </section>

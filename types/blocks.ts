@@ -49,6 +49,17 @@ export interface TestimonialsBlock {
   items: Testimonial[];
 }
 
+
+export interface CustomBudgetBlock {
+  __component: 'dynamic-zone.custom-budget';
+  id: number;
+  heading: string | null;
+  sub_heading: string | null;
+  trust_signals: string | null;  // newline-separated list
+  cta_text: string | null;
+  cta_url: string | null;
+}
+
 export type DynamicBlock =
   | HeroBlock
   | CTABlock
@@ -59,7 +70,8 @@ export type DynamicBlock =
   | BentoGridBlock
   | PlatformFeaturesBlock
   | PricingBlock
-  | DashboardShowcaseBlock;
+  | DashboardShowcaseBlock
+  | CustomBudgetBlock;
 
 
 export interface PricingBlock {
