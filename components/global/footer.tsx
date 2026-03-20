@@ -43,7 +43,7 @@ export function Footer({ footer }: Readonly<FooterProps>) {
             {footer.description && (
               <div
                 className="text-[rgba(73,66,61,0.90)] text-sm font-medium leading-[18px] font-sans max-w-[220px] sm:max-w-[320px] overflow-hidden"
-                style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}
+                style={{ display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}
               >
                 {footer.description}
               </div>

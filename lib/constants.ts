@@ -11,14 +11,14 @@ export const ROUTES = {
  */
 
 export const DEFAULT_METADATA = {
-  TITLE: 'MRVIN100 - Software for Everyone, Everywhere',
-  DESCRIPTION: 'Build globally usable software solutions accessible to communities worldwide.',
+  TITLE: 'MRVIN100 — Top Cameroonian Developers, European Quality',
+  DESCRIPTION: 'Hire dedicated developers from Cameroon. 30-50% cheaper than offshore, same timezone, 72h replacement guarantee.',
   KEYWORDS: [
-    'saas solutions',
-    'education technology',
-    'healthcare software',
-    'business management',
-    'operational efficiency',
+    'hire developers Cameroon',
+    'offshore development alternative',
+    'dedicated developers Africa',
+    'nearshore development',
+    'software outsourcing Cameroon',
   ] as string[],
   SITE_NAME: 'MRVIN100',
 };
