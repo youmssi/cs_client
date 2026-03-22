@@ -31,5 +31,7 @@ export function triggerSurvey(action: string) {
     setTimeout(() => triggerSurvey(action), 1000);
     return;
   }
-  formbricks.track(action).catch(() => {/* silent */});
+  try {
+    formbricks.track(action);
+  } catch {/* silent */}
 }

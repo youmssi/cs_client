@@ -7,6 +7,7 @@ import type { PricingBlock, PricingPlan } from "@/types";
 import { ANCHORS } from "@/lib/constants";
 import { SectionHeader } from "@/components/global/section-header";
 import { Button } from "@/components/ui/button";
+import { triggerSurvey, FORMBRICKS_ACTIONS } from "@/lib/formbricks";
 
 function normalizePrice(value: number | string | null | undefined): number {
   if (typeof value === "number") return value;
@@ -214,18 +215,19 @@ function PricingCard({
           </div>
         </div>
 
-        <div
+        <button
+          onClick={() => triggerSurvey(FORMBRICKS_ACTIONS.BOOK_A_CALL)}
           className={
             ctaVariant === "light"
-              ? "self-stretch px-4 py-[10px] relative bg-[#FBFAF9] shadow-[0px_2px_4px_rgba(55,50,47,0.12)] overflow-hidden rounded-[99px] flex justify-center items-center"
-              : "self-stretch px-4 py-[10px] relative bg-[#37322F] shadow-[0px_2px_4px_rgba(55,50,47,0.12)] overflow-hidden rounded-[99px] flex justify-center items-center"
+              ? "self-stretch px-4 py-[10px] relative bg-[#FBFAF9] shadow-[0px_2px_4px_rgba(55,50,47,0.12)] overflow-hidden rounded-[99px] flex justify-center items-center cursor-pointer hover:opacity-90 transition-opacity"
+              : "self-stretch px-4 py-[10px] relative bg-[#37322F] shadow-[0px_2px_4px_rgba(55,50,47,0.12)] overflow-hidden rounded-[99px] flex justify-center items-center cursor-pointer hover:opacity-90 transition-opacity"
           }
         >
           <div className="w-full h-[41px] absolute left-0 top-[-0.5px] bg-gradient-to-b from-[rgba(255,255,255,0.20)] to-[rgba(0,0,0,0.10)] mix-blend-multiply" />
           <div className={ctaVariant === "light" ? "max-w-[108px] flex justify-center flex-col text-[#37322F] text-[13px] font-medium leading-5 font-sans" : "max-w-[108px] flex justify-center flex-col text-[#FBFAF9] text-[13px] font-medium leading-5 font-sans"}>
             {ctaText}
           </div>
-        </div>
+        </button>
       </div>
 
       <div className="self-stretch flex flex-col justify-start items-start gap-2">
