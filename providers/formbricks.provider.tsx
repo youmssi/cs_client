@@ -10,11 +10,19 @@ export function FormbricksProvider() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!envClient.NEXT_PUBLIC_FORMBRICKS_ENV_ID) return;
-    formbricks.setup({
-      environmentId: envClient.NEXT_PUBLIC_FORMBRICKS_ENV_ID,
-      appUrl: envClient.NEXT_PUBLIC_FORMBRICKS_APP_URL || "https://app.formbricks.com",
-    });
+    const envId = envClient.NEXT_PUBLIC_FORMBRICKS_ENV_ID;
+    const appUrl = envClient.NEXT_PUBLIC_FORMBRICKS_APP_URL || "https://app.formbricks.com";
+    if (!envId) return;
+
+    formbricks
+      .setup({ environmentId: envId, appUrl })
+      .then(() => {
+        // Mark SDK as ready so track() calls work
+        window.__formbricksReady = true;
+      })
+      .catch((err: unknown) => {
+        console.warn("[Formbricks] setup failed:", err);
+      });
   }, []);
 
   useEffect(() => {
@@ -23,4 +31,11 @@ export function FormbricksProvider() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+// Extend window type
+declare global {
+  interface Window {
+    __formbricksReady?: boolean;
+  }
 }
