@@ -1,23 +1,20 @@
+"use client";
+
 import { LocaleLink } from '@/components/locale-link';
 import { ANCHORS } from "@/lib/constants";
-
 import { Button } from '@/components/ui/button';
 import type { CTABlock } from '@/types';
 import { cn } from '@/lib/utils';
+import { triggerSurvey, FORMBRICKS_ACTIONS } from '@/lib/formbricks';
+
+const buttonVariantMap: Record<string, 'default' | 'outline' | 'ghost' | 'destructive' | 'secondary' | 'link'> = {
+  default: 'default', outline: 'outline', ghost: 'ghost',
+  destructive: 'destructive', secondary: 'secondary', link: 'link',
+};
 
 export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
-  const buttonVariantMap: Record<string, 'default' | 'outline' | 'ghost' | 'destructive' | 'secondary' | 'link'> = {
-    default: 'default',
-    outline: 'outline',
-    ghost: 'ghost',
-    destructive: 'destructive',
-    secondary: 'secondary',
-    link: 'link',
-  };
-
   return (
     <section id={ANCHORS.CONTACT} className="w-full relative overflow-hidden flex flex-col justify-center items-center gap-2">
-      {/* Content with oblique lines background */}
       <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-t border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6 relative z-10">
         {/* Oblique lines pattern background */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -26,17 +23,12 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
               <div
                 key={i}
                 className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
-                style={{
-                  top: `${i * 16 - 120}px`,
-                  left: "-100%",
-                  width: "300%",
-                }}
+                style={{ top: `${i * 16 - 120}px`, left: "-100%", width: "300%" }}
               />
             ))}
           </div>
         </div>
 
-        {/* Content container */}
         <div className="w-full max-w-[586px] px-6 py-5 md:py-8 overflow-hidden rounded-lg flex flex-col justify-start items-center gap-6 relative z-20">
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <h2 className="self-stretch text-center flex justify-center flex-col text-[#49423D] text-3xl md:text-5xl font-semibold leading-tight md:leading-[56px] font-sans tracking-tight">
@@ -51,27 +43,27 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
 
           {ctas && ctas.length > 0 && (
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {ctas.map((cta, index) => (
-                <Button
-                  key={`${cta.URL}-${index}`}
-                  asChild
-                  variant={cta.variant ? buttonVariantMap[cta.variant] ?? 'default' : 'default'}
-                  size="lg"
-                  className={cn('transition-all duration-200')}
-                >
-                  {cta.URL ? (
-                    <LocaleLink
-                      href={cta.URL}
-                      target={cta.target || '_self'}
-                      rel={cta.target === '_blank' ? 'noopener noreferrer' : undefined}
-                    >
-                      {cta.text}
-                    </LocaleLink>
-                  ) : (
-                    <span>{cta.text}</span>
-                  )}
-                </Button>
-              ))}
+              {ctas.map((cta, index) => {
+                const isContactCTA = !cta.URL || cta.URL === `#${ANCHORS.CONTACT}` || cta.URL === '#contact';
+                return (
+                  <Button
+                    key={`${cta.URL}-${index}`}
+                    variant={cta.variant ? buttonVariantMap[cta.variant] ?? 'default' : 'default'}
+                    size="lg"
+                    className={cn('transition-all duration-200')}
+                    onClick={isContactCTA ? () => triggerSurvey(FORMBRICKS_ACTIONS.BOOK_A_CALL) : undefined}
+                    asChild={!isContactCTA}
+                  >
+                    {isContactCTA ? (
+                      <span>{cta.text}</span>
+                    ) : (
+                      <LocaleLink href={cta.URL!} target={cta.target || '_self'} rel={cta.target === '_blank' ? 'noopener noreferrer' : undefined}>
+                        {cta.text}
+                      </LocaleLink>
+                    )}
+                  </Button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -79,4 +71,3 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
     </section>
   );
 }
-

@@ -1,6 +1,6 @@
 import type { CustomBudgetBlock } from "@/types";
-import { LocaleLink } from "@/components/locale-link";
 import { ANCHORS } from "@/lib/constants";
+import { triggerSurvey, FORMBRICKS_ACTIONS } from "@/lib/formbricks";
 
 const DEFAULT_SIGNALS = ["No commitment", "Response within 48h", "Any budget considered"];
 
@@ -71,12 +71,12 @@ export function CustomBudget({
             </div>
           </div>
 
-          <LocaleLink
-            href={cta_url ?? `#${ANCHORS.CUSTOM_PROJECT}`}
+          <button
+            onClick={() => triggerSurvey(FORMBRICKS_ACTIONS.CUSTOM_PROJECT)}
             className="self-stretch px-4 py-3 bg-[#37322F] text-[#FBFAF9] text-sm font-medium text-center rounded-sm hover:bg-[#49423D] transition-colors duration-200"
           >
             {cta_text ?? "Submit your project & budget"}
-          </LocaleLink>
+          </button>
 
           <p className="text-[rgba(55,50,47,0.45)] text-xs text-center leading-5">
             We maintain a minimum 8% margin on all custom projects.

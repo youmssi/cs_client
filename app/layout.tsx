@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/client';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { DEFAULT_METADATA } from '@/lib/constants';
+import { AppProvider } from '@/providers';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -61,7 +62,9 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NuqsAdapter>
-              <main>{children}</main>
+              <AppProvider>
+                <main>{children}</main>
+              </AppProvider>
             </NuqsAdapter>
             <Toaster />
           </ThemeProvider>
