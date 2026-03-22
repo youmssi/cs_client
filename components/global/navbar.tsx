@@ -50,10 +50,10 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
             <div className="flex items-center">
               <NavbarLogo logo={navbar.logo} />
             </div>
-            <div className="pl-3 sm:pl-4 md:pl-5 lg:pl-5 hidden md:flex">
+            <div className="pl-2 sm:pl-3 md:pl-4 hidden md:flex">
               <NavItems
                 items={navItems}
-                className="flex flex-row gap-3 md:gap-4"
+                className="flex flex-row gap-1 md:gap-2"
                 linkClassName="text-[rgba(49,45,43,0.80)] text-xs md:text-[13px] font-medium leading-[14px]"
               />
             </div>
