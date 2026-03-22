@@ -7,8 +7,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { TRPCReactProvider } from '@/trpc/client';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { DEFAULT_METADATA } from '@/lib/constants';
-import FormbricksProvider from './formbricks';
-import { Suspense } from 'react';
+import { AppProvider } from '@/providers';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,9 +54,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <Suspense>
-          <FormbricksProvider />
-        </Suspense>
         <TRPCReactProvider>
           <ThemeProvider
             attribute="class"
@@ -66,7 +62,9 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NuqsAdapter>
-              <main>{children}</main>
+              <AppProvider>
+                <main>{children}</main>
+              </AppProvider>
             </NuqsAdapter>
             <Toaster />
           </ThemeProvider>
