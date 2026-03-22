@@ -11,7 +11,10 @@ declare global {
 
 /**
  * Named actions — must match exactly what's configured in Formbricks dashboard
- * under Settings → Website & App Connection → Actions
+ * Settings → Website & App Connection → Actions (Code type)
+ *
+ * book-a-call    → triggers "Book a Call" survey    (CTA section button)
+ * custom-project → triggers "Custom Project" survey (Custom Budget section button)
  */
 export const FORMBRICKS_ACTIONS = {
   BOOK_A_CALL: "book-a-call",
@@ -20,25 +23,13 @@ export const FORMBRICKS_ACTIONS = {
 
 /**
  * Trigger a Formbricks survey by action name.
- * The survey must be set to trigger on this action in the Formbricks dashboard.
+ * Retries once after 1s if the SDK isn't ready yet.
  */
 export function triggerSurvey(action: string) {
-  if (!envClient.NEXT_PUBLIC_FORMBRICKS_ENV_ID) {
-    console.warn("[Formbricks] triggerSurvey: ENV_ID not set");
-    return;
-  }
-  if (typeof window === "undefined") return;
+  if (!envClient.NEXT_PUBLIC_FORMBRICKS_ENV_ID || typeof window === "undefined") return;
   if (!window.__formbricksReady) {
-    console.warn("[Formbricks] triggerSurvey: SDK not ready yet, retrying in 1s...");
     setTimeout(() => triggerSurvey(action), 1000);
     return;
   }
-  formbricks.track(action).catch((err: unknown) => {
-    console.warn("[Formbricks] track failed:", err);
-  });
+  formbricks.track(action).catch(() => {/* silent */});
 }
-
-export const SURVEY_IDS = {
-  BOOK_A_CALL: envClient.NEXT_PUBLIC_FORMBRICKS_SURVEY_BOOK_A_CALL,
-  CUSTOM_PROJECT: envClient.NEXT_PUBLIC_FORMBRICKS_SURVEY_CUSTOM_PROJECT,
-} as const;
