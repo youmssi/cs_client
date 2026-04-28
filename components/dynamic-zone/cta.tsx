@@ -50,7 +50,7 @@ export function CTA({ heading, sub_heading, CTAs: ctas }: Readonly<CTABlock>) {
                     key={`${cta.URL}-${index}`}
                     variant={cta.variant ? buttonVariantMap[cta.variant] ?? 'default' : 'default'}
                     size="lg"
-                    className={cn('transition-all duration-200')}
+                    className={cn('transition-all duration-200 cursor-pointer')}
                     onClick={isContactCTA ? () => triggerSurvey(FORMBRICKS_ACTIONS.BOOK_A_CALL) : undefined}
                     asChild={!isContactCTA}
                   >
