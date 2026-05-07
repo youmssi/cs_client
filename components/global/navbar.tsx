@@ -44,8 +44,8 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
 
   return (
     <ResizableNavbar className="w-full bg-transparent">
-      <NavBody className="max-w-[1060px] text-[#37322f]">
-        <div className="mx-auto w-full max-w-[calc(100%-32px)] sm:max-w-[calc(100%-48px)] md:max-w-[calc(100%-64px)] lg:max-w-[700px] lg:w-[700px] h-10 sm:h-11 md:h-12 py-1.5 sm:py-2 px-3 sm:px-4 md:px-4 pr-2 bg-[#F7F5F3] backdrop-blur-sm shadow-[0px_0px_0px_2px_white] overflow-hidden flex justify-between items-center relative z-30">
+      <NavBody className="max-w-[1060px] text-brand-ink">
+        <div className="mx-auto w-full max-w-[calc(100%-32px)] sm:max-w-[calc(100%-48px)] md:max-w-[calc(100%-64px)] lg:max-w-[700px] lg:w-[700px] h-10 sm:h-11 md:h-12 py-1.5 sm:py-2 px-3 sm:px-4 md:px-4 pr-2 bg-brand-surface backdrop-blur-sm shadow-[0px_0px_0px_2px_white] overflow-hidden flex justify-between items-center relative z-30">
           <div className="flex items-center">
             <div className="flex items-center">
               <NavbarLogo logo={navbar.logo} />
@@ -75,7 +75,7 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
         </div>
       </NavBody>
 
-      <MobileNav className="bg-[#F7F5F3]">
+      <MobileNav className="bg-brand-surface">
         <MobileNavHeader>
           <NavbarLogo logo={navbar.logo} />
           <MobileNavToggle
@@ -84,13 +84,13 @@ export function Navbar({ navbar }: Readonly<NavbarProps>) {
           />
         </MobileNavHeader>
 
-        <MobileNavMenu isOpen={isMobileMenuOpen} className="bg-[#F7F5F3] border-[#37322f]/10">
+        <MobileNavMenu isOpen={isMobileMenuOpen} className="bg-brand-surface border-brand-ink/10">
           {navItems.map((item) => (
             <LocaleLink
               key={`mobile-link-${item.name}-${item.link}`}
               href={item.link}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="relative text-[#37322f]"
+              className="relative text-brand-ink"
             >
               <span className="block">{item.name}</span>
             </LocaleLink>

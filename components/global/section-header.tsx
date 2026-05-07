@@ -30,11 +30,11 @@ export function SectionHeader({
         <BrillanceBadge iconVariant={badgeVariant} text={badgeText} />
       ) : null}
 
-      <div className="self-stretch text-center flex justify-center flex-col text-[#49423D] text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
+      <div className="self-stretch text-center flex justify-center flex-col text-brand-dark text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
         {heading}
       </div>
 
-      <div className="self-stretch text-center text-[#605A57] text-base font-normal leading-7 font-sans whitespace-pre-line">
+      <div className="self-stretch text-center text-brand-text text-base font-normal leading-7 font-sans whitespace-pre-line">
         {rawSubtitle}
       </div>
     </div>

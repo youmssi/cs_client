@@ -29,7 +29,7 @@ function renderBentoIllustration(illustration?: string) {
           <div className="w-full h-full flex items-center justify-center bg-transparent">
             <EffortlessIntegration width={400} height={250} className="max-w-full max-h-full" />
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#F7F5F3] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-brand-surface to-transparent pointer-events-none" />
         </div>
       );
     }
@@ -39,7 +39,7 @@ function renderBentoIllustration(illustration?: string) {
           <div className="absolute inset-0 flex items-center justify-center">
             <NumbersThatSpeak width="100%" height="100%" theme="light" className="w-full h-full object-contain" />
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#F7F5F3] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-brand-surface to-transparent pointer-events-none" />
         </div>
       );
     }
@@ -60,16 +60,16 @@ export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
   const list = (items ?? []).slice(0, 4);
 
   return (
-    <section id={ANCHORS.HOW_IT_WORKS} className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
-      <div className="self-stretch px-4 sm:px-6 md:px-8 lg:px-0 lg:max-w-[1060px] lg:w-[1060px] py-8 sm:py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
+    <section id={ANCHORS.HOW_IT_WORKS} className="w-full border-b border-brand-ink/12 flex flex-col justify-center items-center">
+      <div className="self-stretch px-4 sm:px-6 md:px-8 lg:px-0 lg:max-w-[1060px] lg:w-[1060px] py-8 sm:py-12 md:py-16 border-b border-brand-ink/12 flex justify-center items-center gap-6">
         <div className="w-full max-w-[616px] lg:w-[616px] px-4 sm:px-6 py-4 sm:py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-3 sm:gap-4 shadow-none">
           {badgeText ? <BrillanceBadge iconVariant={badgeVariant} text={badgeText} /> : null}
 
-          <div className="w-full max-w-[598.06px] lg:w-[598.06px] text-center flex justify-center flex-col text-[#49423D] text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
+          <div className="w-full max-w-[598.06px] lg:w-[598.06px] text-center flex justify-center flex-col text-brand-dark text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
             {title}
           </div>
 
-          <div className="self-stretch text-center text-[#605A57] text-sm sm:text-base font-normal leading-6 sm:leading-7 font-sans">
+          <div className="self-stretch text-center text-brand-text text-sm sm:text-base font-normal leading-6 sm:leading-7 font-sans">
             {subtitle.split("\n").map((line, idx) => (
               <span key={idx}>
                 {line}
@@ -86,13 +86,13 @@ export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
             {Array.from({ length: 200 }).map((_, i) => (
               <div
                 key={i}
-                className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-brand-stripe outline-offset-[-0.25px]"
               />
             ))}
           </div>
         </div>
 
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 border-l border-r border-[rgba(55,50,47,0.12)]">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 border-l border-r border-brand-ink/12">
           {list.map((item, index) => {
             const isTopRow = index < 2;
             const isLeftCol = index % 2 === 0;
@@ -103,13 +103,13 @@ export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
                 className={
                   `${isTopRow ? "border-b" : ""} ` +
                   `${isLeftCol ? "border-r-0 md:border-r" : ""} ` +
-                  `border-[rgba(55,50,47,0.12)] p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6 ` +
+                  `border-brand-ink/12 p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6 ` +
                   `${item.illustration === "effortless-integration" ? "bg-transparent" : ""}`
                 }
               >
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-[#37322F] text-lg sm:text-xl font-semibold leading-tight font-sans">{item.title}</h3>
-                  <p className="text-[#605A57] text-sm md:text-base font-normal leading-relaxed font-sans">{item.description}</p>
+                  <h3 className="text-brand-ink text-lg sm:text-xl font-semibold leading-tight font-sans">{item.title}</h3>
+                  <p className="text-brand-text text-sm md:text-base font-normal leading-relaxed font-sans">{item.description}</p>
                 </div>
                 {renderBentoIllustration(item.illustration)}
               </div>
@@ -122,7 +122,7 @@ export function BentoGrid({ header_section, items }: Readonly<BentoGridBlock>) {
             {Array.from({ length: 200 }).map((_, i) => (
               <div
                 key={i}
-                className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-brand-stripe outline-offset-[-0.25px]"
               />
             ))}
           </div>

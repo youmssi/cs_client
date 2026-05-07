@@ -25,10 +25,10 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
         <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6">
           {/* Hero Content */}
           <div className="self-stretch rounded-[3px] flex flex-col items-center gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-            <h1 className="w-full max-w-[748.71px] lg:w-[748.71px] text-center text-[#37322F] text-[24px] xs:text-[28px] sm:text-[36px] md:text-[52px] lg:text-[80px] font-normal leading-[1.1] sm:leading-[1.15] md:leading-[1.2] lg:leading-24 font-serif px-2 sm:px-4 md:px-0">
+            <h1 className="w-full max-w-[748.71px] lg:w-[748.71px] text-center text-brand-ink text-[24px] xs:text-[28px] sm:text-[36px] md:text-[52px] lg:text-[80px] font-normal leading-[1.1] sm:leading-[1.15] md:leading-[1.2] lg:leading-24 font-serif px-2 sm:px-4 md:px-0">
               {heading}
             </h1>
-            <p className="w-full max-w-[506.08px] lg:w-[506.08px] text-center text-[rgba(55,50,47,0.80)] text-sm sm:text-lg md:text-xl leading-[1.4] sm:leading-[1.45] md:leading-[1.5] lg:leading-7 font-sans px-2 sm:px-4 md:px-0 font-medium">
+            <p className="w-full max-w-[506.08px] lg:w-[506.08px] text-center text-brand-ink/80 text-sm sm:text-lg md:text-xl leading-[1.4] sm:leading-[1.45] md:leading-[1.5] lg:leading-7 font-sans px-2 sm:px-4 md:px-0 font-medium">
               {sub_heading}
             </p>
           </div>
@@ -58,12 +58,12 @@ export function Hero({ heading, sub_heading, CTAs }: Readonly<HeroBlock>) {
       </div>
 
       {/* Full-width diagonal pattern separator — same pattern as CTA section */}
-      <div className="w-full h-12 relative overflow-hidden border-t border-b border-[rgba(55,50,47,0.12)] mt-8 sm:mt-12 md:mt-16">
+      <div className="w-full h-12 relative overflow-hidden border-t border-b border-brand-ink/12 mt-8 sm:mt-12 md:mt-16">
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           {Array.from({ length: 300 }).map((_, i) => (
             <div
               key={i}
-              className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+              className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-brand-stripe outline-offset-[-0.25px]"
               style={{ top: `${i * 16 - 120}px`, left: "-100%", width: "300%" }}
             />
           ))}

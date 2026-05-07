@@ -58,6 +58,17 @@
   --shadow-2xl: 4px 4px 0px 0px hsl(0 0% 0% / 2.50);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
+
+  /* Brand palette — warm brown system */
+  --brand-ink:           #37322F;
+  --brand-dark:          #49423D;
+  --brand-text:          #605A57;
+  --brand-surface:       #F7F5F3;
+  --brand-surface-raised:#FBFAF9;
+  --brand-surface-hover: #F0EFEE;
+  --brand-border:        #E0DEDB;
+  --brand-border-light:  #EDE9E6;
+  --brand-stripe:        rgba(3, 7, 18, 0.08);
 }
 
 .dark {
@@ -161,6 +172,16 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+
+  --color-brand-ink:            var(--brand-ink);
+  --color-brand-dark:           var(--brand-dark);
+  --color-brand-text:           var(--brand-text);
+  --color-brand-surface:        var(--brand-surface);
+  --color-brand-surface-raised: var(--brand-surface-raised);
+  --color-brand-surface-hover:  var(--brand-surface-hover);
+  --color-brand-border:         var(--brand-border);
+  --color-brand-border-light:   var(--brand-border-light);
+  --color-brand-stripe:         var(--brand-stripe);
 
   --animate-cell-ripple: cell-ripple var(--duration, 200ms) ease-out none 1 var(--delay, 0ms);
 
