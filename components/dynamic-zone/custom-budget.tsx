@@ -73,7 +73,7 @@ export function CustomBudget({
 
           <button
             onClick={() => triggerSurvey(FORMBRICKS_ACTIONS.CUSTOM_PROJECT)}
-            className="self-stretch px-4 py-3 bg-[#37322F] text-[#FBFAF9] text-sm font-medium text-center rounded-sm hover:bg-[#49423D] transition-colors duration-200"
+            className="self-stretch px-4 py-3 bg-[#37322F] text-[#FBFAF9] text-sm font-medium text-center rounded-sm hover:bg-[#49423D] transition-colors duration-200 cursor-pointer"
           >
             {cta_text ?? "Submit your project & budget"}
           </button>
