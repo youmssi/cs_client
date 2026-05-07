@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { ErrorView } from '@/components/state-views';
 import { PageContent } from '@/components/page-content';
@@ -12,12 +13,16 @@ interface PageProps {
 
 export const dynamicParams = true;
 
+const getHomePage = cache(async (locale: string) => {
+  const caller = await getCaller();
+  return caller.comingSoon.getPageBySlug({ slug: 'home', locale });
+});
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mrvin100.de';
-  const caller = await getCaller();
   try {
-    const page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale });
+    const page = await getHomePage(locale);
     return generateMetadataObject(page?.seo, {
       title: DEFAULT_METADATA.TITLE,
       description: DEFAULT_METADATA.DESCRIPTION,
@@ -34,10 +39,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function HomePage({ params }: Readonly<PageProps>) {
   const { locale } = await params;
-  const caller = await getCaller();
   let page = null;
   try {
-    page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale });
+    page = await getHomePage(locale);
   } catch (error) {
     console.warn(`[HomePage] Failed to load page for locale ${locale}:`, error instanceof Error ? error.message : error);
   }
