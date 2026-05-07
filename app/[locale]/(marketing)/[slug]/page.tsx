@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { ErrorView } from '@/components/state-views';
 import { PageContent } from '@/components/page-content';
@@ -11,12 +12,16 @@ interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
 }
 
+const getSlugPage = cache(async (slug: string, locale: string) => {
+  const caller = await getCaller();
+  return caller.comingSoon.getPageBySlug({ slug, locale });
+});
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug, locale } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mrvin100.de';
-  const caller = await getCaller();
   try {
-    const page = await caller.comingSoon.getPageBySlug({ slug, locale });
+    const page = await getSlugPage(slug, locale);
     return generateMetadataObject(page?.seo, {
       title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} — ${DEFAULT_METADATA.SITE_NAME}`,
       description: DEFAULT_METADATA.DESCRIPTION,
@@ -33,10 +38,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DynamicPage({ params }: Readonly<PageProps>) {
   const { slug, locale } = await params;
-  const caller = await getCaller();
   let page = null;
   try {
-    page = await caller.comingSoon.getPageBySlug({ slug, locale });
+    page = await getSlugPage(slug, locale);
   } catch (error) {
     console.warn(`[DynamicPage] Failed to load page ${slug} for locale ${locale}:`, error instanceof Error ? error.message : error);
   }

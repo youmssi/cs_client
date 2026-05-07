@@ -1,3 +1,5 @@
+"use client";
+
 import type { CustomBudgetBlock } from "@/types";
 import { ANCHORS } from "@/lib/constants";
 import { triggerSurvey, FORMBRICKS_ACTIONS } from "@/lib/formbricks";

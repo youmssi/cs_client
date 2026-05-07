@@ -7,8 +7,22 @@ export function FAQ({ heading, sub_heading, faqs }: Readonly<FAQBlock>) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   if (!faqs || faqs.length === 0) return null;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  };
+
   return (
     <section id={ANCHORS.FAQ} className="w-full flex justify-center items-start border-b border-brand-ink/12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex-1 px-4 md:px-12 lg:px-24 py-16 md:py-20 flex flex-col items-center gap-10 md:gap-14">
         {/* Header */}
         <div className="w-full max-w-[640px] flex flex-col items-center gap-3 text-center">
