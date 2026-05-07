@@ -60,3 +60,8 @@ export const API_ENDPOINTS = {
 export const LOCALES = ['fr', 'en'] as const;
 export type Locale = typeof LOCALES[number];
 export const DEFAULT_LOCALE = LOCALES[0];
+
+export const OG_LOCALE_MAP: Record<string, string> = {
+  fr: 'fr_FR',
+  en: 'en_US',
+};

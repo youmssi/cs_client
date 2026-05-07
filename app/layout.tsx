@@ -1,13 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Instrument_Serif } from 'next/font/google';
 import './globals.css';
-
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
-import { TRPCReactProvider } from '@/trpc/client';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { DEFAULT_METADATA } from '@/lib/constants';
-import { AppProvider } from '@/providers';
+import { DEFAULT_LOCALE } from '@/lib/constants';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,50 +19,25 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: DEFAULT_METADATA.TITLE,
-    template: `%s — ${DEFAULT_METADATA.SITE_NAME}`,
-  },
-  description: DEFAULT_METADATA.DESCRIPTION,
-  keywords: DEFAULT_METADATA.KEYWORDS,
-  metadataBase: new URL('https://mrvin100.de'),
-  openGraph: {
-    siteName: DEFAULT_METADATA.SITE_NAME,
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mrvin100.de'),
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html
-      lang="en"
+      lang={DEFAULT_LOCALE}
       className={`${inter.variable} ${instrumentSerif.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <TRPCReactProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <NuqsAdapter>
-              <AppProvider>
-                <main>{children}</main>
-              </AppProvider>
-            </NuqsAdapter>
-            <Toaster />
-          </ThemeProvider>
-        </TRPCReactProvider>
+        {children}
       </body>
     </html>
   );

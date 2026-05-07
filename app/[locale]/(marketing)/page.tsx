@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { ErrorView } from '@/components/state-views';
 import { PageContent } from '@/components/page-content';
-import { HydrateClient, getCaller } from "@/trpc/server";
-import { ErrorBoundary } from "react-error-boundary";
+import { HydrateClient, getCaller } from '@/trpc/server';
+import { ErrorBoundary } from 'react-error-boundary';
 import { generateMetadataObject } from '@/lib/metadata';
 import { DEFAULT_METADATA } from '@/lib/constants';
 
@@ -14,12 +14,18 @@ export const dynamicParams = true;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mrvin100.de';
   const caller = await getCaller();
   try {
     const page = await caller.comingSoon.getPageBySlug({ slug: 'home', locale });
     return generateMetadataObject(page?.seo, {
       title: DEFAULT_METADATA.TITLE,
       description: DEFAULT_METADATA.DESCRIPTION,
+    }, {
+      locale,
+      localizations: page?.localizations ?? [],
+      slug: 'home',
+      siteUrl,
     });
   } catch {
     return { title: DEFAULT_METADATA.TITLE, description: DEFAULT_METADATA.DESCRIPTION };
