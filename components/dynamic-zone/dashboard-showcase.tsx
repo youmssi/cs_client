@@ -102,13 +102,13 @@ export function DashboardShowcase({
         </div>
 
         {/* Feature cards with progress bar */}
-        <div className="self-stretch border-t border-[#E0DEDB] border-b border-[#E0DEDB] flex justify-center items-start">
+        <div className="self-stretch border-t border-brand-border border-b border-brand-border flex justify-center items-start">
           <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
             <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
               {Array.from({ length: 50 }).map((_, i) => (
                 <div
                   key={i}
-                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-brand-stripe outline-offset-[-0.25px]"
                 />
               ))}
             </div>
@@ -132,7 +132,7 @@ export function DashboardShowcase({
               {Array.from({ length: 50 }).map((_, i) => (
                 <div
                   key={i}
-                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+                  className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline outline-[0.5px] outline-brand-stripe outline-offset-[-0.25px]"
                 />
               ))}
             </div>
@@ -160,24 +160,24 @@ function FeatureCard({
     <div
       className={`w-full md:flex-1 self-stretch px-6 py-5 overflow-hidden flex flex-col justify-start items-start gap-2 cursor-pointer relative border-b md:border-b-0 last:border-b-0 ${
         isActive
-          ? "bg-white shadow-[0px_0px_0px_0.75px_#E0DEDB_inset]"
-          : "border-l-0 border-r-0 md:border border-[#E0DEDB]/80"
+          ? "bg-white shadow-[0px_0px_0px_0.75px_var(--color-brand-border)_inset]"
+          : "border-l-0 border-r-0 md:border border-brand-border/80"
       }`}
       onClick={onClick}
     >
       {isActive && (
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-[rgba(50,45,43,0.08)]">
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-brand-ink/8">
           <div
-            className="h-full bg-[#322D2B] transition-all duration-100 ease-linear"
+            className="h-full bg-brand-ink transition-all duration-100 ease-linear"
             style={{ width: `${progress}%` }}
           />
         </div>
       )}
 
-      <div className="self-stretch flex justify-center flex-col text-[#49423D] text-sm md:text-sm font-semibold leading-6 md:leading-6 font-sans">
+      <div className="self-stretch flex justify-center flex-col text-brand-dark text-sm md:text-sm font-semibold leading-6 md:leading-6 font-sans">
         {title}
       </div>
-      <div className="self-stretch text-[#605A57] text-[13px] md:text-[13px] font-normal leading-[22px] md:leading-[22px] font-sans">
+      <div className="self-stretch text-brand-text text-[13px] md:text-[13px] font-normal leading-[22px] md:leading-[22px] font-sans">
         {description}
       </div>
     </div>

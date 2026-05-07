@@ -25,19 +25,19 @@ export function PlatformFeatures({ header_section, cards }: Readonly<PlatformFea
   };
 
   return (
-    <div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
-      <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-[rgba(55,50,47,0.12)] flex justify-center items-center gap-6">
+    <div className="w-full border-b border-brand-ink/12 flex flex-col justify-center items-center">
+      <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-brand-ink/12 flex justify-center items-center gap-6">
         <div className="w-full max-w-[586px] px-6 py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-4 shadow-none">
           {(header_section?.badge?.text ?? "Platform Features") ? (
-            <BrillanceBadge 
-              iconVariant={header_section?.badge?.variant ?? "bar"} 
-              text={header_section?.badge?.text ?? "Platform Features"} 
+            <BrillanceBadge
+              iconVariant={header_section?.badge?.variant ?? "bar"}
+              text={header_section?.badge?.text ?? "Platform Features"}
             />
           ) : null}
-          <div className="self-stretch text-center flex justify-center flex-col text-[#49423D] text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
+          <div className="self-stretch text-center flex justify-center flex-col text-brand-dark text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
             {header_section?.heading ?? "Streamline your business operations"}
           </div>
-          <div className="self-stretch text-center text-[#605A57] text-base font-normal leading-7 font-sans">
+          <div className="self-stretch text-center text-brand-text text-base font-normal leading-7 font-sans">
             {(header_section?.sub_heading ?? "Manage schedules, analyze data, and collaborate with your team\nall in one powerful platform.")
               .split("\n")
               .map((line, i) => (
@@ -61,7 +61,7 @@ export function PlatformFeatures({ header_section, cards }: Readonly<PlatformFea
                   key={index}
                   onClick={() => handleCardClick(index)}
                   className={`w-full overflow-hidden flex flex-col justify-start items-start transition-all duration-300 cursor-pointer ${
-                    isActive ? "bg-white shadow-[0px_0px_0px_0.75px_#E0DEDB_inset]" : "border border-[rgba(2,6,23,0.08)]"
+                    isActive ? "bg-white shadow-[0px_0px_0px_0.75px_var(--color-brand-border)_inset]" : "border border-brand-stripe"
                   }`}
                 >
                   <div
@@ -69,14 +69,14 @@ export function PlatformFeatures({ header_section, cards }: Readonly<PlatformFea
                   >
                     <div
                       key={animationKey}
-                      className="h-0.5 bg-[#322D2B] animate-[progressBar_5s_linear_forwards] will-change-transform"
+                      className="h-0.5 bg-brand-ink animate-[progressBar_5s_linear_forwards] will-change-transform"
                     />
                   </div>
                   <div className="px-6 py-5 w-full flex flex-col gap-2">
-                    <div className="self-stretch flex justify-center flex-col text-[#49423D] text-sm font-semibold leading-6 font-sans">
+                    <div className="self-stretch flex justify-center flex-col text-brand-dark text-sm font-semibold leading-6 font-sans">
                       {card.title}
                     </div>
-                    <div className="self-stretch text-[#605A57] text-[13px] font-normal leading-[22px] font-sans whitespace-pre-line">
+                    <div className="self-stretch text-brand-text text-[13px] font-normal leading-[22px] font-sans whitespace-pre-line">
                       {card.description}
                     </div>
                   </div>
