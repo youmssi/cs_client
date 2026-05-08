@@ -13,6 +13,9 @@ import { FAQ } from "./faq";
 import { CTA } from "./cta";
 import { Story } from "./story";
 import { CustomBudget } from "./custom-budget";
+import { AppCatalog } from "./app-catalog";
+import { EcosystemShowcase } from "./ecosystem-showcase";
+import { DeliveryModel } from "./delivery-model";
 
 interface DynamicZoneManagerProps {
   blocks?: DynamicBlock[] | null;
@@ -77,6 +80,18 @@ export function DynamicZoneManager({
           case "blocks.story": {
             const props = block;
             return <Story key={`story-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.app-catalog": {
+            const props = block;
+            return <AppCatalog key={`app-catalog-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.ecosystem-showcase": {
+            const props = block;
+            return <EcosystemShowcase key={`ecosystem-showcase-${block.id}-${index}`} {...props} />;
+          }
+          case "dynamic-zone.delivery-model": {
+            const props = block;
+            return <DeliveryModel key={`delivery-model-${block.id}-${index}`} {...props} />;
           }
           default: {
             console.warn('No component found for this block type');
