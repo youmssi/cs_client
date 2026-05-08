@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Instrument_Serif } from 'next/font/google';
+import { headers } from 'next/headers';
 import './globals.css';
 import { DEFAULT_LOCALE } from '@/lib/constants';
 
@@ -25,14 +26,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const locale = headersList.get('x-locale') ?? DEFAULT_LOCALE;
+
   return (
     <html
-      lang={DEFAULT_LOCALE}
+      lang={locale}
       className={`${inter.variable} ${instrumentSerif.variable} antialiased`}
       suppressHydrationWarning
     >
