@@ -18,6 +18,8 @@ export const ANCHORS = {
   TESTIMONIALS: 'testimonials',
   FAQ: 'faq',
   CONTACT: 'contact',
+  APPS_CATALOG: 'apps-catalog',
+  ECOSYSTEM: 'ecosystem',
 } as const;
 
 export type AnchorId = typeof ANCHORS[keyof typeof ANCHORS];

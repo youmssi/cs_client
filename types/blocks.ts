@@ -9,6 +9,9 @@ import type {
   PricingPlan,
   DashboardShowcaseFeature,
   Media,
+  App,
+  IndustryTag,
+  DeliveryMode,
 } from "./components";
 
 export interface HeroBlock {
@@ -71,7 +74,10 @@ export type DynamicBlock =
   | PlatformFeaturesBlock
   | PricingBlock
   | DashboardShowcaseBlock
-  | CustomBudgetBlock;
+  | CustomBudgetBlock
+  | AppCatalogBlock
+  | EcosystemShowcaseBlock
+  | DeliveryModelBlock;
 
 
 export interface PricingBlock {
@@ -121,17 +127,32 @@ export interface BentoGridBlock {
 export interface DashboardShowcaseBlock {
   __component: "dynamic-zone.dashboard-showcase";
   id: number;
-  /**
-   * Up to three dashboard images that are swapped when the feature changes.
-   * Can be either Media objects or URL strings for flexibility.
-   */
   primary_image?: Media | string | null;
   secondary_image?: Media | string | null;
   tertiary_image?: Media | string | null;
-  /**
-   * Feature descriptions that control the active dashboard image.
-   */
   features?: DashboardShowcaseFeature[] | null;
 }
 
+export interface AppCatalogBlock {
+  __component: 'dynamic-zone.app-catalog';
+  id: number;
+  header_section?: HeaderSection | null;
+  apps: App[];
+}
+
+export interface EcosystemShowcaseBlock {
+  __component: 'dynamic-zone.ecosystem-showcase';
+  id: number;
+  label?: string | null;
+  header_section?: HeaderSection | null;
+  industries: IndustryTag[];
+  logos?: Logo[] | null;
+}
+
+export interface DeliveryModelBlock {
+  __component: 'dynamic-zone.delivery-model';
+  id: number;
+  header_section?: HeaderSection | null;
+  modes: DeliveryMode[];
+}
 

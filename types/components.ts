@@ -125,6 +125,36 @@ export interface PricingPlan {
   features?: string | string[] | null;
 }
 
+export interface App {
+  id: number;
+  name: string;
+  slug: string;
+  tagline: string;
+  description?: string;
+  logo?: Media | null;
+  external_url?: string;
+  category: string;
+  is_saas: boolean;
+  is_on_premise: boolean;
+  is_hybrid: boolean;
+  sort_order: number;
+  featured: boolean;
+}
+
+export interface IndustryTag {
+  id: number;
+  name: string;
+  icon_name?: string;
+}
+
+export interface DeliveryMode {
+  id: number;
+  title: string;
+  description?: string;
+  icon_name?: string;
+  badge?: string;
+}
+
 export interface DashboardShowcaseFeature {
   /**
    * Title shown in the feature card.
