@@ -189,9 +189,9 @@ export async function POST(request: NextRequest) {
     // Revalidate based on content type
     if (model === 'api::page.page') {
       // Always revalidate pages tag to invalidate static params cache
-      revalidateTag('pages', 'layout');
+      revalidateTag('pages', 'max');
       revalidated.tags.push('pages');
-      
+
       // If we have entry details, revalidate specific page path
       if (entry && typeof entry === 'object' && 'slug' in entry && 'locale' in entry) {
         const slug = entry.slug as string;
@@ -199,9 +199,9 @@ export async function POST(request: NextRequest) {
         const path = `/${locale}${slug === 'home' ? '' : `/${slug}`}`;
         revalidatePath(path, 'page');
         revalidated.paths.push(path);
-        
+
         // Also revalidate the locale-specific pages cache tag
-        revalidateTag(`pages:${locale}`, 'layout');
+        revalidateTag(`pages:${locale}`, 'max');
         revalidated.tags.push(`pages:${locale}`);
       } else {
         // If no locale specified, revalidate all locale pages caches
@@ -210,20 +210,26 @@ export async function POST(request: NextRequest) {
       }
     } else if (model === 'api::global.global') {
       // Revalidate global data (affects all pages)
-      revalidateTag('global', 'layout');
+      revalidateTag('global', 'max');
       revalidated.tags.push('global');
-      
+
       // Revalidate home pages in all locales
       revalidatePath('/', 'layout');
       revalidated.paths.push('/');
     } else if (model === 'api::logo.logo') {
       // Revalidate pages that use logos
-      revalidateTag('logos', 'layout');
+      revalidateTag('logos', 'max');
       revalidated.tags.push('logos');
     } else if (model === 'api::faq.faq') {
       // Revalidate FAQ data
-      revalidateTag('faqs', 'layout');
+      revalidateTag('faqs', 'max');
       revalidated.tags.push('faqs');
+    } else if (model === 'api::app.app') {
+      // App entries are embedded in pages via app-catalog — revalidate all pages
+      revalidateTag('pages', 'max');
+      revalidated.tags.push('pages');
+      revalidatePath('/', 'layout');
+      revalidated.paths.push('/');
     } else if (event?.startsWith('media.')) {
       // Media changed - revalidate all pages to be safe
       revalidatePath('/', 'layout');
