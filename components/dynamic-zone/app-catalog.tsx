@@ -54,7 +54,7 @@ export function AppCatalog({ header_section, apps }: Readonly<AppCatalogBlock>) 
     >
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026') }}
       />
       <div className="flex-1 px-4 md:px-12 lg:px-24 py-16 md:py-20 flex flex-col items-center gap-10 md:gap-14">
         <SectionHeader

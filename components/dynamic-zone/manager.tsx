@@ -1,5 +1,3 @@
-"use client";
-
 import type { DynamicBlock } from "@/types";
 
 import { Hero } from "./hero";

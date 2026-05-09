@@ -80,7 +80,8 @@ export function EcosystemShowcase({
         {hasLogos && (
           <div className="w-full flex flex-wrap justify-center items-center gap-6 md:gap-10 mt-2">
             {logos!.map((logo, index) => {
-              const logoUrl = getStrapiMediaUrl(logo.image?.url ?? undefined);
+              const logoUrl = logo.image ? getStrapiMediaUrl(logo.image.url) : null;
+              if (!logoUrl) return null;
               return (
                 <div
                   key={index}
@@ -90,8 +91,8 @@ export function EcosystemShowcase({
                     <Image
                       src={logoUrl}
                       alt={logo.company || 'Logo'}
-                      width={logo.image?.width ?? 32}
-                      height={logo.image?.height ?? 32}
+                      width={logo.image!.width ?? 32}
+                      height={logo.image!.height ?? 32}
                       className="w-full h-full object-contain"
                     />
                   </div>
