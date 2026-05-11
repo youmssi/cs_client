@@ -60,7 +60,7 @@ export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock
               <div
                 key={index}
                 className={`
-                  h-24 xs:h-28 sm:h-32 md:h-36 lg:h-40 flex justify-center items-center gap-1 xs:gap-2 sm:gap-3
+                  h-24 xs:h-28 sm:h-32 md:h-36 lg:h-40 flex justify-center flex-col items-center gap-1 xs:gap-2 sm:gap-3
                   border-b border-brand-border/50
                   ${index < 6 ? "sm:border-b-[0.5px]" : "sm:border-b"}
                   ${index >= 6 ? "border-b" : ""}
@@ -82,7 +82,7 @@ export function SocialProof({ header_section, logos }: Readonly<SocialProofBlock
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <div className="text-center flex justify-center flex-col text-brand-ink text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-tight md:leading-9 font-sans">
+                <div className="text-center flex justify-center flex-col text-brand-ink text-sm xs:text-base font-medium leading-tight md:leading-6 font-sans px-2">
                   {logo.company ?? ""}
                 </div>
               </div>
