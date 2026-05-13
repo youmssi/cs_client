@@ -15,6 +15,9 @@ export interface Footer {
   internal_links: Link[];
   policy_links: Link[];
   social_media_links: SocialLink[];
+  contact_email: string | null;
+  contact_phones: string | null;
+  cities: string | null;
 }
 
 export interface Global {

@@ -46,7 +46,7 @@ export interface Button extends Link {
 
 export interface SocialLink {
   id: number;
-  platform: 'x' | 'linkedin' | 'github';
+  platform: 'x' | 'linkedin' | 'github' | 'discord';
   URL: string;
   target: '_blank' | '_self' | '_parent' | '_top';
   label?: string | null;
