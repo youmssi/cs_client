@@ -61,6 +61,23 @@ export function Compare({
     updatePosition(e.touches[0].clientX);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const step = e.shiftKey ? 10 : 5;
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setPosition((p) => Math.max(0, p - step));
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setPosition((p) => Math.min(100, p + step));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      setPosition(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      setPosition(100);
+    }
+  };
+
   useEffect(() => {
     if (!dragging) return;
     const onMove = (e: MouseEvent) => updatePosition(e.clientX);
@@ -83,11 +100,24 @@ export function Compare({
       ref={containerRef}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      onKeyDown={handleKeyDown}
+      role="slider"
+      tabIndex={0}
+      aria-label="Drag or use arrow keys to compare before and after"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(position)}
       className={cn(
         "relative w-full overflow-hidden rounded-2xl border border-brand-border bg-brand-surface-raised select-none touch-none cursor-ew-resize",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface",
         className,
       )}
-      style={{ borderColor: "var(--product-accent, var(--brand-border))" }}
+      style={
+        {
+          borderColor: "var(--product-accent, var(--brand-border))",
+          "--tw-ring-color": "var(--product-accent, #50B8D9)",
+        } as React.CSSProperties
+      }
     >
       {firstImage && (
         // eslint-disable-next-line @next/next/no-img-element

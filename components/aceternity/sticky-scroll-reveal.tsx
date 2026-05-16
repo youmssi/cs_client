@@ -49,16 +49,23 @@ export function StickyScroll({ content, className }: Readonly<StickyScrollProps>
       <div className="relative flex items-start px-2 md:px-4 w-full md:w-1/2">
         <div className="max-w-2xl">
           {content.map((item, index) => (
-            <div key={`sticky-card-${index}`} className="my-20 md:my-28">
+            <div key={`sticky-card-${index}`} className="my-16 md:my-28">
               <motion.h3
                 animate={{ opacity: activeCard === index ? 1 : 0.35 }}
                 className="text-2xl md:text-3xl font-bold text-brand-ink font-serif"
               >
                 {item.title}
               </motion.h3>
+              {/* Inline visual on mobile — sticky panel is hidden below md */}
+              <div
+                className="md:hidden mt-6 h-[260px] overflow-hidden rounded-2xl shadow-xl border bg-brand-surface-raised"
+                style={{ borderColor: "var(--product-accent, var(--brand-border))" }}
+              >
+                {item.visual}
+              </div>
               <motion.div
                 animate={{ opacity: activeCard === index ? 1 : 0.3 }}
-                className="text-base md:text-lg text-brand-dark/80 mt-4 max-w-md leading-relaxed"
+                className="text-base md:text-lg text-brand-dark/80 mt-6 max-w-md leading-relaxed"
               >
                 {item.description}
               </motion.div>
