@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface CompareProps {
@@ -26,7 +26,22 @@ export function Compare({
 }: Readonly<CompareProps>) {
   const [position, setPosition] = useState(initialPosition);
   const [dragging, setDragging] = useState(false);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Measure on mount + observe resize so the overlay <img> stays synced
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    setContainerWidth(el.getBoundingClientRect().width);
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -98,7 +113,7 @@ export function Compare({
             alt={secondImageAlt}
             draggable={false}
             className="block w-full h-auto pointer-events-none"
-            style={{ width: containerRef.current?.offsetWidth ?? "auto" }}
+            style={{ width: containerWidth ?? "auto" }}
           />
         )}
         <span className="absolute top-3 left-3 z-30 rounded-full px-3 py-1 text-xs font-medium text-white" style={{ backgroundColor: "var(--product-accent, #50B8D9)" }}>

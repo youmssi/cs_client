@@ -45,25 +45,30 @@ export function BackgroundBeams({ className, accent = "var(--product-accent, #50
           />
         ))}
         <defs>
-          {paths.map((_, idx) => (
-            <motion.linearGradient
-              key={`beam-gradient-${idx}`}
-              id={`beam-gradient-${idx}`}
-              gradientUnits="userSpaceOnUse"
-              initial={{ x1: "0%", x2: "0%", y1: "0%", y2: "0%" }}
-              animate={{ x1: ["0%", "100%"], x2: ["0%", "95%"], y1: ["0%", "100%"], y2: ["0%", `${93 + Math.random() * 8}%`] }}
-              transition={{
-                duration: 7 + Math.random() * 4,
-                ease: "easeInOut",
-                repeat: Infinity,
-                delay: idx * 0.4,
-              }}
-            >
-              <stop stopColor={accent} stopOpacity="0" />
-              <stop offset="0.32" stopColor={accent} />
-              <stop offset="1" stopColor={accent} stopOpacity="0" />
-            </motion.linearGradient>
-          ))}
+          {paths.map((_, idx) => {
+            // Deterministic, stable across renders — derived from idx
+            const y2Offset = 93 + ((idx * 13) % 8); // 0..7 → 93..100
+            const duration = 7 + ((idx * 7) % 5); // 0..4 → 7..11
+            return (
+              <motion.linearGradient
+                key={`beam-gradient-${idx}`}
+                id={`beam-gradient-${idx}`}
+                gradientUnits="userSpaceOnUse"
+                initial={{ x1: "0%", x2: "0%", y1: "0%", y2: "0%" }}
+                animate={{ x1: ["0%", "100%"], x2: ["0%", "95%"], y1: ["0%", "100%"], y2: ["0%", `${y2Offset}%`] }}
+                transition={{
+                  duration,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  delay: idx * 0.4,
+                }}
+              >
+                <stop stopColor={accent} stopOpacity="0" />
+                <stop offset="0.32" stopColor={accent} />
+                <stop offset="1" stopColor={accent} stopOpacity="0" />
+              </motion.linearGradient>
+            );
+          })}
         </defs>
       </svg>
     </div>

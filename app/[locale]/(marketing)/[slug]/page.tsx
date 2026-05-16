@@ -49,7 +49,7 @@ export default async function DynamicPage({ params }: Readonly<PageProps>) {
     <HydrateClient>
       <ErrorBoundary fallback={<ErrorView message={`Failed to load page '${slug}'. Please check that content is created in the CMS.`} />}>
         <main>
-          <PageContent page={page} />
+          <PageContent page={page} locale={locale} />
         </main>
       </ErrorBoundary>
     </HydrateClient>

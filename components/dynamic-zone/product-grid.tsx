@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { LocaleLink } from "@/components/locale-link";
@@ -8,18 +7,23 @@ import { getStrapiMediaUrl } from "@/lib/media.strapi";
 import { DEFAULT_LOCALE } from "@/lib/constants";
 import type { ProductGridBlock, ProductPageListItem } from "@/types";
 
+interface ProductGridProps extends ProductGridBlock {
+  /** Locale forwarded by the parent route. Falls back to DEFAULT_LOCALE if omitted. */
+  locale?: string;
+}
+
 export async function ProductGrid({
   header_section,
   cta_label,
   show_all_featured,
-}: Readonly<ProductGridBlock>) {
-  const h = await headers();
-  const locale = h.get("x-locale") ?? DEFAULT_LOCALE;
+  locale,
+}: Readonly<ProductGridProps>) {
+  const resolvedLocale = locale ?? DEFAULT_LOCALE;
 
   let products: ProductPageListItem[] = [];
   try {
     const caller = await getCaller();
-    const data = await caller.comingSoon.getProductPages({ locale });
+    const data = await caller.comingSoon.getProductPages({ locale: resolvedLocale });
     products = (data ?? []).filter((p) =>
       show_all_featured !== false ? p.featured_in_catalog : true,
     );

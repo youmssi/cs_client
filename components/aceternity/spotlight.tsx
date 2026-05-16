@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +10,7 @@ interface SpotlightProps {
 }
 
 export function Spotlight({ className, fill = "white" }: Readonly<SpotlightProps>) {
+  const filterId = useId();
   return (
     <motion.svg
       initial={{ opacity: 0 }}
@@ -22,7 +24,7 @@ export function Spotlight({ className, fill = "white" }: Readonly<SpotlightProps
       viewBox="0 0 3787 2842"
       fill="none"
     >
-      <g filter="url(#filter)">
+      <g filter={`url(#${filterId})`}>
         <ellipse
           cx="1924.71"
           cy="273.501"
@@ -35,7 +37,7 @@ export function Spotlight({ className, fill = "white" }: Readonly<SpotlightProps
       </g>
       <defs>
         <filter
-          id="filter"
+          id={filterId}
           x="0.860352"
           y="0.838989"
           width="3785.16"

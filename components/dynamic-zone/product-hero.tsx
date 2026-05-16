@@ -25,6 +25,27 @@ const STATUS_LABEL: Record<string, string> = {
   "coming-soon": "Coming soon",
 };
 
+const TRUSTED_EMBED_HOSTS = new Set([
+  "www.youtube.com",
+  "youtube.com",
+  "www.youtube-nocookie.com",
+  "youtube-nocookie.com",
+  "player.vimeo.com",
+  "www.loom.com",
+  "loom.com",
+]);
+
+function isTrustedEmbedUrl(raw: string | null | undefined): raw is string {
+  if (!raw) return false;
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== "https:") return false;
+    return TRUSTED_EMBED_HOSTS.has(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
 export function ProductHero({
   eyebrow,
   heading,
@@ -167,13 +188,16 @@ export function ProductHero({
               className="rounded-2xl overflow-hidden border bg-brand-surface-raised shadow-2xl"
               style={{ borderColor: `color-mix(in oklch, ${accentColor ?? "#50B8D9"} 40%, var(--brand-border))` }}
             >
-              {preview_video_url ? (
+              {isTrustedEmbedUrl(preview_video_url) ? (
                 <div className="relative aspect-video bg-black">
                   <iframe
                     src={preview_video_url}
                     title={`${productName ?? "Product"} preview`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="autoplay; encrypted-media; picture-in-picture"
                     allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
                     className="absolute inset-0 w-full h-full"
                   />
                 </div>

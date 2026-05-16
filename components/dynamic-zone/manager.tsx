@@ -27,6 +27,11 @@ import { ProductGrid } from "./product-grid";
 interface DynamicZoneManagerProps {
   blocks?: DynamicBlock[] | null;
   /**
+   * Current request locale. Forwarded to data-fetching blocks (e.g. product-grid)
+   * so they don't need to read headers() — preserves SSG eligibility for the parent.
+   */
+  locale?: string;
+  /**
    * Product-level context for product-page blocks. Passed by the
    * `/apps/[product]` route so blocks can render the product accent color,
    * status pill, version, logo, etc.
@@ -43,6 +48,7 @@ interface DynamicZoneManagerProps {
 
 export function DynamicZoneManager({
   blocks,
+  locale,
   productContext,
 }: Readonly<DynamicZoneManagerProps>) {
   if (!blocks || blocks.length === 0) {
@@ -152,7 +158,7 @@ export function DynamicZoneManager({
             return <ProductCtaFinal key={`product-cta-final-${block.id}-${index}`} {...block} accentColor={accentColor} />;
           }
           case "dynamic-zone.product-grid": {
-            return <ProductGrid key={`product-grid-${block.id}-${index}`} {...block} />;
+            return <ProductGrid key={`product-grid-${block.id}-${index}`} {...block} locale={locale} />;
           }
           default: {
             console.warn('No component found for this block type');

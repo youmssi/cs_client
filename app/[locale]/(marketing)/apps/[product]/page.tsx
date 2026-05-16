@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { ErrorView } from '@/components/state-views';
 import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
 import { HydrateClient, getCaller } from '@/trpc/server';
@@ -62,13 +63,7 @@ export default async function ProductPageRoute({ params }: Readonly<ProductPageR
   }
 
   if (!page) {
-    return (
-      <main>
-        <ErrorView
-          message={`Product '${product}' not found. Please check that the product page is created and published in the CMS.`}
-        />
-      </main>
-    );
+    notFound();
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mrvin100.de';
@@ -108,7 +103,9 @@ export default async function ProductPageRoute({ params }: Readonly<ProductPageR
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+          }}
         />
         <main
           style={
@@ -117,6 +114,7 @@ export default async function ProductPageRoute({ params }: Readonly<ProductPageR
         >
           <DynamicZoneManager
             blocks={page.dynamic_zone}
+            locale={locale}
             productContext={{
               name: page.name,
               logo: page.product_logo

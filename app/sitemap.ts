@@ -76,8 +76,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           if (!bySlug.has(product.slug)) bySlug.set(product.slug, new Set());
           bySlug.get(product.slug)!.add(locale);
         }
-      } catch {
-        // ignore locales with no product pages
+      } catch (err) {
+        const message = err instanceof Error ? err.stack ?? err.message : String(err);
+        console.error(`[sitemap] Failed to fetch product pages for locale '${locale}':`, message);
       }
     }
 

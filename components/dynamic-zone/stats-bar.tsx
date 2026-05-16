@@ -9,31 +9,73 @@ interface StatsBarProps extends StatsBarBlock {
   accentColor?: string | null;
 }
 
+/**
+ * Parse a locale-aware numeric token (e.g. "10,000+", "99.9%", "1.234,5") into a Number.
+ * - If both "." and "," are present, the LAST-occurring symbol is the decimal separator.
+ * - If only "," is present and it appears as 3-digit groupings (e.g. "10,000"), treat as grouping.
+ *   Otherwise treat "," as the decimal separator.
+ * - Returns null if the token cannot be parsed.
+ */
+function parseLocalizedNumber(token: string): number | null {
+  const cleaned = token.replace(/[^0-9.,\-]/g, "");
+  if (!cleaned) return null;
+
+  const hasDot = cleaned.includes(".");
+  const hasComma = cleaned.includes(",");
+  let normalized = cleaned;
+
+  if (hasDot && hasComma) {
+    const lastDot = cleaned.lastIndexOf(".");
+    const lastComma = cleaned.lastIndexOf(",");
+    if (lastComma > lastDot) {
+      // "," is decimal, "." is grouping
+      normalized = cleaned.replace(/\./g, "").replace(",", ".");
+    } else {
+      // "." is decimal, "," is grouping
+      normalized = cleaned.replace(/,/g, "");
+    }
+  } else if (hasComma) {
+    // Only comma — heuristic: pure 3-digit groupings (e.g. "10,000", "1,234,567") = grouping
+    const groupingPattern = /^-?\d{1,3}(,\d{3})+$/;
+    if (groupingPattern.test(cleaned)) {
+      normalized = cleaned.replace(/,/g, "");
+    } else {
+      normalized = cleaned.replace(",", ".");
+    }
+  }
+
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : null;
+}
+
 function AnimatedNumber({ value, inView }: { value: string; inView: boolean }) {
-  const [display, setDisplay] = useState<string>("0");
-  const numericMatch = value.match(/-?\d+(?:[.,]\d+)?/);
-  const target = numericMatch ? parseFloat(numericMatch[0].replace(",", ".")) : null;
+  const numericMatch = value.match(/-?[\d.,]+/);
+  const target = numericMatch ? parseLocalizedNumber(numericMatch[0]) : null;
+  const isAnimatable = inView && target !== null && numericMatch !== null;
+
+  const [display, setDisplay] = useState<string>(value);
 
   useEffect(() => {
-    if (!inView || target === null) {
-      setDisplay(value);
-      return;
-    }
+    if (!isAnimatable) return;
     let raf = 0;
     const start = performance.now();
     const duration = 1400;
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
-      const current = target * eased;
-      const formatted = Number.isInteger(target) ? Math.round(current).toString() : current.toFixed(1);
+      const current = (target as number) * eased;
+      const formatted = Number.isInteger(target)
+        ? Math.round(current).toString()
+        : current.toFixed(1);
       setDisplay(value.replace(numericMatch![0], formatted));
       if (t < 1) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [inView, target, value]);
+  }, [isAnimatable, target, value, numericMatch]);
 
+  // No animation case: render raw value directly — no state update needed
+  if (!isAnimatable) return <span>{value}</span>;
   return <span>{display}</span>;
 }
 
