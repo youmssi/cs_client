@@ -52,6 +52,8 @@ export const API_ENDPOINTS = {
   FAQS: '/api/faqs/clean',
   LOGOS: '/api/logos/clean',
   LOCALES: '/api/i18n/locales',
+  PRODUCT_PAGE: '/api/product-page/clean',
+  PRODUCT_PAGE_LIST: '/api/product-page/list-clean',
 } as const;
 
 /**

@@ -4,12 +4,13 @@ import type { Page } from '@/types';
 
 interface PageContentProps {
   page: Page | null;
+  locale?: string;
 }
 
-export function PageContent({ page }: Readonly<PageContentProps>) {
+export function PageContent({ page, locale }: Readonly<PageContentProps>) {
   if (!page) {
     return <ErrorView message="Page not found" />;
   }
 
-  return <DynamicZoneManager blocks={page.dynamic_zone} />;
+  return <DynamicZoneManager blocks={page.dynamic_zone} locale={locale} />;
 }

@@ -13,6 +13,17 @@ import type {
   IndustryTag,
   DeliveryMode,
 } from "./components";
+import type {
+  ProductHeroBlock,
+  StatsBarBlock,
+  FeatureDeepDiveBlock,
+  ScreenshotsGalleryBlock,
+  TechStackBlock,
+  CompareSliderBlock,
+  UseCasesBlock,
+  ProductCtaFinalBlock,
+  ProductGridBlock,
+} from "./product";
 
 export interface HeroBlock {
   __component: "dynamic-zone.hero";
@@ -77,7 +88,16 @@ export type DynamicBlock =
   | CustomBudgetBlock
   | AppCatalogBlock
   | EcosystemShowcaseBlock
-  | DeliveryModelBlock;
+  | DeliveryModelBlock
+  | ProductHeroBlock
+  | StatsBarBlock
+  | FeatureDeepDiveBlock
+  | ScreenshotsGalleryBlock
+  | TechStackBlock
+  | CompareSliderBlock
+  | UseCasesBlock
+  | ProductCtaFinalBlock
+  | ProductGridBlock;
 
 
 export interface PricingBlock {
