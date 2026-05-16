@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { generatePageStaticParams } from '@/lib/static-params';
+import { getCaller } from '@/trpc/server';
 import { LOCALES, DEFAULT_LOCALE } from '@/lib/constants';
 
 // ISR: regenerate at most every hour. Also cleared immediately by
@@ -62,5 +63,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('[sitemap] Failed to fetch dynamic pages from Strapi:', error);
   }
 
-  return [...homeEntries, ...dynamicEntries];
+  // Product landing pages — /apps/[product] per locale
+  const productEntries: MetadataRoute.Sitemap = [];
+  try {
+    const caller = await getCaller();
+    const bySlug = new Map<string, Set<string>>();
+    for (const locale of LOCALES) {
+      try {
+        const products = await caller.comingSoon.getProductPages({ locale });
+        for (const product of products ?? []) {
+          if (!product?.slug) continue;
+          if (!bySlug.has(product.slug)) bySlug.set(product.slug, new Set());
+          bySlug.get(product.slug)!.add(locale);
+        }
+      } catch {
+        // ignore locales with no product pages
+      }
+    }
+
+    for (const [slug, localeSet] of bySlug.entries()) {
+      const locales = [...localeSet];
+      const xDefault = locales.includes(DEFAULT_LOCALE) ? DEFAULT_LOCALE : locales[0];
+      const langAlternates = {
+        ...Object.fromEntries(locales.map((loc) => [loc, `${siteUrl}/${loc}/apps/${slug}`])),
+        'x-default': `${siteUrl}/${xDefault}/apps/${slug}`,
+      };
+      for (const locale of locales) {
+        productEntries.push({
+          url: `${siteUrl}/${locale}/apps/${slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.9,
+          alternates: { languages: langAlternates },
+        });
+      }
+    }
+  } catch (error) {
+    console.error('[sitemap] Failed to fetch product pages from Strapi:', error);
+  }
+
+  return [...homeEntries, ...dynamicEntries, ...productEntries];
 }

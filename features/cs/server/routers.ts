@@ -3,7 +3,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { API_ENDPOINTS } from "@/lib/constants";
 import { envServer } from "@/lib/env.server";
-import type { Global, Page } from "@/types";
+import type { Global, Page, ProductPage, ProductPageListItem } from "@/types";
 
 /**
  * Helper function to call Strapi clean endpoints
@@ -113,5 +113,56 @@ export const comingSoonRouter = createTRPCRouter({
           });
         }
         return locales.map(l => l.code);
+    }),
+
+  getProductPageBySlug: publicProcedure
+    .input(z.object({ slug: z.string(), locale: z.string().optional() }))
+    .query(async ({ input }): Promise<ProductPage> => {
+      const params = new URLSearchParams();
+      if (input.locale) params.set('locale', input.locale);
+
+      const pages = await fetchFromStrapi<ProductPage[]>(
+        `${API_ENDPOINTS.PRODUCT_PAGE}?${params.toString()}`,
+        {
+          tags: [
+            'product-pages',
+            `product-pages:${input.locale ?? 'default'}`,
+            `product-page:${input.slug}:${input.locale ?? 'default'}`
+          ],
+          revalidate: 3600
+        }
+      );
+
+      if (!pages || pages.length === 0) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'No product pages found',
+        });
+      }
+
+      const page = pages.find(p => p.slug === input.slug);
+
+      if (!page) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Product page with slug '${input.slug}' not found`,
+        });
+      }
+
+      return page;
+    }),
+
+  getProductPages: publicProcedure
+    .input(z.object({ locale: z.string().optional() }))
+    .query(async ({ input }): Promise<ProductPageListItem[]> => {
+      const params = new URLSearchParams();
+      if (input.locale) params.set('locale', input.locale);
+
+      const pages = await fetchFromStrapi<ProductPageListItem[]>(
+        `${API_ENDPOINTS.PRODUCT_PAGE_LIST}?${params.toString()}`,
+        { tags: ['product-pages', `product-pages:${input.locale ?? 'default'}`], revalidate: 3600 }
+      );
+
+      return pages ?? [];
     }),
 });
