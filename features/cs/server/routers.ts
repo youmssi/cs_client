@@ -6,6 +6,16 @@ import { envServer } from "@/lib/env.server";
 import type { Global, Page, ProductPage, ProductPageListItem } from "@/types";
 
 /**
+ * Build URLSearchParams with optional `locale` set. Used by every Strapi
+ * /clean endpoint call below to avoid 5× of the same 3-line snippet.
+ */
+function buildLocaleParams(locale?: string): URLSearchParams {
+  const p = new URLSearchParams();
+  if (locale) p.set('locale', locale);
+  return p;
+}
+
+/**
  * Helper function to call Strapi clean endpoints
  */
 async function fetchFromStrapi<T>(endpoint: string, opts?: { tags?: string[]; revalidate?: number }): Promise<T> {
@@ -39,9 +49,7 @@ export const comingSoonRouter = createTRPCRouter({
   getGlobal: publicProcedure
     .input(z.object({ locale: z.string().optional() }))
     .query(async ({ input }): Promise<Global> => {
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
-      const queryString = params.toString();
+      const queryString = buildLocaleParams(input.locale).toString();
       const endpoint = queryString ? `${API_ENDPOINTS.GLOBAL}?${queryString}` : API_ENDPOINTS.GLOBAL;
       return fetchFromStrapi<Global>(endpoint, { tags: ['global'], revalidate: 3600 });
     }),
@@ -49,9 +57,8 @@ export const comingSoonRouter = createTRPCRouter({
   getPageBySlug: publicProcedure
     .input(z.object({ slug: z.string(), locale: z.string().optional() }))
     .query(async ({ input }): Promise<Page> => {
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
-      
+      const params = buildLocaleParams(input.locale);
+
       const pages = await fetchFromStrapi<Page[]>(
         `${API_ENDPOINTS.PAGE}?${params.toString()}`,
         { 
@@ -87,9 +94,8 @@ export const comingSoonRouter = createTRPCRouter({
   getPages: publicProcedure
     .input(z.object({ locale: z.string().optional() }))
     .query(async ({ input }): Promise<Page[]> => {
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
-      
+      const params = buildLocaleParams(input.locale);
+
       // Strapi /clean endpoints return arrays directly
       const pages = await fetchFromStrapi<Page[]>(`${API_ENDPOINTS.PAGE}?${params.toString()}`, { tags: ['pages', `pages:${input.locale ?? 'default'}`], revalidate: 3600 });
       
@@ -118,8 +124,7 @@ export const comingSoonRouter = createTRPCRouter({
   getProductPageBySlug: publicProcedure
     .input(z.object({ slug: z.string(), locale: z.string().optional() }))
     .query(async ({ input }): Promise<ProductPage> => {
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
+      const params = buildLocaleParams(input.locale);
 
       const pages = await fetchFromStrapi<ProductPage[]>(
         `${API_ENDPOINTS.PRODUCT_PAGE}?${params.toString()}`,
@@ -155,8 +160,7 @@ export const comingSoonRouter = createTRPCRouter({
   getProductPages: publicProcedure
     .input(z.object({ locale: z.string().optional() }))
     .query(async ({ input }): Promise<ProductPageListItem[]> => {
-      const params = new URLSearchParams();
-      if (input.locale) params.set('locale', input.locale);
+      const params = buildLocaleParams(input.locale);
 
       const pages = await fetchFromStrapi<ProductPageListItem[]>(
         `${API_ENDPOINTS.PRODUCT_PAGE_LIST}?${params.toString()}`,

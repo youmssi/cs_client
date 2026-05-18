@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useInView, motion } from "motion/react";
+import { useEffect, useMemo, useRef } from "react";
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+} from "motion/react";
 import { CardContainer, CardItem } from "@/components/aceternity/three-d-card";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
 import type { StatsBarBlock } from "@/types";
 
 interface StatsBarProps extends StatsBarBlock {
@@ -49,20 +56,37 @@ function formatCurrent(target: number, current: number): string {
   if (Number.isInteger(target)) {
     return Math.round(current).toLocaleString("fr-FR");
   }
-  // Preserve the same number of decimals the target has, max 1
   return current.toFixed(1).replace(".", ",");
 }
 
 interface AnimatedNumberProps {
   value: string;
   inView: boolean;
-  /** Animation delay in ms (used to stagger items). */
+  /** Animation delay in seconds (staggers items). */
   delay?: number;
-  /** Total animation duration in ms. */
+  /** Animation duration in seconds. */
   duration?: number;
 }
 
-function AnimatedNumber({ value, inView, delay = 0, duration = 1600 }: Readonly<AnimatedNumberProps>) {
+/**
+ * Counts up a parsed number from 0 → target whenever `inView` becomes true,
+ * substituting it into the surrounding value template (so "10,000+" animates
+ * just the digits while the "+" stays put).
+ *
+ * Uses framer-motion's `useMotionValue` + `animate()` rather than a manual
+ * `requestAnimationFrame` loop. The motion value drives display via
+ * `useTransform`, so updates don't trigger React re-renders for every frame
+ * — which is what made the previous implementation's count-up invisible:
+ * the count happened, but the React scheduler combined with the parent
+ * `motion.div` fade left no perceptible window where mid-animation values
+ * rendered.
+ */
+function AnimatedNumber({
+  value,
+  inView,
+  delay = 0,
+  duration = 1.4,
+}: Readonly<AnimatedNumberProps>) {
   const parsed = useMemo(() => {
     const match = value.match(/-?[\d.,]+/);
     if (!match) return null;
@@ -71,67 +95,48 @@ function AnimatedNumber({ value, inView, delay = 0, duration = 1600 }: Readonly<
     return { token: match[0], target };
   }, [value]);
 
-  const isAnimatable = parsed !== null;
+  const motionValue = useMotionValue(0);
 
-  // Initial display:
-  //  - if animatable, show the placeholder "0" (formatted) so the count-up
-  //    visually starts from zero
-  //  - if not animatable, show the raw value
-  const initialDisplay = useMemo(() => {
+  const display = useTransform(motionValue, (latest) => {
     if (!parsed) return value;
-    return value.replace(parsed.token, formatCurrent(parsed.target, 0));
-  }, [parsed, value]);
-
-  const [display, setDisplay] = useState<string>(initialDisplay);
+    return value.replace(parsed.token, formatCurrent(parsed.target, latest));
+  });
 
   useEffect(() => {
-    if (!inView || !parsed) return;
-    let raf = 0;
-    let cancelled = false;
-    const { token, target } = parsed;
+    if (!inView || !parsed) {
+      motionValue.set(0);
+      return;
+    }
+    const controls = animate(motionValue, parsed.target, {
+      duration,
+      delay,
+      // Quint-out — smooth, premium deceleration
+      ease: [0.22, 1, 0.36, 1],
+    });
+    return () => controls.stop();
+  }, [inView, parsed, duration, delay, motionValue]);
 
-    // Stagger start with a timeout so the requestAnimationFrame loop
-    // doesn't start before its turn
-    const startTimer = setTimeout(() => {
-      const start = performance.now();
-      const step = (now: number) => {
-        if (cancelled) return;
-        const t = Math.min(1, (now - start) / duration);
-        // Quint-out easing — feels premium, slows nicely at the end
-        const eased = 1 - Math.pow(1 - t, 5);
-        const current = target * eased;
-        setDisplay(value.replace(token, formatCurrent(target, current)));
-        if (t < 1) raf = requestAnimationFrame(step);
-      };
-      raf = requestAnimationFrame(step);
-    }, delay);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(startTimer);
-      cancelAnimationFrame(raf);
-    };
-  }, [inView, parsed, value, delay, duration]);
-
-  if (!isAnimatable) return <span>{value}</span>;
-  return <span aria-live="polite">{display}</span>;
+  if (!parsed) return <span>{value}</span>;
+  return <motion.span aria-live="polite">{display}</motion.span>;
 }
 
 export function StatsBar({ eyebrow, items, accentColor }: Readonly<StatsBarProps>) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  // -40px margin (was -80) so the section triggers earlier on fast scroll
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const accent = accentColor ?? DEFAULT_PRODUCT_ACCENT;
 
   if (!items || items.length === 0) return null;
 
-  // Stagger between stats — each item starts 180ms after the previous.
-  // Gives a sweeping, premium "wave" feel rather than all firing at once.
-  const STAGGER_MS = 180;
+  // 140ms stagger gives a tight, premium wave without dragging the last
+  // item past where the user has already left the section.
+  const STAGGER = 0.14;
 
   return (
     <section
       ref={ref}
       className="w-full border-b border-brand-ink/10 bg-brand-surface"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accent } as React.CSSProperties}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
         {eyebrow && (
@@ -145,18 +150,21 @@ export function StatsBar({ eyebrow, items, accentColor }: Readonly<StatsBarProps
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-                transition={{ duration: 0.55, delay: idx * (STAGGER_MS / 1000), ease: "easeOut" }}
+                // Card fade ends well before the count-up so users see the
+                // count animating inside an already-visible card.
+                transition={{ duration: 0.35, delay: idx * STAGGER, ease: "easeOut" }}
                 className="w-full"
               >
                 <CardItem className="w-full rounded-xl border border-brand-border bg-brand-surface-raised p-6 md:p-7 text-center">
                   <div
                     className="text-4xl md:text-5xl font-serif font-normal leading-none mb-2 tabular-nums"
-                    style={{ color: accentColor ?? "#50B8D9" }}
+                    style={{ color: accent }}
                   >
                     <AnimatedNumber
                       value={item.value}
                       inView={inView}
-                      delay={idx * STAGGER_MS}
+                      // Wait for the card fade to finish before counting up
+                      delay={idx * STAGGER + 0.25}
                     />
                   </div>
                   {item.unit && (

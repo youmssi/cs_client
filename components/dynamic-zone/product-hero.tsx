@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/locale-link";
 import { Spotlight } from "@/components/aceternity/spotlight";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
-import { cn } from "@/lib/utils";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
+import { cn, PRODUCT_STATUS_LABEL } from "@/lib/utils";
 import type { ProductHeroBlock } from "@/types";
 
 interface ProductHeroProps extends ProductHeroBlock {
@@ -17,13 +18,6 @@ interface ProductHeroProps extends ProductHeroBlock {
   accentColor?: string | null;
   complianceTags?: string[] | null;
 }
-
-const STATUS_LABEL: Record<string, string> = {
-  alpha: "Alpha",
-  beta: "Beta",
-  ga: "Production",
-  "coming-soon": "Coming soon",
-};
 
 const TRUSTED_EMBED_HOSTS = new Set([
   "www.youtube.com",
@@ -62,21 +56,21 @@ export function ProductHero({
   accentColor,
   complianceTags,
 }: Readonly<ProductHeroProps>) {
-  const logoUrl = productLogo ? getStrapiMediaUrl(productLogo as unknown as Record<string, unknown>) : null;
-  const previewUrl = preview_image ? getStrapiMediaUrl(preview_image as unknown as Record<string, unknown>) : null;
+  const logoUrl = productLogo ? getStrapiMediaUrl(productLogo) : null;
+  const previewUrl = preview_image ? getStrapiMediaUrl(preview_image) : null;
   const showStatus = show_status_pill !== false && status;
 
   return (
     <section
       className="relative w-full overflow-hidden border-b border-brand-ink/10 bg-brand-surface"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accentColor ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties}
     >
-      <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={accentColor ?? "#50B8D9"} />
+      <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={accentColor ?? DEFAULT_PRODUCT_ACCENT} />
 
       <div
         className="absolute inset-0 -z-10 pointer-events-none [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         style={{
-          backgroundImage: `radial-gradient(circle at 50% 0%, color-mix(in oklch, ${accentColor ?? "#50B8D9"} 22%, transparent), transparent 60%)`,
+          backgroundImage: `radial-gradient(circle at 50% 0%, color-mix(in oklch, ${accentColor ?? DEFAULT_PRODUCT_ACCENT} 22%, transparent), transparent 60%)`,
         }}
       />
 
@@ -99,12 +93,12 @@ export function ProductHero({
                 <span
                   className="px-3 py-1 rounded-full border"
                   style={{
-                    color: accentColor ?? "#50B8D9",
-                    borderColor: `color-mix(in oklch, ${accentColor ?? "#50B8D9"} 35%, transparent)`,
-                    backgroundColor: `color-mix(in oklch, ${accentColor ?? "#50B8D9"} 10%, transparent)`,
+                    color: accentColor ?? DEFAULT_PRODUCT_ACCENT,
+                    borderColor: `color-mix(in oklch, ${accentColor ?? DEFAULT_PRODUCT_ACCENT} 35%, transparent)`,
+                    backgroundColor: `color-mix(in oklch, ${accentColor ?? DEFAULT_PRODUCT_ACCENT} 10%, transparent)`,
                   }}
                 >
-                  {STATUS_LABEL[status as string] ?? status}
+                  {PRODUCT_STATUS_LABEL[status as string] ?? status}
                 </span>
               )}
               {version && (
@@ -138,7 +132,7 @@ export function ProductHero({
                   asChild
                   size="lg"
                   className="text-white shadow-lg hover:brightness-110 transition-all"
-                  style={{ backgroundColor: accentColor ?? "#50B8D9" }}
+                  style={{ backgroundColor: accentColor ?? DEFAULT_PRODUCT_ACCENT }}
                 >
                   <LocaleLink
                     href={primary_cta.URL}
@@ -186,7 +180,7 @@ export function ProductHero({
           >
             <div
               className="rounded-2xl overflow-hidden border bg-brand-surface-raised shadow-2xl"
-              style={{ borderColor: `color-mix(in oklch, ${accentColor ?? "#50B8D9"} 40%, var(--brand-border))` }}
+              style={{ borderColor: `color-mix(in oklch, ${accentColor ?? DEFAULT_PRODUCT_ACCENT} 40%, var(--brand-border))` }}
             >
               {isTrustedEmbedUrl(preview_video_url) ? (
                 <div className="relative aspect-video bg-black">

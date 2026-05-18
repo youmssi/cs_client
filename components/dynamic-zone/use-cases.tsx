@@ -15,6 +15,8 @@ import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { CardContainer, CardItem } from "@/components/aceternity/three-d-card";
 import { SectionHeader } from "@/components/global/section-header";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
+import { parseBullets } from "@/lib/utils";
 import type { UseCasesBlock } from "@/types";
 
 interface UseCasesProps extends UseCasesBlock {
@@ -42,7 +44,7 @@ export function UseCases({ header_section, cases, accentColor }: Readonly<UseCas
     <section
       ref={ref}
       className="w-full border-b border-brand-ink/10 bg-brand-surface"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accentColor ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <div className="flex flex-col items-center mb-12 md:mb-16">
@@ -55,9 +57,7 @@ export function UseCases({ header_section, cases, accentColor }: Readonly<UseCas
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cases.map((useCase, idx) => {
             const Icon = useCase.icon_name ? ICON_MAP[useCase.icon_name] : null;
-            const bullets = useCase.bullets
-              ? useCase.bullets.split("\n").map((b) => b.trim()).filter(Boolean)
-              : [];
+            const bullets = parseBullets(useCase.bullets);
             return (
               <CardContainer key={useCase.id} containerClassName="py-0">
                 <motion.div
@@ -72,8 +72,8 @@ export function UseCases({ header_section, cases, accentColor }: Readonly<UseCas
                         translateZ={40}
                         className="h-10 w-10 rounded-lg flex items-center justify-center"
                         style={{
-                          backgroundColor: `color-mix(in oklch, ${accentColor ?? "#50B8D9"} 15%, transparent)`,
-                          color: accentColor ?? "#50B8D9",
+                          backgroundColor: `color-mix(in oklch, ${accentColor ?? DEFAULT_PRODUCT_ACCENT} 15%, transparent)`,
+                          color: accentColor ?? DEFAULT_PRODUCT_ACCENT,
                         }}
                       >
                         <Icon className="h-5 w-5" />
@@ -93,7 +93,7 @@ export function UseCases({ header_section, cases, accentColor }: Readonly<UseCas
                           <li key={`${useCase.id}-bullet-${bIdx}`} className="flex items-start gap-2 text-sm text-brand-dark/80">
                             <span
                               className="mt-2 h-1 w-1 rounded-full shrink-0"
-                              style={{ backgroundColor: accentColor ?? "#50B8D9" }}
+                              style={{ backgroundColor: accentColor ?? DEFAULT_PRODUCT_ACCENT }}
                             />
                             {bullet}
                           </li>

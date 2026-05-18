@@ -9,13 +9,28 @@ import { SectionHeader } from "@/components/global/section-header";
 import { Button } from "@/components/ui/button";
 import { triggerSurvey, FORMBRICKS_ACTIONS } from "@/lib/formbricks";
 
-function normalizePrice(value: number | string | null | undefined): number {
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const parsed = parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : 0;
+interface NormalizedPrice {
+  display: string;
+  isNumeric: boolean;
+}
+
+function normalizePrice(value: number | string | null | undefined): NormalizedPrice {
+  if (value === null || value === undefined || value === "") {
+    return { display: "—", isNumeric: false };
   }
-  return 0;
+  if (typeof value === "number") {
+    return { display: value.toString(), isNumeric: true };
+  }
+  const trimmed = value.trim();
+  const parsed = parseFloat(trimmed);
+  // parseFloat returns NaN for non-numeric leading strings ("Custom"),
+  // and a finite number for purely numeric strings ("1290" or "1290.50").
+  // We require the entire string to be numeric for `isNumeric: true`
+  // so values like "Custom" or "1290 + tax" render verbatim.
+  if (Number.isFinite(parsed) && String(parsed) === trimmed) {
+    return { display: parsed.toString(), isNumeric: true };
+  }
+  return { display: trimmed, isNumeric: false };
 }
 
 function normalizeFeatures(features?: string | string[] | null): string[] {
@@ -32,6 +47,8 @@ export function Pricing({
   header_section,
   frequency_toggle_label_monthly,
   frequency_toggle_label_yearly,
+  price_unit_monthly,
+  price_unit_yearly,
   plans,
 }: Readonly<PricingBlock>): JSX.Element {
   const [billingPeriod, setBillingPeriod] =
@@ -48,6 +65,12 @@ export function Pricing({
 
   const monthlyLabel = frequency_toggle_label_monthly ?? "Part-time";
   const yearlyLabel = frequency_toggle_label_yearly ?? "Full-time";
+
+  // Per-card price suffix — Strapi-driven. The fallback preserves the existing
+  // talent-home behaviour without requiring any admin change. Product pages
+  // set these fields to empty string to hide the suffix row.
+  const monthlyUnitLabel = price_unit_monthly ?? "per part-time (80h)";
+  const yearlyUnitLabel = price_unit_yearly ?? "per full-time (160h)";
 
   return (
     <section id={ANCHORS.PRICING} className="w-full flex flex-col justify-center items-center gap-2">
@@ -139,7 +162,7 @@ export function Pricing({
                       ? plan.monthly_price
                       : plan.annual_price,
                   )}
-                  period={billingPeriod}
+                  unitLabel={billingPeriod === "monthly" ? monthlyUnitLabel : yearlyUnitLabel}
                   ctaText={isPrimary ? "Book a call" : "Get started"}
                   ctaVariant={isPrimary ? "light" : "dark"}
                   features={normalizeFeatures(plan.features)}
@@ -169,7 +192,7 @@ function PricingCard({
   title,
   description,
   price,
-  period,
+  unitLabel,
   ctaText,
   ctaVariant,
   features,
@@ -177,13 +200,15 @@ function PricingCard({
   variant: "light" | "dark";
   title: string;
   description: string;
-  price: number;
-  period: "monthly" | "annually";
+  price: NormalizedPrice;
+  /** Per-card billing suffix (e.g. "per part-time (80h)" or "/mois"). Empty hides the row. */
+  unitLabel: string;
   ctaText: string;
   ctaVariant: "light" | "dark";
   features: string[];
 }) {
   const isDark = variant === "dark";
+  const renderedPrice = price.isNumeric ? `€${price.display}` : price.display;
 
   return (
     <div
@@ -206,12 +231,14 @@ function PricingCard({
         <div className="self-stretch flex flex-col justify-start items-start gap-2">
           <div className="flex flex-col justify-start items-start gap-1">
             <div className={isDark ? "relative h-[60px] flex items-center text-brand-surface-hover text-5xl font-medium leading-[60px] font-serif" : "relative h-[60px] flex items-center text-brand-ink text-5xl font-medium leading-[60px] font-serif"}>
-              <span className="invisible">€{price}</span>
-              <span className="absolute inset-0 flex items-center">€{price}</span>
+              <span className="invisible">{renderedPrice}</span>
+              <span className="absolute inset-0 flex items-center">{renderedPrice}</span>
             </div>
-            <div className={isDark ? "text-[#D2C6BF] text-sm font-medium font-sans" : "text-[#847971] text-sm font-medium font-sans"}>
-              per {period === "monthly" ? "part-time (80h)" : "full-time (160h)"}
-            </div>
+            {unitLabel && (
+              <div className={isDark ? "text-[#D2C6BF] text-sm font-medium font-sans" : "text-[#847971] text-sm font-medium font-sans"}>
+                {unitLabel}
+              </div>
+            )}
           </div>
         </div>
 

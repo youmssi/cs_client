@@ -11,7 +11,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
-import { cn } from "@/lib/utils";
+import { cn, parseBullets } from "@/lib/utils";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
 import type { FeatureDeepDiveBlock, FeatureDeepDiveItem } from "@/types";
 
 interface FeatureDeepDiveProps extends FeatureDeepDiveBlock {
@@ -51,7 +52,7 @@ export function FeatureDeepDive({
   features,
   accentColor,
 }: Readonly<FeatureDeepDiveProps>) {
-  const accent = accentColor ?? "#50B8D9";
+  const accent = accentColor ?? DEFAULT_PRODUCT_ACCENT;
 
   // Cards stay text-only and show every feature.
   // The modal cycles through features that actually have an image attached.
@@ -175,12 +176,7 @@ function BentoCard({
   onClick,
   className,
 }: Readonly<BentoCardProps>) {
-  const bullets = feature.bullets
-    ? feature.bullets
-        .split("\n")
-        .map((b) => b.trim())
-        .filter(Boolean)
-    : [];
+  const bullets = parseBullets(feature.bullets);
 
   const indexLabel = String(index + 1).padStart(2, "0");
   const interactive = hasImage;
@@ -322,7 +318,7 @@ function Lightbox({
 }: Readonly<LightboxProps>) {
   const current = index !== null ? items[index] : null;
   const imageUrl = current?.image
-    ? getStrapiMediaUrl(current.image as unknown as Record<string, unknown>)
+    ? getStrapiMediaUrl(current.image)
     : null;
   const open = current !== null && imageUrl !== null;
   const total = items.length;

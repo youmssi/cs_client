@@ -16,3 +16,17 @@ export const formatNumber = (number: number, locale: string = 'en-US') : string 
     maximumFractionDigits: 2,
   }).format(number)
 }
+
+/** Split newline-separated text into trimmed, non-empty lines. */
+export function parseBullets(text?: string | null): string[] {
+  if (!text) return []
+  return text.split("\n").map((b) => b.trim()).filter(Boolean)
+}
+
+/** Human-readable label for a ProductPage `release_status` enum value. */
+export const PRODUCT_STATUS_LABEL: Record<string, string> = {
+  alpha: "Alpha",
+  beta: "Beta",
+  ga: "Production",
+  "coming-soon": "Coming soon",
+}

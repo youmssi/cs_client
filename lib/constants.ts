@@ -69,3 +69,9 @@ export const OG_LOCALE_MAP: Record<string, string> = {
   fr: 'fr_FR',
   en: 'en_US',
 };
+
+/**
+ * Default accent color for product-page blocks when a ProductPage entry
+ * has no `accent_color` set. Kept here so a rebrand only edits one file.
+ */
+export const DEFAULT_PRODUCT_ACCENT = '#50B8D9';
