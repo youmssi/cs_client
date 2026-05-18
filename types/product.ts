@@ -18,7 +18,12 @@ export interface ProductPage {
   slug: string;
   tagline: string | null;
   product_logo: Media | null;
-  status: ProductStatus;
+  /**
+   * Product release maturity (alpha / beta / ga / coming-soon).
+   * Named `release_status` because Strapi v5 reserves `status` as a top-level
+   * attribute for the Document Service draft/published state.
+   */
+  release_status: ProductStatus;
   version: string | null;
   accent_color: string | null;
   category: ProductCategory;
@@ -46,7 +51,7 @@ export interface ProductPageListItem {
   slug: string;
   tagline: string | null;
   product_logo: Media | null;
-  status: ProductStatus;
+  release_status: ProductStatus;
   version: string | null;
   accent_color: string | null;
   category: ProductCategory;
