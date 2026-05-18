@@ -120,7 +120,7 @@ export default async function ProductPageRoute({ params }: Readonly<ProductPageR
               logo: page.product_logo
                 ? { url: logoUrl ?? '', alternativeText: page.product_logo.alternativeText ?? null }
                 : null,
-              status: page.status,
+              status: page.release_status,
               version: page.version,
               accentColor: page.accent_color,
               complianceTags: page.compliance_tags,

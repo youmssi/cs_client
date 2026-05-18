@@ -64,7 +64,7 @@ export async function ProductGrid({
                   )}
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="text-xl md:text-2xl font-semibold text-brand-ink">{product.name}</h3>
-                    {product.status && (
+                    {product.release_status && (
                       <span
                         className="text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full"
                         style={{
@@ -72,7 +72,7 @@ export async function ProductGrid({
                           backgroundColor: `color-mix(in oklch, ${accent} 12%, transparent)`,
                         }}
                       >
-                        {product.status}
+                        {product.release_status}
                       </span>
                     )}
                   </div>
