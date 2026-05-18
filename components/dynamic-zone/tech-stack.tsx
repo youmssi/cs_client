@@ -4,6 +4,7 @@ import Image from "next/image";
 import { InfiniteMovingCards } from "@/components/aceternity/infinite-moving-cards";
 import { SectionHeader } from "@/components/global/section-header";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
 import type { TechStackBlock } from "@/types";
 
 interface TechStackProps extends TechStackBlock {
@@ -16,7 +17,7 @@ export function TechStack({ header_section, groups, accentColor }: Readonly<Tech
   return (
     <section
       className="w-full border-b border-brand-ink/10 bg-brand-surface"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accentColor ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-24">
         <div className="flex flex-col items-center mb-10 md:mb-14">
@@ -29,7 +30,7 @@ export function TechStack({ header_section, groups, accentColor }: Readonly<Tech
         <div className="flex flex-col gap-10">
           {groups.map((group, idx) => {
             const logoCards = (group.logos ?? []).map((logo, logoIdx) => {
-              const imageUrl = logo.image ? getStrapiMediaUrl(logo.image as unknown as Record<string, unknown>) : null;
+              const imageUrl = logo.image ? getStrapiMediaUrl(logo.image) : null;
               return (
                 <div
                   key={`${group.id}-${logoIdx}-${logo.company ?? ''}`}

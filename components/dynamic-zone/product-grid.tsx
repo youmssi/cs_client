@@ -4,7 +4,8 @@ import { LocaleLink } from "@/components/locale-link";
 import { SectionHeader } from "@/components/global/section-header";
 import { getCaller } from "@/trpc/server";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
-import { DEFAULT_LOCALE } from "@/lib/constants";
+import { DEFAULT_PRODUCT_ACCENT, DEFAULT_LOCALE } from "@/lib/constants";
+import { PRODUCT_STATUS_LABEL } from "@/lib/utils";
 import type { ProductGridBlock, ProductPageListItem } from "@/types";
 
 interface ProductGridProps extends ProductGridBlock {
@@ -46,9 +47,9 @@ export async function ProductGrid({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {products.map((product) => {
             const logoUrl = product.product_logo
-              ? getStrapiMediaUrl(product.product_logo as unknown as Record<string, unknown>)
+              ? getStrapiMediaUrl(product.product_logo)
               : null;
-            const accent = product.accent_color ?? "#50B8D9";
+            const accent = product.accent_color ?? DEFAULT_PRODUCT_ACCENT;
             return (
               <LocaleLink
                 key={product.id}
@@ -72,7 +73,7 @@ export async function ProductGrid({
                           backgroundColor: `color-mix(in oklch, ${accent} 12%, transparent)`,
                         }}
                       >
-                        {product.release_status}
+                        {PRODUCT_STATUS_LABEL[product.release_status] ?? product.release_status}
                       </span>
                     )}
                   </div>

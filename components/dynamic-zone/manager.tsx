@@ -17,7 +17,6 @@ import { DeliveryModel } from "./delivery-model";
 import { ProductHero } from "./product-hero";
 import { StatsBar } from "./stats-bar";
 import { FeatureDeepDive } from "./feature-deep-dive";
-import { ScreenshotsGallery } from "./screenshots-gallery";
 import { TechStack } from "./tech-stack";
 import { CompareSlider } from "./compare-slider";
 import { UseCases } from "./use-cases";
@@ -141,9 +140,6 @@ export function DynamicZoneManager({
           }
           case "dynamic-zone.feature-deep-dive": {
             return <FeatureDeepDive key={`feature-deep-dive-${block.id}-${index}`} {...block} accentColor={accentColor} />;
-          }
-          case "dynamic-zone.screenshots-gallery": {
-            return <ScreenshotsGallery key={`screenshots-gallery-${block.id}-${index}`} {...block} accentColor={accentColor} />;
           }
           case "dynamic-zone.tech-stack": {
             return <TechStack key={`tech-stack-${block.id}-${index}`} {...block} accentColor={accentColor} />;

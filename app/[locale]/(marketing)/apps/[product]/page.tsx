@@ -6,7 +6,7 @@ import { DynamicZoneManager } from '@/components/dynamic-zone/manager';
 import { HydrateClient, getCaller } from '@/trpc/server';
 import { ErrorBoundary } from 'react-error-boundary';
 import { generateMetadataObject } from '@/lib/metadata';
-import { DEFAULT_METADATA, LOCALES } from '@/lib/constants';
+import { DEFAULT_METADATA, DEFAULT_PRODUCT_ACCENT, LOCALES } from '@/lib/constants';
 import { getStrapiMediaUrl } from '@/lib/media.strapi';
 import type { ProductPage } from '@/types';
 
@@ -109,7 +109,7 @@ export default async function ProductPageRoute({ params }: Readonly<ProductPageR
         />
         <main
           style={
-            { '--product-accent': page.accent_color ?? '#50B8D9' } as React.CSSProperties
+            { '--product-accent': page.accent_color ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties
           }
         >
           <DynamicZoneManager

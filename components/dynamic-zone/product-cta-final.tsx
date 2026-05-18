@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/locale-link";
 import { BackgroundBeams } from "@/components/aceternity/background-beams";
 import { Spotlight } from "@/components/aceternity/spotlight";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
 import type { ProductCtaFinalBlock } from "@/types";
 
 interface ProductCtaFinalProps extends ProductCtaFinalBlock {
@@ -24,10 +25,10 @@ export function ProductCtaFinal({
   return (
     <section
       className="relative w-full overflow-hidden bg-brand-ink"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accentColor ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties}
     >
-      <BackgroundBeams accent={accentColor ?? "#50B8D9"} />
-      <Spotlight className="-top-32 right-0" fill={accentColor ?? "#50B8D9"} />
+      <BackgroundBeams accent={accentColor ?? DEFAULT_PRODUCT_ACCENT} />
+      <Spotlight className="-top-32 right-0" fill={accentColor ?? DEFAULT_PRODUCT_ACCENT} />
 
       <div className="relative max-w-4xl mx-auto px-6 md:px-10 py-24 md:py-32 flex flex-col items-center text-center gap-6">
         <motion.div
@@ -40,7 +41,7 @@ export function ProductCtaFinal({
           {eyebrow && (
             <p
               className="text-sm md:text-base font-medium tracking-wide uppercase"
-              style={{ color: accentColor ?? "#50B8D9" }}
+              style={{ color: accentColor ?? DEFAULT_PRODUCT_ACCENT }}
             >
               {eyebrow}
             </p>
@@ -62,7 +63,7 @@ export function ProductCtaFinal({
                   asChild
                   size="lg"
                   className="text-white shadow-2xl hover:brightness-110 transition-all"
-                  style={{ backgroundColor: accentColor ?? "#50B8D9" }}
+                  style={{ backgroundColor: accentColor ?? DEFAULT_PRODUCT_ACCENT }}
                 >
                   <LocaleLink
                     href={primary_cta.URL}

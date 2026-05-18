@@ -76,13 +76,6 @@ export interface FeatureDeepDiveItem {
   accent_quote: string | null;
 }
 
-export interface ScreenshotTab {
-  id: number;
-  tab_label: string;
-  screenshot: Media | null;
-  caption: string | null;
-}
-
 export interface TechStackGroup {
   id: number;
   label: string;
@@ -139,13 +132,6 @@ export interface FeatureDeepDiveBlock {
   id: number;
   header_section: HeaderSection | null;
   features: FeatureDeepDiveItem[];
-}
-
-export interface ScreenshotsGalleryBlock {
-  __component: 'dynamic-zone.screenshots-gallery';
-  id: number;
-  header_section: HeaderSection | null;
-  tabs: ScreenshotTab[];
 }
 
 export interface TechStackBlock {

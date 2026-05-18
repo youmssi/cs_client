@@ -17,7 +17,6 @@ import type {
   ProductHeroBlock,
   StatsBarBlock,
   FeatureDeepDiveBlock,
-  ScreenshotsGalleryBlock,
   TechStackBlock,
   CompareSliderBlock,
   UseCasesBlock,
@@ -92,7 +91,6 @@ export type DynamicBlock =
   | ProductHeroBlock
   | StatsBarBlock
   | FeatureDeepDiveBlock
-  | ScreenshotsGalleryBlock
   | TechStackBlock
   | CompareSliderBlock
   | UseCasesBlock
@@ -110,6 +108,14 @@ export interface PricingBlock {
   header_section?: HeaderSection | null;
   frequency_toggle_label_monthly?: string | null;
   frequency_toggle_label_yearly?: string | null;
+  /**
+   * Per-card billing suffix shown under the price (e.g. "per part-time (80h)",
+   * "/mois"). When null/undefined, the component falls back to the talent-page
+   * defaults. When set to the empty string, the suffix row is hidden — used
+   * for product pages where the suffix makes no sense.
+   */
+  price_unit_monthly?: string | null;
+  price_unit_yearly?: string | null;
   /**
    * Fully configurable pricing plans managed from Strapi.
    */

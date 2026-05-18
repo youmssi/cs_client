@@ -3,6 +3,7 @@
 import { Compare } from "@/components/aceternity/compare";
 import { SectionHeader } from "@/components/global/section-header";
 import { getStrapiMediaUrl } from "@/lib/media.strapi";
+import { DEFAULT_PRODUCT_ACCENT } from "@/lib/constants";
 import type { CompareSliderBlock } from "@/types";
 
 interface CompareSliderProps extends CompareSliderBlock {
@@ -15,7 +16,7 @@ export function CompareSlider({ header_section, pairs, accentColor }: Readonly<C
   return (
     <section
       className="w-full border-b border-brand-ink/10 bg-brand-surface-raised"
-      style={{ "--product-accent": accentColor ?? "#50B8D9" } as React.CSSProperties}
+      style={{ "--product-accent": accentColor ?? DEFAULT_PRODUCT_ACCENT } as React.CSSProperties}
     >
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <div className="flex flex-col items-center mb-10 md:mb-14">
@@ -27,8 +28,8 @@ export function CompareSlider({ header_section, pairs, accentColor }: Readonly<C
         </div>
         <div className="flex flex-col gap-12">
           {pairs.map((pair) => {
-            const beforeUrl = pair.before_image ? getStrapiMediaUrl(pair.before_image as unknown as Record<string, unknown>) : undefined;
-            const afterUrl = pair.after_image ? getStrapiMediaUrl(pair.after_image as unknown as Record<string, unknown>) : undefined;
+            const beforeUrl = pair.before_image ? getStrapiMediaUrl(pair.before_image) : undefined;
+            const afterUrl = pair.after_image ? getStrapiMediaUrl(pair.after_image) : undefined;
             return (
               <div key={pair.id} className="flex flex-col gap-4">
                 {pair.title && (
